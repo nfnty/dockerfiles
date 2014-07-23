@@ -19,4 +19,4 @@ Run with:
 * $PKGDEST = path to package destination
 * $LOCAL = path to a folder that contains modified builds
 * $PKGNAME = package  name
-* $FROM = '1' for AUR and '2' for $LOCAL
+* $FROM = '1' for AUR or '2' for $LOCAL
