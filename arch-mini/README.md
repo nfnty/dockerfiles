@@ -1,7 +1,7 @@
 arch-mini
 =========
 
-The script builds a Docker Archlinux image with only 5 packages explicitly installed (bash, filesystem, glibc, pacman, shadow).
+mkimage.sh builds a Docker Archlinux image with only 5 packages explicitly installed (bash, filesystem, glibc, pacman, shadow).
 
 Build by running mkimage.sh as root:
 
