@@ -3,7 +3,7 @@ arch-makepkg
 
 Docker Archlinux Builder
 
-First build minimal base image by using script over at https://github.com/nfnty/arch-mini
+First build minimal base image by using script over at [nfnty/arch-mini](https://github.com/nfnty/arch-mini)
 
 Build with:
 
