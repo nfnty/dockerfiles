@@ -14,7 +14,7 @@ Run with:
 	docker run \
 	-v $PKGDEST:/srv/builder/pkg \
 	-v $LOCAL:/srv/builder/local:ro \
-	--name="$PKGNAME" -t arch-makepkg $PKGNAME $FROM
+	--name="$PKGNAME" -t arch-builder $PKGNAME $FROM
 
 * $PKGDEST = path to package destination
 * $LOCAL = path to a folder that contains modified builds
