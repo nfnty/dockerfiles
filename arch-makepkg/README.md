@@ -5,6 +5,8 @@ Docker Archlinux Builder
 
 First build minimal base image by using script over at https://github.com/nfnty/arch-mini
 
+Build with:
+
 	docker build -t "arch-makepkg" .
 
 Run with:
@@ -12,9 +14,9 @@ Run with:
 	docker run \
 	-v $PKGDEST:/srv/builder/pkg \
 	-v $LOCAL:/srv/builder/local:ro \
-	--name="$1" -t arch-makepkg $1 $2
+	--name="$PKGNAME" -t arch-makepkg $PKGNAME $FROM
 
-* $PKGDEST = the path to the folder that you want the built packages to end up
-* $LOCAL = the path to a folder that contains modified builds
-* $1 = the package  name
-* $2 = '1' if you want it to pull from AUR and '2' from your modified builds
+* $PKGDEST = path to package destination
+* $LOCAL = path to a folder that contains modified builds
+* $PKGNAME = package  name
+* $FROM = '1' for pulling from AUR and '2' from modified builds folder
