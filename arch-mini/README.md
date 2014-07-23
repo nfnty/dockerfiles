@@ -1,7 +1,7 @@
 arch-mini
 =========
 
-Docker Archlinux Minimal
+Docker Archlinux Minimal with only 5 packages explicitly installed (bash, filesystem, glibc, pacman, shadow).
 
 Build by running mkimage.sh as root:
 
