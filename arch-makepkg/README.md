@@ -7,14 +7,14 @@ First build minimal base image by using script over at [nfnty/arch-mini](https:/
 
 Build with:
 
-	docker build -t "arch-makepkg" .
+	docker build -t "nfnty/arch-makepkg" .
 
 Run with:
 
 	docker run \
 	-v $PKGDEST:/srv/builder/pkg \
 	-v $LOCAL:/srv/builder/local:ro \
-	--name="$PKGNAME" -t arch-makepkg $PKGNAME $FROM
+	--name="$PKGNAME" -t nfnty/arch-makepkg $PKGNAME $FROM
 
 * $PKGDEST = path to package destination
 * $LOCAL = path to a folder that contains modified builds
