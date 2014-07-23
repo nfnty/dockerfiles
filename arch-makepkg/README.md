@@ -3,7 +3,8 @@ arch-makepkg
 
 Docker Archlinux Builder
 
-docker build -t "arch-makepkg" .
-docker run -v $PKGDESTINATION:/home/builder/pkg -d arch-makepkg
+First create and import base image by using script over at https://github.com/nfnty/arch-mini
 
-Extract tarball into "makepkg".
+	docker build -t "arch-makepkg" .
+	tar --strip-components=1 -xzf $TARBALL -C makepkg
+	docker run -v $PKGDEST:/home/builder/pkg -d arch-makepkg
