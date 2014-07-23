@@ -5,15 +5,16 @@ RUN pacman -Syu --noconfirm
 RUN pacman -S --needed --noconfirm base-devel
 RUN pacman -D --asexplicit $(pacman -Sgq base-devel)
 
-RUN mkdir -p /home/builder/makepkg
-RUN mkdir /home/builder/pkg
-RUN useradd -d /home/builder builder
+RUN mkdir -p /srv/builder/makepkg
+RUN mkdir /srv/scripts
+
+RUN useradd -d /srv/builder builder
+RUN chown -R builder:builder /srv/builder
+
 COPY etc /etc/
+COPY build.sh /srv/scripts/
 
-WORKDIR /home/builder/makepkg
-ENV PKGDEST /home/builder/pkg
-CMD ["/usr/bin/makepkg", "-s", "--noconfirm" ]
-
-COPY makepkg /home/builder/makepkg/
-RUN chown -R builder:builder /home/builder
 USER builder
+WORKDIR /srv/builder/makepkg
+ENV PKGDEST /srv/builder/pkg
+ENTRYPOINT ["/srv/scripts/build.sh"]
