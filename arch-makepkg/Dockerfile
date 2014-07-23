@@ -1,4 +1,4 @@
-FROM arch-mini
+FROM nfnty/arch-mini
 
 RUN update-ca-certificates
 RUN pacman -Syu --noconfirm
