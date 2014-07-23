@@ -7,4 +7,4 @@ Build by running mkimage.sh as root:
 
 	./mkimage.sh
 
-Input name of container and valid timezone when prompted.
+Input name of image and valid timezone when prompted.
