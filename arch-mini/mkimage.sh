@@ -13,9 +13,9 @@ hash pacstrap &>/dev/null || {
     exit 1
 }
 
-read -e -p "Name of the container? " CONNAME
-if [[ -z "$CONNAME" ]]; then
-	echo "Container name can't be empty."
+read -e -p "Name of the image? " IMAGENAME
+if [[ -z "$IMAGENAME" ]]; then
+	echo "Image name can't be empty."
 	exit 1
 fi
 read -e -p "Enter timezone (e.g. Europe/Berlin or UTC): " TIMEZONE
@@ -65,5 +65,5 @@ mknod -m 600 $DEV/initctl p
 mknod -m 666 $DEV/ptmx c 5 2
 ln -sf /proc/self/fd $DEV/fd
 
-tar --numeric-owner -C $ROOTFS -c . | docker import - $CONNAME
-docker run --rm -i -t $CONNAME echo Success.
+tar --numeric-owner -C $ROOTFS -c . | docker import - $IMAGENAME
+docker run --rm -i -t $IMAGENAME echo Success.
