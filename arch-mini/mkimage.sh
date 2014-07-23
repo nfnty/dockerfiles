@@ -3,24 +3,48 @@
 set -e
 umask 022
 
+function cleanup {
+	echo "Removing $ROOTFS"
+	rm -r $ROOTFS
+}
+
 hash pacstrap &>/dev/null || {
     echo "Could not find pacstrap. Run pacman -S arch-install-scripts"
     exit 1
 }
 
+read -e -p "Name of the container? " CONNAME
+if [[ -z "$CONNAME" ]]; then
+	echo "Container name can't be empty."
+	exit 1
+fi
+read -e -p "Enter timezone (e.g. Europe/Berlin or UTC): " TIMEZONE
+if [[ -z "$TIMEZONE" ]]; then
+	echo "Timezone can't be empty."
+	exit 1
+fi
+
 ROOTFS=$(mktemp -d ${TMPDIR:-/var/tmp}/rootfs-archlinux-XXXXXXXXXX)
 chmod 755 $ROOTFS
 
-PKGS='bash filesystem glibc pacman shadow'
-PKGEXTRA='gzip sed'
+trap cleanup EXIT
 
-pacstrap -C ./pacman.conf -c -d -G $ROOTFS $PKGS $PKGEXTRA  haveged procps-ng
+PKGS='bash filesystem glibc pacman shadow'
+
+pacstrap -C ./pacman.conf -c -d -G $ROOTFS $PKGS haveged procps-ng
 arch-chroot $ROOTFS /bin/sh -c "haveged -w 1024; pacman-key --init; pkill -x haveged; pacman -Rsn --noconfirm haveged procps-ng; pacman-key --populate archlinux"
 
-arch-chroot $ROOTFS /bin/sh -c "ln -s /usr/share/zoneinfo/UTC /etc/localtime"
+if [[ ! -f "$ROOTFS/usr/share/zoneinfo/$TIMEZONE" ]]; then
+	echo "$TIMEZONE is not a valid timezone!"
+	exit 1
+fi
+
+arch-chroot $ROOTFS /bin/sh -c "ln -s /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
 echo 'LANG="en_US.UTF-8"' > $ROOTFS/etc/locale.conf
 echo 'en_US.UTF-8 UTF-8' > $ROOTFS/etc/locale.gen
+arch-chroot $ROOTFS /bin/sh -c "pacman -S --noconfirm --asdeps --needed sed gzip"
 arch-chroot $ROOTFS locale-gen
+arch-chroot $ROOTFS /bin/sh -c "pacman -Rsn --noconfirm gzip"
 
 cp pacman.conf $ROOTFS/etc/
 
@@ -41,6 +65,5 @@ mknod -m 600 $DEV/initctl p
 mknod -m 666 $DEV/ptmx c 5 2
 ln -sf /proc/self/fd $DEV/fd
 
-tar --numeric-owner -C $ROOTFS -c . | docker import - nfnty/arch-mini
-docker run --rm -i -t arch-mini echo Success.
-rm -rf $ROOTFS
+tar --numeric-owner -C $ROOTFS -c . | docker import - $CONNAME
+docker run --rm -i -t $CONNAME echo Success.
