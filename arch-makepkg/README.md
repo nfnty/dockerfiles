@@ -1,4 +1,4 @@
-arch-builder
+arch-makepkg
 ============
 
 Docker Archlinux Builder
@@ -7,14 +7,14 @@ First build minimal base image by using script over at https://github.com/nfnty/
 
 Build with:
 
-	docker build -t "arch-builder" .
+	docker build -t "arch-makepkg" .
 
 Run with:
 
 	docker run \
 	-v $PKGDEST:/srv/builder/pkg \
 	-v $LOCAL:/srv/builder/local:ro \
-	--name="$PKGNAME" -t arch-builder $PKGNAME $FROM
+	--name="$PKGNAME" -t arch-makepkg $PKGNAME $FROM
 
 * $PKGDEST = path to package destination
 * $LOCAL = path to a folder that contains modified builds
