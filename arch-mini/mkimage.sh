@@ -12,6 +12,16 @@ if ! hash pacstrap &>/dev/null; then
     exit 1
 fi
 
+while true; do
+    read -e -p 'Name of image? ' CONTAINERNAME
+    if [[ -n "$CONTAINERNAME" ]]; then
+        break
+    else
+        echo "Name can't be empty."
+        continue
+    fi
+done
+
 SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 ROOTFS=$(mktemp -d ${TMPDIR:-/var/tmp}/rootfs-archlinux-XXXXXXXXXX)
@@ -28,25 +38,10 @@ PKGS='bash filesystem glibc pacman shadow'
 pacstrap -C "$SCRIPTDIR/etc/pacman.conf" -c -d -G "$ROOTFS" $PKGS haveged procps-ng
 arch-chroot "$ROOTFS" /usr/bin/bash -c 'haveged -w 1024; pacman-key --init; pkill -x haveged; pacman-key --populate archlinux; pkill -x gpg-agent; pacman -Rsn --noconfirm haveged procps-ng'
 
-while true; do
-    read -e -p 'Enter timezone (e.g. Europe/Berlin or UTC): ' TIMEZONE
-    if [[ -n "$TIMEZONE" ]]; then
-        if [[ -f "$ROOTFS/usr/share/zoneinfo/$TIMEZONE" ]]; then
-            break
-        else
-            echo "$TIMEZONE is not a valid timezone!"
-            continue
-        fi
-    else
-        echo "Timezone can't be empty."
-        continue
-    fi
-done
-
 install -m644 "$SCRIPTDIR/etc/locale.conf" "$ROOTFS/etc/"
 install -m644 "$SCRIPTDIR/etc/locale.gen" "$ROOTFS/etc/"
 install -m644 "$SCRIPTDIR/etc/pacman.conf" "$ROOTFS/etc/"
-arch-chroot "$ROOTFS" /usr/bin/bash -c "ln -s /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
+arch-chroot "$ROOTFS" /usr/bin/bash -c "ln -s /usr/share/zoneinfo/UTC /etc/localtime"
 arch-chroot "$ROOTFS" /usr/bin/bash -c "pacman -S --noconfirm --asdeps --needed sed gzip"
 arch-chroot "$ROOTFS" locale-gen
 
@@ -66,16 +61,6 @@ mknod -m 666 "$DEV/full" c 1 7
 mknod -m 600 "$DEV/initctl" p
 mknod -m 666 "$DEV/ptmx" c 5 2
 ln -sf /proc/self/fd "$DEV/fd"
-
-while true; do
-    read -e -p 'Name of image? ' CONTAINERNAME
-    if [[ -n "$CONTAINERNAME" ]]; then
-        break
-    else
-        echo "Name can't be empty."
-        continue
-    fi
-done
 
 tar --numeric-owner --xattrs --acls -C "$ROOTFS" -c . | docker import - "$CONTAINERNAME"
 docker run --rm -t "$CONTAINERNAME" echo Success.
