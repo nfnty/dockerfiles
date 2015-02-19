@@ -43,9 +43,9 @@ while true; do
     fi
 done
 
-cp "$SCRIPTDIR/etc/locale.conf" "$ROOTFS/etc/"
-cp "$SCRIPTDIR/etc/locale.gen" "$ROOTFS/etc/"
-cp "$SCRIPTDIR/etc/pacman.conf" "$ROOTFS/etc/"
+install -m644 "$SCRIPTDIR/etc/locale.conf" "$ROOTFS/etc/"
+install -m644 "$SCRIPTDIR/etc/locale.gen" "$ROOTFS/etc/"
+install -m644 "$SCRIPTDIR/etc/pacman.conf" "$ROOTFS/etc/"
 arch-chroot "$ROOTFS" /usr/bin/bash -c "ln -s /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
 arch-chroot "$ROOTFS" /usr/bin/bash -c "pacman -S --noconfirm --asdeps --needed sed gzip"
 arch-chroot "$ROOTFS" locale-gen
