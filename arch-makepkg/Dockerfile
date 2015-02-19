@@ -1,6 +1,5 @@
 FROM nfnty/arch-mini
 
-RUN update-ca-certificates
 RUN pacman -Syu --noconfirm && \
 	pacman -S --needed --noconfirm base-devel && \
 	pacman -D --asexplicit $(pacman -Sgq base-devel)
