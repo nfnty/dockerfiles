@@ -1,9 +1,9 @@
 FROM nfnty/arch-mini
 
 RUN update-ca-certificates
-RUN pacman -Syu --noconfirm
-RUN pacman -S --needed --noconfirm base-devel
-RUN pacman -D --asexplicit $(pacman -Sgq base-devel)
+RUN pacman -Syu --noconfirm && \
+	pacman -S --needed --noconfirm base-devel && \
+	pacman -D --asexplicit $(pacman -Sgq base-devel)
 
 RUN mkdir -p /srv/builder/makepkg
 RUN mkdir /srv/scripts
