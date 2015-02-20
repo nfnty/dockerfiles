@@ -1,6 +1,0 @@
-[submodule "arch-mini"]
-	path = arch-mini
-	url = git@github.com:nfnty/arch-mini.git
-[submodule "arch-makepkg"]
-	path = arch-makepkg
-	url = git@github.com:nfnty/arch-makepkg.git
