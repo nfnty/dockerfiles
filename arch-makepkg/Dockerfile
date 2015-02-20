@@ -1,8 +1,8 @@
 FROM nfnty/arch-mini
 
 RUN pacman -Syu --noconfirm && \
-	pacman -S --needed --noconfirm base-devel && \
-	pacman -D --asexplicit $(pacman -Sgq base-devel)
+    pacman -S --needed --noconfirm base-devel && \
+    pacman -D --asexplicit $(pacman -Sgq base-devel)
 
 RUN mkdir -p /srv/builder/makepkg
 RUN mkdir /srv/scripts
