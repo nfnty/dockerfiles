@@ -23,12 +23,12 @@ function cleanup {
 }
 trap cleanup EXIT
 
-PKGS='bash filesystem glibc pacman shadow'
+PKGS='filesystem glibc pacman shadow'
 
-pacstrap -c -d -G -M "$ROOTFS" $PKGS haveged procps-ng sed
-install --mode=644 "$SCRIPTDIR/etc/pacman.d/mirrorlist" "$ROOTFS/etc/pacman.d/"
+pacstrap -c -d -G -M "$ROOTFS" $PKGS haveged procps-ng
+install --mode=644 "$SCRIPTDIR/etc/mirrorlist" "$ROOTFS/etc/pacman.d/"
+install --mode=644 "$SCRIPTDIR/etc/pacman.conf" "$ROOTFS/etc/"
 install --mode=644 "$SCRIPTDIR/etc/locale.conf" "$ROOTFS/etc/"
-install --mode=644 "$SCRIPTDIR/etc/locale.gen" "$ROOTFS/etc/"
 
 arch-chroot "$ROOTFS" /usr/bin/bash << 'EOF'
 haveged --write=1024
@@ -36,13 +36,11 @@ pacman-key --init
 pkill --exact haveged
 pacman-key --populate archlinux
 pkill --exact gpg-agent
+pacman --remove --recursive --nosave --noconfirm haveged procps-ng
 
-sed --in-place 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
-
-ln --symbolic /usr/share/zoneinfo/UTC /etc/localtime
-locale-gen
-
-pacman --remove --recursive --nosave --noconfirm haveged procps-ng sed
+ln --symbolic /usr/share/zoneinfo/Europe/UTC /etc/localtime
+localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+localedef -i en_DK -c -f UTF-8 -A /usr/share/locale/locale.alias en_DK.UTF-8
 EOF
 
 DEV="$ROOTFS/dev"
