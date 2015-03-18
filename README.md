@@ -1,6 +1,4 @@
-docker
+Docker Projects Collection
 ======
 
-Docker Projects Collection
-
-Check `scripts` directory in the project directory for use reference.
+Use reference can be found in the each project's `scripts` directory.
