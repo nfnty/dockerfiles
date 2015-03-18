@@ -23,7 +23,7 @@ function cleanup {
 }
 trap cleanup EXIT
 
-PKGS='bash bzip2 coreutils curl filesystem gcc-libs glibc gzip pacman shadow tar xz'
+PKGS='bash coreutils curl filesystem gcc-libs glibc gzip pacman shadow tar xz'
 
 pacstrap -c -d -G -M "$ROOTFS" $PKGS haveged procps-ng
 
@@ -34,6 +34,7 @@ pkill --exact haveged
 pacman-key --populate archlinux
 pkill --exact gpg-agent
 pacman --remove --recursive --nosave --noconfirm haveged procps-ng
+pacman --sync --noconfirm --clean --clean
 EOF
 
 DEV="$ROOTFS/dev"
