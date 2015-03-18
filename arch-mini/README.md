@@ -1,6 +1,8 @@
 arch-mini
 =========
 
-Minimal Docker Archlinux base image with only 4 packages explicitly installed (filesystem, glibc, pacman, shadow).
+Minimal Docker Archlinux base image with 12 packages explicitly installed:
 
-Build archive by running `mkimage.sh` as root.
+    bash bzip2 coreutils curl filesystem gcc-libs glibc gzip pacman shadow tar xz
+
+Build archive by running `scripts/mkimage.sh` as root.

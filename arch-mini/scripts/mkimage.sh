@@ -23,12 +23,9 @@ function cleanup {
 }
 trap cleanup EXIT
 
-PKGS='filesystem glibc pacman shadow'
+PKGS='bash bzip2 coreutils curl filesystem gcc-libs glibc gzip pacman shadow tar xz'
 
 pacstrap -c -d -G -M "$ROOTFS" $PKGS haveged procps-ng
-install --mode=644 "$SCRIPTDIR/etc/mirrorlist" "$ROOTFS/etc/pacman.d/"
-install --mode=644 "$SCRIPTDIR/etc/pacman.conf" "$ROOTFS/etc/"
-install --mode=644 "$SCRIPTDIR/etc/locale.conf" "$ROOTFS/etc/"
 
 arch-chroot "$ROOTFS" /usr/bin/bash << 'EOF'
 haveged --write=1024
@@ -37,15 +34,11 @@ pkill --exact haveged
 pacman-key --populate archlinux
 pkill --exact gpg-agent
 pacman --remove --recursive --nosave --noconfirm haveged procps-ng
-
-ln --symbolic /usr/share/zoneinfo/Europe/UTC /etc/localtime
-localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-localedef -i en_DK -c -f UTF-8 -A /usr/share/locale/locale.alias en_DK.UTF-8
 EOF
 
 DEV="$ROOTFS/dev"
-rm --recursive --force "$DEV"
-mkdir --parents "$DEV"
+rm --recursive "$DEV"
+mkdir "$DEV"
 mknod --mode=666 "$DEV/null" c 1 3
 mknod --mode=666 "$DEV/zero" c 1 5
 mknod --mode=666 "$DEV/random" c 1 8
@@ -58,6 +51,6 @@ mknod --mode=666 "$DEV/tty0" c 4 0
 mknod --mode=666 "$DEV/full" c 1 7
 mknod --mode=600 "$DEV/initctl" p
 mknod --mode=666 "$DEV/ptmx" c 5 2
-ln --symbolic --force /proc/self/fd "$DEV/fd"
+ln --symbolic /proc/self/fd "$DEV/fd"
 
-tar --numeric-owner --xattrs --acls --xz --create --directory="$ROOTFS" --file="$SCRIPTDIR/arch-mini.tar.xz" .
+tar --numeric-owner --xattrs --acls --xz --create --directory="$ROOTFS" --file="$SCRIPTDIR/../image/arch-mini.tar.xz" .
