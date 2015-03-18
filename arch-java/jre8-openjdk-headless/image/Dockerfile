@@ -4,6 +4,5 @@ MAINTAINER "nfnty <docker@nfnty.se>"
 
 ENV PATH="$PATH:/usr/lib/jvm/default/bin"
 
-RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm jre8-openjdk-headless && \
+RUN pacman --sync --noconfirm jre8-openjdk-headless && \
     pacman --sync --noconfirm --clean --clean

@@ -24,8 +24,7 @@ RUN install --directory --mode=755 --owner=root --group=root "$TORRENTPATH"
 RUN install --directory --mode=700 --owner="$UGID" --group="$UGID" "$TORRENTPATH/"{completed,downloading,seeding}
 
 ENV TMVERSION="1.8.4-1"
-RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm transmission-cli && \
+RUN pacman --sync --noconfirm transmission-cli && \
     pacman --sync --noconfirm --clean --clean
 
 USER $UGNAME

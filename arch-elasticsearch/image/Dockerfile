@@ -16,8 +16,7 @@ RUN chmod 644 "$PRIMPATH/config/"*
 RUN install --directory --mode=700 --owner="$UGID" --group="$UGID" "$PRIMPATH/"{data,logs,work,plugins}
 VOLUME ["$PRIMPATH/data", "$PRIMPATH/logs"]
 
-RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm util-linux && \
+RUN pacman --sync --noconfirm util-linux && \
     pacman --sync --noconfirm --clean --clean
 
 ENV ESVERSION="1.4.4"

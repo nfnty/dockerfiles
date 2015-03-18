@@ -13,8 +13,7 @@ RUN install --directory --mode=755 --owner=root --group=root "$PRIMPATH/"{bin,co
 ADD config/kibana.yml $PRIMPATH/config/
 RUN chmod 644 "$PRIMPATH/config/"*
 
-RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm util-linux && \
+RUN pacman --sync --noconfirm util-linux && \
     pacman --sync --noconfirm --clean --clean
 
 ENV KVERSION="4.0.1"
