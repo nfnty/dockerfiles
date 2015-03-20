@@ -1,0 +1,3 @@
+[submodule "images/arch-mini/latest/bootstrap"]
+	path = images/arch-mini/latest/bootstrap
+	url = https://github.com/nfnty/arch-mini-bootstrap.git

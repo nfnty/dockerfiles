@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -e
+set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 CNAME="$1"
 BRNAME="$2"
