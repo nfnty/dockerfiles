@@ -2,36 +2,19 @@
 
 set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
+SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
 CNAME='transmission'
 UGID=100000
 TORRENTPATH='/mnt/1/share/torrent'
 CONFIGPATH='/srv/docker/transmission/config'
 
-WTESTPATHS=(
-    "$TORRENTPATH/completed"
-    "$TORRENTPATH/downloading"
-    "$TORRENTPATH/seeding"
-    "$CONFIGPATH"
-)
+TESTSCRIPT="$SCRIPTDIR/../../scripts/test_file.py"
 
-for testpath in ${WTESTPATHS[@]}; do
-    if ! sudo --user="#$UGID" test -r "$testpath"; then
-        echo 'Read denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    elif ! sudo --user="#$UGID" test -w "$testpath"; then
-        echo 'Write denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    elif ! sudo --user="#$UGID" test -x "$testpath"; then
-        echo 'Execute denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    fi
-done
+"$TESTSCRIPT" 'drwxgU' "$UGID" "$TORRENTPATH/completed"
+"$TESTSCRIPT" 'drwxgU' "$UGID" "$TORRENTPATH/downloading"
+"$TESTSCRIPT" 'drwxgU' "$UGID" "$TORRENTPATH/seeding"
+"$TESTSCRIPT" 'drwxUG' "$UGID" "$CONFIGPATH"
 
 docker create \
     --volume="$CONFIGPATH:/transmission/config" \

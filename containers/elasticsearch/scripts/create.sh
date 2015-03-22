@@ -2,6 +2,8 @@
 
 set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
+SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
 BTRFSPATH="/var/lib/docker/btrfs/subvolumes"
 
 CNAME='elasticsearch'
@@ -13,52 +15,13 @@ CONFIGPATH="$BASEPATH/config"
 DATAPATH="$BASEPATH/data"
 LOGPATH="$BASEPATH/logs"
 
-RTESTPATHS=(
-    "$CONFIGPATH"
-)
+TESTSCRIPT="$SCRIPTDIR/../../scripts/test_file.py"
 
-for testpath in ${RTESTPATHS[@]}; do
-    if ! sudo --user="#$UGID" test -r "$testpath"; then
-        echo 'Read denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    elif sudo --user="#$UGID" test -w "$testpath"; then
-        echo 'Write allowed!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    elif ! sudo --user="#$UGID" test -x "$testpath"; then
-        echo 'Execute denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    fi
-done
-
-WTESTPATHS=(
-    "$LOGPATH"
-    "$DATAPATH"
-)
-
-for testpath in ${WTESTPATHS[@]}; do
-    if ! sudo --user="#$UGID" test -r "$testpath"; then
-        echo 'Read denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    elif ! sudo --user="#$UGID" test -w "$testpath"; then
-        echo 'Write denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    elif ! sudo --user="#$UGID" test -x "$testpath"; then
-        echo 'Execute denied!'
-        echo "UGID: $UGID"
-        echo "Path: $testpath"
-        exit 1
-    fi
-done
+"$TESTSCRIPT" 'drwxUG' "$UGID" "$LOGPATH"
+"$TESTSCRIPT" 'drwxUG' "$UGID" "$DATAPATH"
+"$TESTSCRIPT" 'drx' "$UGID" "$CONFIGPATH"
+"$TESTSCRIPT" 'fr' "$UGID" "$CONFIGPATH/elasticsearch.yml"
+"$TESTSCRIPT" 'fr' "$UGID" "$CONFIGPATH/logging.yml"
 
 docker create \
     --volume="$CONFIGPATH:$PRIMPATH/config:ro" \
