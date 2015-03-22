@@ -1,7 +1,7 @@
-arch-mini
-=========
+Arch Linux: Minimal Base Image
+=====
 
-Arch Linux minimal base image with 11 packages explicitly installed:
+11 packages explicitly installed:
 
 * bash
 * coreutils
