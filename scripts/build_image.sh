@@ -11,5 +11,3 @@ ITAG="${3}"
 DOCKERDIR="${SCRIPTDIR}/../images/${IPREFIX}-${INAME}/${ITAG}"
 
 docker build --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "$DOCKERDIR"
-
-
