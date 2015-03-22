@@ -24,4 +24,4 @@ docker create \
     --volume="$SHARE1:/share/1" \
     --net=none \
     --name="$CNAME" \
-    nfnty/arch-samba
+    nfnty/arch-samba:latest

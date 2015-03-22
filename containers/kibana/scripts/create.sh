@@ -22,7 +22,7 @@ docker create \
     --volume="$CONFIGPATH:$PRIMPATH/config:ro" \
     --net=none \
     --name="$CNAME" \
-    nfnty/arch-kibana
+    nfnty/arch-kibana:latest
 
 CID="$(docker inspect --format='{{.Id}}' "$CNAME")"
 

@@ -37,7 +37,7 @@ docker create \
     --volume="$ULOGDPATH:$PRIMPATH/host/ulogd:ro" \
     --net=none \
     --name="$CNAME" \
-    nfnty/arch-logstash
+    nfnty/arch-logstash:latest
 
 CID="$(docker inspect --format='{{.Id}}' "$CNAME")"
 

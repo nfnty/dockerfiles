@@ -29,7 +29,7 @@ docker create \
     --volume="$LOGPATH:$PRIMPATH/logs" \
     --net=none \
     --name="$CNAME" \
-    nfnty/arch-elasticsearch
+    nfnty/arch-elasticsearch:latest
 
 CID="$(docker inspect --format='{{.Id}}' "$CNAME")"
 

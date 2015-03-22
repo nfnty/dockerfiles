@@ -21,4 +21,4 @@ docker create \
     --volume="$TORRENTPATH:/torrent" \
     --net=none \
     --name="$CNAME" \
-    nfnty/arch-transmission
+    nfnty/arch-transmission:latest
