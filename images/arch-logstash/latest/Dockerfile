@@ -6,7 +6,7 @@ ENV UGID="130000"
 ENV UGNAME="logstash"
 ENV PRIMPATH="/logstash"
 ENV JAVA_HOME="/usr/lib/jvm/default-runtime"
-ENV SINCEDB_PATH="$PRIMPATH/data/sincedb/default"
+ENV SINCEDB_DIR="$PRIMPATH/data/sincedb"
 
 RUN groupadd --gid "$UGID" "$UGNAME" && \
     useradd --uid "$UGID" --gid "$UGID" --shell /usr/bin/false "$UGNAME"
@@ -17,7 +17,7 @@ RUN chmod 644 "$PRIMPATH/config/"*
 RUN install --directory --mode=700 --owner="$UGID" --group="$UGID" "$PRIMPATH/"{bundle,data/sincedb}
 VOLUME ["$PRIMPATH/data"]
 
-ENV LOGSTASH_VERSION="1.5.0.rc2"
+ENV LOGSTASH_VERSION="1.4.2"
 RUN curl "https://download.elasticsearch.org/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \
     tar --extract --gzip --strip-components=1 --file=- --directory="$PRIMPATH/bin" --owner=root --group=root
 
