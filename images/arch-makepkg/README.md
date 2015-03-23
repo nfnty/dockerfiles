@@ -27,7 +27,7 @@ Takes the following arguments:
 2. \<URL to PKGBUILD or tar.gz or tar.xz>
 3. [\<Relative path to PKGBUILD root>]
 
-Documentation:
+####Documentation:
 
 * [ArchWiki: PKGBUILD](https://wiki.archlinux.org/index.php/PKGBUILD)
 * [ArchWiki: Arch User Repository](https://wiki.archlinux.org/index.php/Arch_User_Repository)
