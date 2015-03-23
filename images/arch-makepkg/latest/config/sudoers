@@ -1,0 +1,2 @@
+root ALL=(ALL) ALL
+makepkg ALL=NOPASSWD: /usr/bin/pacman
