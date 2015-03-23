@@ -3,7 +3,7 @@ FROM nfnty/arch-mini:latest
 MAINTAINER "nfnty <docker@nfnty.se>"
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm base-devel git && \
+    pacman --sync --noconfirm --needed base-devel git && \
     pacman --sync --noconfirm --clean --clean
 
 ENV UGID="99999"
