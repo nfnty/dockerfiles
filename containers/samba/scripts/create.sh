@@ -6,22 +6,26 @@ SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 CNAME='samba'
 UGID=140000
+PRIMPATH='/samba'
 
-BASEPATH='/srv/docker/samba'
-CONFIGPATH="$BASEPATH/config"
-DATAPATH="$BASEPATH/data"
+source "${SCRIPTDIR}/../../scripts/variables.sh"
+
+CONFIGPATH="${HOSTPATH}/config"
+DATAPATH="${HOSTPATH}/data"
 SHARE1='/mnt/1/share'
 
-TESTSCRIPT="$SCRIPTDIR/../../scripts/test_file.py"
-
-"$TESTSCRIPT" 'fr' "$UGID" "$CONFIGPATH/smb.conf"
-"$TESTSCRIPT" 'drwxUG' '0' "$DATAPATH"
-"$TESTSCRIPT" 'drwxUGg' "$UGID" "$SHARE1"
+perm_root "${HOSTPATH}" '-maxdepth 0'
+perm_root "${DATAPATH}"
+perm_root "${CONFIGPATH}"
+perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=rX' '-maxdepth 0'
+perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwX,o=' '-mindepth 1 -type f' "-and -not -path ${SHARE1}/torrent*"
+perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=' '-mindepth 1 -type d' "-and -not -path ${SHARE1}/torrent*"
 
 docker create \
-    --volume="$CONFIGPATH:/samba/config:ro" \
-    --volume="$DATAPATH:/samba/data" \
-    --volume="$SHARE1:/share/1" \
+    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
+    --volume="${DATAPATH}:${PRIMPATH}/data" \
+    --volume="${SHARE1}:/share/1" \
     --net=none \
-    --name="$CNAME" \
+    --dns="${DNSSERVER}" \
+    --name="${CNAME}" \
     nfnty/arch-samba:latest

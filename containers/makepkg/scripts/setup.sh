@@ -8,8 +8,9 @@ source "${SCRIPTDIR}/variables.sh"
 
 docker run \
     --rm \
-    --attach="STDOUT" \
-    --attach="STDERR" \
+    --tty \
+    --interactive \
+    --entrypoint='/usr/bin/bash' \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${PKGBUILDPATH}:${PRIMPATH}/host/pkgbuild:ro" \
     --volume="${PKGDEST}:${PRIMPATH}/pkgdest" \
@@ -18,5 +19,4 @@ docker run \
     --volume="${GNUPGHOME}:${PRIMPATH}/crypto/gnupg" \
     --volume="${PKGCACHE}:/var/cache/pacman/pkg" \
     --net=bridge \
-    nfnty/arch-makepkg:latest \
-    ${@}
+    nfnty/arch-makepkg:latest

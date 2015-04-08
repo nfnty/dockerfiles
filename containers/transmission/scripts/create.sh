@@ -6,19 +6,22 @@ SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 CNAME='transmission'
 UGID=100000
+PRIMPATH='/transmission'
+
+source "${SCRIPTDIR}/../../scripts/variables.sh"
+
+CONFIGPATH="${HOSTPATH}/config"
 TORRENTPATH='/mnt/1/share/torrent'
-CONFIGPATH='/srv/docker/transmission/config'
 
-TESTSCRIPT="$SCRIPTDIR/../../scripts/test_file.py"
-
-"$TESTSCRIPT" 'drwxgU' "$UGID" "$TORRENTPATH/completed"
-"$TESTSCRIPT" 'drwxgU' "$UGID" "$TORRENTPATH/downloading"
-"$TESTSCRIPT" 'drwxgU' "$UGID" "$TORRENTPATH/seeding"
-"$TESTSCRIPT" 'drwxUG' "$UGID" "$CONFIGPATH"
+perm_group "${HOSTPATH}" '-maxdepth 0'
+perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwX,o=' '-type f'
+perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwXs,o=' '-type d'
+perm_user "${CONFIGPATH}"
 
 docker create \
-    --volume="$CONFIGPATH:/transmission/config" \
-    --volume="$TORRENTPATH:/torrent" \
+    --volume="${CONFIGPATH}:${PRIMPATH}/config" \
+    --volume="${TORRENTPATH}:/torrent" \
     --net=none \
-    --name="$CNAME" \
+    --dns="${DNSSERVER}" \
+    --name="${CNAME}" \
     nfnty/arch-transmission:latest
