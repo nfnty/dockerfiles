@@ -2,27 +2,28 @@ FROM nfnty/arch-mini:latest
 
 MAINTAINER "nfnty <docker@nfnty.se>"
 
-ENV UGID="140000"
-ENV UGNAME="fileshare"
-ENV PRIMPATH="/samba"
+ENV UGID="140000" UGNAME="fileshare" PRIMPATH="/samba"
+
 ENV SHAREPATH="/share"
 
-RUN install --directory --owner=root --group=root --mode=700 "$PRIMPATH/config" "$PRIMPATH/data/private"
-ADD config/smb.conf $PRIMPATH/config/
-RUN chmod 600 "$PRIMPATH/config/smb.conf"
-VOLUME ["$PRIMPATH/data"]
+RUN groupadd --gid "${UGID}" "${UGNAME}" && \
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group=root --mode=755 "$SHAREPATH"
+RUN install --directory --owner=root --group=root --mode=700 \
+        "${PRIMPATH}/"{,config,data,data/private}
+ADD config/ ${PRIMPATH}/config/
+RUN chown --recursive 'root:root' "${PRIMPATH}/config" && \
+    chmod --recursive 'u=rwX,g=,o=' "${PRIMPATH}/config"
+VOLUME ["${PRIMPATH}/data"]
 
-RUN groupadd --gid "$UGID" "$UGNAME" && \
-    useradd --uid "$UGID" --gid "$UGID" --shell /usr/bin/false "$UGNAME"
+RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
+        "${SHAREPATH}"
 
 ENV SAMBA_VERSION="4.2.0-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm samba && \
-    pacman --sync --noconfirm --clean --clean
-
-RUN rm --recursive '/var/lib/samba' && \
+    pacman --sync --noconfirm "samba=${SAMBA_VERSION}" && \
+    pacman --sync --noconfirm --clean --clean && \
+    rm --recursive '/var/lib/samba' && \
     ln --symbolic '/samba/data' '/var/lib/samba'
 
 USER root

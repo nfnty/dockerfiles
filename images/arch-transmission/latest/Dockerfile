@@ -2,32 +2,33 @@ FROM nfnty/arch-mini:latest
 
 MAINTAINER "nfnty <docker@nfnty.se>"
 
-ENV UGID="100000"
-ENV UGNAME="transmission"
-ENV PRIMPATH="/transmission"
+ENV UGID="100000" UGNAME="transmission" PRIMPATH="/transmission"
+
 ENV TORRENTPATH="/torrent"
 
-RUN groupadd --gid "$UGID" "$UGNAME" && \
-    useradd --uid "$UGID" --gid "$UGID" --shell /usr/bin/false "$UGNAME"
+RUN groupadd --gid "${UGID}" "${UGNAME}" && \
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group=root --mode=755 "$PRIMPATH/scripts"
-ADD scripts/completed_reflink.sh $PRIMPATH/scripts/
-RUN chmod 755 "$PRIMPATH/scripts/completed_reflink.sh"
+RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
+        "${PRIMPATH}/"{,scripts} \
+        "${TORRENTPATH}"
+ADD scripts/ ${PRIMPATH}/scripts/
+RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/scripts" && \
+    chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/scripts"
 
-RUN install --directory --owner="$UGNAME" --group="$UGNAME" --mode=700 "$PRIMPATH/config"
-ADD config/settings.json $PRIMPATH/config/
-RUN chown "$UGNAME":"$UGNAME" "$PRIMPATH/config/settings.json" && \
-    chmod 600 "$PRIMPATH/config/settings.json"
-VOLUME ["$PRIMPATH/config"]
+RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
+        "${PRIMPATH}/config" \
+        "${TORRENTPATH}/"{completed,downloading,seeding}
+ADD config/ ${PRIMPATH}/config/
+RUN chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/config" && \
+    chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/config"
+VOLUME ["${PRIMPATH}/config"]
 
-RUN install --directory --mode=755 --owner=root --group=root "$TORRENTPATH"
-RUN install --directory --mode=700 --owner="$UGID" --group="$UGID" "$TORRENTPATH/"{completed,downloading,seeding}
-
-ENV TRANSMISSION_VERSION="1.8.4-1"
+ENV TRANSMISSION_VERSION="2.84-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm transmission-cli && \
+    pacman --sync --noconfirm "transmission-cli=${TRANSMISSION_VERSION}" && \
     pacman --sync --noconfirm --clean --clean
 
-USER $UGNAME
+USER ${UGNAME}
 EXPOSE 9091 51413
 ENTRYPOINT ["/usr/bin/transmission-daemon", "--foreground", "--config-dir", "/transmission/config"]
