@@ -15,15 +15,9 @@ Todo:
 * Add systemd service files
 * arch-postfix
 * arch-dovecot
-* arch-postgresql
-* arch-apache
-* arch-telldus
-* arch-mariadb
 * arch-dnsmasq
 * arch-hostsupdate
 * arch-hostapd
 * arch-openvpn
-* arch-pacman-mirror
-* arch-makepkg
-* arch-pacman-cache
 * arch-prometheus
+* arch-pacman-rsync
