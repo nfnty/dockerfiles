@@ -19,6 +19,7 @@ RUN pacman-key --init && \
 ADD crypto/ca-certificates/ /tmp/ca-certificates/
 RUN find /tmp/ca-certificates -mindepth 1 -type f -not -path '*/.gitignore' \
         -exec cp --target-directory='/etc/ca-certificates/trust-source/anchors' '{}' '+' && \
+    rm --recursive /tmp/ca-certificates && \
     chown --recursive 'root:root' /etc/ca-certificates/trust-source/anchors && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /etc/ca-certificates/trust-source/anchors && \
     trust extract-compat
