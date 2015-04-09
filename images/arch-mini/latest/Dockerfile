@@ -16,8 +16,10 @@ RUN ln --symbolic /usr/share/zoneinfo/UTC /etc/localtime && \
 RUN pacman-key --init && \
     pacman-key --populate archlinux
 
-ADD crypto/ca-certificates/ /etc/ca-certificates/trust-source/anchors/
-RUN chown --recursive 'root:root' /etc/ca-certificates/trust-source/anchors && \
+ADD crypto/ca-certificates/ /tmp/ca-certificates/
+RUN find /tmp/ca-certificates -mindepth 1 -type f -not -path '*/.gitignore' \
+        -exec cp --target-directory='/etc/ca-certificates/trust-source/anchors' '{}' '+' && \
+    chown --recursive 'root:root' /etc/ca-certificates/trust-source/anchors && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /etc/ca-certificates/trust-source/anchors && \
     trust extract-compat
 
