@@ -4,9 +4,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-CNAME='samba'
-UGID=140000
-PRIMPATH='/samba'
+CNAME='samba' UGID='140000' PRIMPATH='/samba'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 

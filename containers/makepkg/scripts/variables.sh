@@ -1,8 +1,6 @@
 #!/usr/bin/bash
 
-CNAME='makepkg'
-PRIMPATH='/makepkg'
-UGID=99999
+CNAME='makepkg' UGID='99999' PRIMPATH='/makepkg'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 

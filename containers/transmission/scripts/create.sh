@@ -4,9 +4,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-CNAME='transmission'
-UGID=100000
-PRIMPATH='/transmission'
+CNAME='transmission' UGID='100000' PRIMPATH='/transmission'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 

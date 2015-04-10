@@ -4,9 +4,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-CNAME='openhab'
-UGID=170000
-PRIMPATH="/openhab"
+CNAME='openhab' UGID='170000' PRIMPATH='/openhab'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 

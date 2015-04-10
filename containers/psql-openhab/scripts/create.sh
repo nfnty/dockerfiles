@@ -4,9 +4,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-CNAME='psql-openhab'
-UGID=180000
-PRIMPATH='/postgres'
+CNAME='psql-openhab' UGID='180000' PRIMPATH='/postgres'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 

@@ -4,9 +4,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-CNAME='kibana'
-UGID=120000
-PRIMPATH="/kibana"
+CNAME='kibana' UGID='120000' PRIMPATH='/kibana'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
