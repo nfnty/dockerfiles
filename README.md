@@ -10,9 +10,6 @@ Docker Projects Collection
 Todo:
 
 * Automatic updating and building.
-* Improve scripts.
-* Add info to READMEs
-* Add systemd service files
 * arch-postfix
 * arch-dovecot
 * arch-dnsmasq
@@ -20,4 +17,4 @@ Todo:
 * arch-hostapd
 * arch-openvpn
 * arch-prometheus
-* arch-pacman-rsync
+* arch-mirror
