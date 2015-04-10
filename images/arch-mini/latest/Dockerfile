@@ -22,6 +22,7 @@ RUN find /tmp/ca-certificates -mindepth 1 -type f -not -path '*/.gitignore' \
     rm --recursive /tmp/ca-certificates && \
     chown --recursive 'root:root' /etc/ca-certificates/trust-source/anchors && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /etc/ca-certificates/trust-source/anchors && \
+    setfattr --name=user.pax.flags --value=E /usr/bin/trust && \
     trust extract-compat
 
 ADD crypto/gnupg/ /tmp/gnupg/
