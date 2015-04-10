@@ -33,3 +33,5 @@ RUN find /tmp/gnupg/keys -mindepth 1 -type f -not -path '*/.gitignore' \
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm --clean --clean
+
+CMD ["/usr/bin/bash"]
