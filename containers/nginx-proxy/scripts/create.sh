@@ -10,14 +10,17 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 CRYPTOPATH="${HOSTPATH}/crypto"
+HTPASSWDPATH="${HOSTPATH}/htpasswd"
 
 perm_root "${HOSTPATH}" '-maxdepth 0'
 perm_root "${CONFIGPATH}"
 perm_root "${CRYPTOPATH}"
+perm_group "${HTPASSWDPATH}"
 
 docker create \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
+    --volume="${HTPASSWDPATH}:${PRIMPATH}/htpasswd:ro" \
     --net=none \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

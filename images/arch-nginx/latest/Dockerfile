@@ -8,7 +8,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
 RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}" && \
+        "${PRIMPATH}/"{,htpasswd} && \
     install --directory --owner=root --group=root --mode=700 \
         "${PRIMPATH}/"{config,crypto}
 ADD config/ ${PRIMPATH}/config/
