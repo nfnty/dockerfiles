@@ -2,7 +2,7 @@
 
 set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
-SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 CNAME='nginx-proxy' UGID='160000' PRIMPATH='/nginx'
 

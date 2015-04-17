@@ -13,7 +13,7 @@ if ! hash pacstrap &>/dev/null; then
     exit 1
 fi
 
-SCRIPTDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ROOTFS=$(mktemp --directory "${TMPDIR}/rootfs-archlinux-XXXXXXXXXX")
 chmod 755 "${ROOTFS}"
