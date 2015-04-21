@@ -18,7 +18,7 @@ RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/config" && \
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         "${PRIMPATH}/data"
 
-ENV NGINX_VERSION="1.6.3-1"
+ENV NGINX_VERSION="1.8.0-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx=${NGINX_VERSION}" && \
     pacman --sync --noconfirm --clean --clean
