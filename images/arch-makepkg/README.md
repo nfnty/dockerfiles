@@ -23,7 +23,7 @@ Build `yaourt` and remove container afterwards:
 
 `docker run --rm --volumes-from='makepkg_data' nfnty/arch-makepkg --aur yaourt`
 
-Create persistent container that builds `ranger-git` from my pkgbuilds git repository and adds it to the database `nfnty`:
+Create persistent container that builds `ranger-git` from my git repo [nfnty/pkgbuilds](https://github.com/nfnty/pkgbuilds) and adds it to the database `nfnty`:
 
 `docker run --volumes-from='makepkg_data' --name='makepkg_ranger-git' nfnty/arch-makepkg --git 'https://github.com/nfnty/pkgbuilds.git' --db 'nfnty' 'ranger-git'`
 
