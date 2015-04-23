@@ -9,7 +9,7 @@ CNAME='nginx-mirror' UGID='160000' PRIMPATH='/nginx'
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
-PKGPATH='/mnt/2/docker/makepkg/pkgdest'
+PKGPATH='/mnt/2/docker/builder/pkgdest'
 
 perm_root "${HOSTPATH}" '-maxdepth 0'
 perm_root "${CONFIGPATH}"
