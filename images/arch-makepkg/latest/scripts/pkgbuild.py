@@ -34,6 +34,24 @@ def args_parse():
 
     # Main arguments
     method = parser.add_mutually_exclusive_group(required=True)
+
+    method.add_argument(
+        '--aur', metavar='NAME',
+        help='Build from AUR'
+    )
+    method.add_argument(
+        '--git', metavar='URL',
+        help='Build from remote git repository'
+    )
+    method.add_argument(
+        '--local', action='store_true',
+        help='Build from local path ' + HOSTPKGBUILD
+    )
+    method.add_argument(
+        '--remote', metavar='URL',
+        help='Build from remote PKGBUILD or archive (tar / tar.gz / tar.xz / gz / xz)'
+    )
+
     method.add_argument(
         '--gpginit', action='store_true',
         help='Initialize GnuPG in ' + GPGPATH
@@ -45,22 +63,6 @@ def args_parse():
     method.add_argument(
         '--pkgcleanup', action='store_true',
         help='Remove all packages not present in database in ' + PKGDEST
-    )
-    method.add_argument(
-        '--local', action='store_true',
-        help='Build from local path in ' + HOSTPKGBUILD
-    )
-    method.add_argument(
-        '--aur', metavar='NAME',
-        help='Build from AUR'
-    )
-    method.add_argument(
-        '--git', metavar='URL',
-        help='Build from remote git repository'
-    )
-    method.add_argument(
-        '--remote', metavar='URL',
-        help='Build from remote PKGBUILD or archive (tar / tar.gz / tar.xz / gz / xz)'
     )
 
     # Options
@@ -92,7 +94,7 @@ def args_parse():
     # Positional
     parser.add_argument(
         'path', metavar='PATH', nargs='?',
-        help='Optional relative path from ' + PKGBUILD + ' to PKGBUILD directory',
+        help='Optional relative path to PKGBUILD directory',
     )
 
     args = parser.parse_args()
