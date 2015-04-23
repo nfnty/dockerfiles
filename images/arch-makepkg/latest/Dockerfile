@@ -2,7 +2,7 @@ FROM nfnty/arch-devel:latest
 
 MAINTAINER "nfnty <docker@nfnty.se>"
 
-ENV UGID="99999" UGNAME="makepkg" PRIMPATH="/makepkg"
+ENV UGID="99999" UGNAME="builder" PRIMPATH="/builder"
 
 ENV GNUPGHOME="${PRIMPATH}/crypto/gnupg"
 
@@ -33,4 +33,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm --clean --clean
 
 USER ${UGNAME}
-ENTRYPOINT ["/makepkg/scripts/pkgbuild.py"]
+ENTRYPOINT ["/builder/scripts/pkgbuild.py"]

@@ -7,30 +7,30 @@ Builds packages based on PKGBUILDs.
 
 * Initialize data container:
 
-        docker create --name='makepkg_data' nfnty/arch-makepkg --gpginit
+        docker create --name='builder_data' nfnty/arch-builder --gpginit
 
-        docker start makepkg_data
+        docker start builder_data
 
 * Check the logs for public key that can be imported on clients for package validation:
 
-        docker logs makepkg_data
+        docker logs builder_data
 
-* All packages and database are stored in `makepkg_data` persistent storage under `/makepkg/pkgdest`. Retrieve path by issuing:
+* All packages and database are stored in `builder_data` persistent storage under `/builder/pkgdest`. Retrieve path by issuing:
 
-        docker inspect --format='{{ (index .Volumes "/makepkg/pkgdest") }}' makepkg_data
+        docker inspect --format='{{ (index .Volumes "/builder/pkgdest") }}' builder_data
 
 * Build `yaourt` and remove container afterwards:
 
-        docker run --rm --volumes-from='makepkg_data' nfnty/arch-makepkg --aur yaourt
+        docker run --rm --volumes-from='builder_data' nfnty/arch-builder --aur yaourt
 
 * Create persistent container that builds `ranger-git` from my git repo [nfnty/pkgbuilds](https://github.com/nfnty/pkgbuilds) and adds it to the database `nfnty`:
 
-        docker run --volumes-from='makepkg_data' --name='makepkg_ranger-git' nfnty/arch-makepkg \
+        docker run --volumes-from='builder_data' --name='builder_ranger-git' nfnty/arch-builder \
                                   --git 'https://github.com/nfnty/pkgbuilds.git' --db 'nfnty' --path 'ranger-git'
 
 * Now if `ranger-git` PKGBUILD has been updated or a recompilation is wanted:
 
-        docker start makepkg_ranger-git
+        docker start builder_ranger-git
 
 ####Usage:
 
@@ -46,14 +46,14 @@ optional arguments:
   -h, --help           show this help message and exit
   --aur NAME           Build from AUR
   --git URL            Build from remote git repository
-  --local              Build from local path /makepkg/host/pkgbuild
+  --local              Build from local path /builder/host/pkgbuild
   --remote URL         Build from remote PKGBUILD or archive (tar / tar.gz /
                        tar.xz / gz / xz)
-  --gpginit            Initialize GnuPG in /makepkg/crypto/gnupg
+  --gpginit            Initialize GnuPG in /builder/crypto/gnupg
   --dbreset            Remove database and add the latest packages in
-                       /makepkg/pkgdest
+                       /builder/pkgdest
   --pkgcleanup         Remove all packages not present in database in
-                       /makepkg/pkgdest
+                       /builder/pkgdest
   --pkg PKG [PKG ...]  Name of specific package(s) of group
   --db NAME            Create database in pkgdest root
   --path PATH          Relative path to PKGBUILD directory
