@@ -16,6 +16,7 @@ BUILDDIR = os.path.join(PRIMPATH, 'builddir')
 MAKEPKGCFG = os.path.join(PRIMPATH, 'config/makepkg.conf')
 PKGDEST = os.path.join(PRIMPATH, 'pkgdest')
 HOSTPKGBUILD = os.path.join(PRIMPATH, 'host/pkgbuild')
+GPGPATH = os.environ['GNUPGHOME']
 
 def signal_handle_sigchld(signum, frame):
     ''' Handle zombie processes '''
@@ -34,8 +35,20 @@ def args_parse():
     # Main arguments
     method = parser.add_mutually_exclusive_group(required=True)
     method.add_argument(
+        '--gpginit', action='store_true',
+        help='Initialize GnuPG in ' + GPGPATH
+    )
+    method.add_argument(
+        '--dbreset', action='store_true',
+        help='Remove database and add the latest packages in ' + PKGDEST
+    )
+    method.add_argument(
+        '--pkgcleanup', action='store_true',
+        help='Remove all packages not present in database in ' + PKGDEST
+    )
+    method.add_argument(
         '--local', action='store_true',
-        help='Build from local path'
+        help='Build from local path in ' + HOSTPKGBUILD
     )
     method.add_argument(
         '--aur', metavar='NAME',
@@ -47,7 +60,7 @@ def args_parse():
     )
     method.add_argument(
         '--remote', metavar='URL',
-        help='Build from remote PKGBUILD, directory or archive (tar, gz or xz)'
+        help='Build from remote PKGBUILD or archive (tar / tar.gz / tar.xz / gz / xz)'
     )
 
     # Options
@@ -60,22 +73,26 @@ def args_parse():
         help='Create database in pkgdest root'
     )
     parser.add_argument(
-        '--noclean', action='store_true', default=False,
+        '--noclean', action='store_true',
         help='Do not clean builddir'
     )
     parser.add_argument(
-        '--nosign', action='store_true', default=False,
+        '--nosign', action='store_true',
         help='Do not sign package(s) and database',
     )
     parser.add_argument(
-        '--noforce', action='store_true', default=False,
+        '--noforce', action='store_true',
         help='Do not force overwrite old package',
+    )
+    parser.add_argument(
+        '--removeold', action='store_true',
+        help='Remove old package after build',
     )
 
     # Positional
     parser.add_argument(
         'path', metavar='PATH', nargs='?',
-        help='Optional path to PKGBUILD directory',
+        help='Optional relative path from ' + PKGBUILD + ' to PKGBUILD directory',
     )
 
     args = parser.parse_args()
@@ -83,6 +100,11 @@ def args_parse():
     # AUR and PATH are mutually exclusive
     if args.aur and args.path:
         print('--aur and PATH are mutually exclusive\n')
+        parser.print_help()
+        sys.exit(2)
+
+    if (args.pkgcleanup or args.dbreset) and not args.db:
+        print('--db also needs to be specified\n')
         parser.print_help()
         sys.exit(2)
 
@@ -111,6 +133,37 @@ def print_separator():
     ''' Prints a separator for redability '''
     print('\n##################################################\n')
 
+def gpg_init():
+    ''' Initialize GnuPG '''
+    batchcfg_path = os.path.join(GPGPATH, 'batch.conf')
+
+    try:
+        subprocess.check_call(
+            [
+                '/usr/bin/gpg', '--verbose', '--no-tty',
+                '--full-gen-key', '--batch', batchcfg_path
+            ]
+        )
+    except subprocess.CalledProcessError as error:
+        print('Failed to generate GnuPG key at ' + GPGPATH)
+        error_print_exit(error)
+
+    try:
+        subprocess.check_call(['/usr/bin/gpg', '--armor', '--export'])
+    except subprocess.CalledProcessError as error:
+        print('Failed to export GnuPG key from ' + GPGPATH)
+        error_print_exit(error)
+def gpg_hack():
+    ''' Reset gpg '''
+    try:
+        subprocess.check_call(
+            ['/usr/bin/gpg', '--list-secret-keys'],
+            stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+        )
+    except subprocess.CalledProcessError as error:
+        print('gpg hack failed!')
+        error_print_exit(error)
+
 def pacman_upgrade():
     ''' Pacman upgrade '''
     try:
@@ -137,73 +190,151 @@ def path_clean(path):
         print('Failed to clean ' + path)
         error_print_exit(error)
 
-def pkg_build(args):
-    ''' Build package '''
-    cmd = [
-        '/usr/bin/makepkg', '--config', MAKEPKGCFG,
-        '--noconfirm', '--log', '--syncdeps'
-    ]
+def packages_cleanup(path_base, db_name):
+    ''' Cleanup packages not present in database '''
+    print('Starting cleanup in ' + path_base)
+    print('Database ' + db_name)
 
-    if not args.noforce:
-        cmd.append('--force')
-
-    if args.nosign:
-        cmd.append('--nosign')
-    else:
-        cmd.append('--sign')
-
-    if args.pkg:
-        cmd.append('--pkg')
-        cmd.append(','.join(args.pkg))
-
-    try:
-        subprocess.check_call(cmd)
-    except subprocess.CalledProcessError as error:
-        print('Failed to build package!')
-        error_print_exit(error)
-def gpg_hack():
-    ''' Reset gpg '''
-    try:
-        subprocess.check_call(
-            ['/usr/bin/gpg', '--list-secret-keys'],
-            stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-        )
-    except subprocess.CalledProcessError as error:
-        print('gpg hack failed!')
-        error_print_exit(error)
-def db_create(args):
-    ''' Create database '''
-    path_db = os.path.join(PKGDEST, args.db + '.db.tar.xz')
-
-    cmd_find = ['/usr/bin/find', PKGDEST, '-name', '*.pkg.tar.xz', '-print0']
+    path_db = os.path.join(path_base, db_name + '.db.tar.xz')
 
     try:
         os.stat(path_db)
-        cmd_find.insert(-1, '-newer')
-        cmd_find.insert(-1, path_db)
+    except FileNotFoundError as error:
+        print('Couldn\'t find database file: ' + path_db)
+        error_print_exit(error)
+
+    try:
+        output = subprocess.check_output(
+            [
+                '/usr/bin/tar', '--extract', '--xz',
+                '--to-stdout', '--wildcards',
+                '--file', path_db,
+                '*/desc'
+            ]
+        ).decode('UTF-8').replace('\n\n', '\n').splitlines()
+    except subprocess.CalledProcessError as error:
+        print('tar failed!')
+        error_print_exit(error)
+
+    files_db = []
+    nextline = False
+    for line in output:
+        if nextline:
+            files_db.append(line)
+            nextline = False
+        if line == '%FILENAME%':
+            nextline = True
+
+    try:
+        files_packages = subprocess.check_output(
+            [
+                '/usr/bin/find', path_base,
+                '(',
+                '-name', '*.pkg.tar.xz', '-or',
+                '-name', '*.pkg.tar.xz.sig',
+                ')',
+                '-printf', '%f\\0'
+            ]
+        ).decode('UTF-8').split('\0')[:-1]
+    except subprocess.CalledProcessError as error:
+        print('find packages in ' + path_base + ' failed!')
+        error_print_exit(error)
+
+    for filename in files_db:
+        if filename in files_packages:
+            files_packages.remove(filename)
+            try:
+                files_packages.remove(filename + '.sig')
+            except ValueError:
+                pass
+
+    for filename in files_packages:
+        os.remove(os.path.join(path_base, filename))
+
+    print('Package cleanup finished!')
+
+def packages_mtime(path_base):
+    ''' Find and sort packages by modification time '''
+    print('Finding and sorting packages by modification time in ' + path_base)
+
+    try:
+        packages = subprocess.check_output(
+            [
+                '/usr/bin/find', path_base,
+                '-name', '*.pkg.tar.xz',
+                '-printf', '%f\\0%T@\\0'
+            ]
+        ).decode('UTF-8').split('\0')[:-1]
+    except subprocess.CalledProcessError as error:
+        print('find failed!')
+        error_print_exit(error)
+
+    if not packages:
+        print('Failed to find any packages')
+        sys.exit(1)
+    elif '' in packages:
+        print('Find error: empty string found')
+        sys.exit(1)
+
+    packages = [
+        (mtime, float(package))
+        for (mtime, package) in zip(packages[0::2], packages[1::2])
+    ]
+    packages = sorted(packages, key=lambda package: package[1])
+    packages = [os.path.join(path_base, package[0]) for package in packages]
+
+    return packages
+def packages_newer(path):
+    ''' Find packages newer than path '''
+    print('Finding packages newer than ' + path)
+    cmd = ['/usr/bin/find', PKGDEST, '-name', '*.pkg.tar.xz', '-print0']
+
+    try:
+        os.stat(path)
+        cmd.insert(-1, '-newer')
+        cmd.insert(-1, path)
     except FileNotFoundError:
         pass
 
     try:
-        packages = subprocess.check_output(cmd_find).decode('UTF-8').split('\0')[:-1]
+        packages = subprocess.check_output(cmd).decode('UTF-8').split('\0')[:-1]
     except subprocess.CalledProcessError as error:
-        print('db creation: find failed!')
+        print('find packages newer than ' + path + ' failed!')
         error_print_exit(error)
 
-    cmd_repo = ['/usr/bin/repo-add', path_db]
+    if not packages:
+        print('Failed to find newer packages than ' + path)
+        sys.exit(1)
+    elif '' in packages:
+        print('Find error: empty string found for ' + path)
+        sys.exit(1)
+
+    return packages
+
+def db_update(args):
+    ''' Update database '''
+    print('Updating database!')
+
+    db_path = os.path.join(PKGDEST, args.db + '.db.tar.xz')
+
+    cmd = ['/usr/bin/repo-add', db_path]
 
     if not args.nosign:
-        cmd_repo.insert(1, '--sign')
+        cmd.insert(1, '--sign')
+    if args.removeold:
+        cmd.insert(1, '--remove')
 
-    if packages:
-        cmd_repo += packages
+    if args.dbreset:
+        try:
+            os.remove(db_path)
+        except FileNotFoundError:
+            pass
+        packages = packages_mtime(PKGDEST)
     else:
-        print('db creation: Failed to find packages')
-        sys.exit(1)
-        return
+        packages = packages_newer(db_path)
 
     try:
-        subprocess.check_call(cmd_repo)
+        subprocess.check_call(cmd + packages)
     except subprocess.CalledProcessError as error:
         print('Failed to create db!')
         error_print_exit(error)
@@ -292,8 +423,35 @@ def prepare_remote(args, path):
         print('Failed to download remote: ' + args.remote)
         sys.exit(1)
 
+def pkg_build(args):
+    ''' Build package '''
+    cmd = [
+        '/usr/bin/makepkg', '--config', MAKEPKGCFG,
+        '--noconfirm', '--log', '--syncdeps'
+    ]
+
+    if not args.noforce:
+        cmd.append('--force')
+
+    if args.nosign:
+        cmd.append('--nosign')
+    else:
+        cmd.append('--sign')
+
+    if args.pkg:
+        cmd.append('--pkg')
+        cmd.append(','.join(args.pkg))
+
+    try:
+        subprocess.check_call(cmd)
+    except subprocess.CalledProcessError as error:
+        print('Failed to build package!')
+        error_print_exit(error)
+
 def main():
     ''' Main '''
+    print_separator()
+
     # Handle zombie processes
     signal.signal(signal.SIGCHLD, signal_handle_sigchld)
 
@@ -305,6 +463,19 @@ def main():
 
     # Upgrade databases and packages
     pacman_upgrade()
+
+    if args.gpginit:
+        print_separator()
+        gpg_init()
+        sys.exit(0)
+    elif args.dbreset:
+        print_separator()
+        db_update(args)
+        sys.exit(0)
+    elif args.pkgcleanup:
+        print_separator()
+        packages_cleanup(PKGDEST, args.db)
+        sys.exit(0)
 
     # Clean builddir
     if not args.noclean:
@@ -333,7 +504,7 @@ def main():
     # cd to specified relpath
     if args.path and not args.local:
         os.chdir(os.path.join(PKGBUILD, args.path))
-        print('Successfully changed directory')
+        print('Successfully changed directory to ' + args.path)
 
     # Build package
     print_separator()
@@ -345,7 +516,7 @@ def main():
         gpg_hack()
 
         print_separator()
-        db_create(args)
+        db_update(args)
 
 if __name__ == '__main__':
     main()
