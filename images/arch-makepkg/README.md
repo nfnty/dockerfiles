@@ -26,7 +26,7 @@ Builds packages based on PKGBUILDs.
 * Create persistent container that builds `ranger-git` from my git repo [nfnty/pkgbuilds](https://github.com/nfnty/pkgbuilds) and adds it to the database `nfnty`:
 
         docker run --volumes-from='makepkg_data' --name='makepkg_ranger-git' nfnty/arch-makepkg \
-                                  --git 'https://github.com/nfnty/pkgbuilds.git' --db 'nfnty' 'ranger-git'
+                                  --git 'https://github.com/nfnty/pkgbuilds.git' --db 'nfnty' --path 'ranger-git'
 
 * Now if `ranger-git` PKGBUILD has been updated or a recompilation is wanted:
 
@@ -37,14 +37,10 @@ Builds packages based on PKGBUILDs.
 ```
 usage: pkgbuild.py [-h]
                    (--aur NAME | --git URL | --local | --remote URL | --gpginit | --dbreset | --pkgcleanup)
-                   [--pkg PKG [PKG ...]] [--db NAME] [--noclean] [--nosign]
-                   [--noforce] [--removeold]
-                   [PATH]
+                   [--pkg PKG [PKG ...]] [--db NAME] [--path PATH] [--noclean]
+                   [--nosign] [--noforce] [--removeold]
 
 Arch Docker package build script
-
-positional arguments:
-  PATH                 Optional relative path to PKGBUILD directory
 
 optional arguments:
   -h, --help           show this help message and exit
@@ -60,6 +56,7 @@ optional arguments:
                        /makepkg/pkgdest
   --pkg PKG [PKG ...]  Name of specific package(s) of group
   --db NAME            Create database in pkgdest root
+  --path PATH          Relative path to PKGBUILD directory
   --noclean            Do not clean builddir
   --nosign             Do not sign package(s) and database
   --noforce            Do not force overwrite old package

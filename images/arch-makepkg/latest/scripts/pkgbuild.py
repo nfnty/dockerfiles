@@ -75,6 +75,10 @@ def args_parse():
         help='Create database in pkgdest root'
     )
     parser.add_argument(
+        '--path', metavar='PATH',
+        help='Relative path to PKGBUILD directory',
+    )
+    parser.add_argument(
         '--noclean', action='store_true',
         help='Do not clean builddir'
     )
@@ -89,12 +93,6 @@ def args_parse():
     parser.add_argument(
         '--removeold', action='store_true',
         help='Remove old package after build',
-    )
-
-    # Positional
-    parser.add_argument(
-        'path', metavar='PATH', nargs='?',
-        help='Optional relative path to PKGBUILD directory',
     )
 
     args = parser.parse_args()
