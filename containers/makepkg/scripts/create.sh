@@ -20,3 +20,8 @@ docker create \
     --name="${CNAME}_${PKGNAME}" \
     nfnty/arch-makepkg:latest \
     ${@:2}
+
+CID="$(docker inspect --format='{{.Id}}' "${CNAME}_${PKGNAME}")"
+
+cd "${BTRFSPATH}/${CID}"
+setfattr --name=user.pax.flags --value=em usr/bin/python3

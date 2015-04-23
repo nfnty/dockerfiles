@@ -7,17 +7,17 @@ ENV UGID="99999" UGNAME="makepkg" PRIMPATH="/makepkg"
 ENV GNUPGHOME="${PRIMPATH}/crypto/gnupg"
 
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false --home-dir "${PRIMPATH}/home" "${UGNAME}"
 
 RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
         "${PRIMPATH}/"{,config,host,host/pkgbuild,scripts}
-ADD config/ ${PRIMPATH}/config/
+ADD config/makepkg.conf ${PRIMPATH}/config/
 ADD scripts/ ${PRIMPATH}/scripts/
 RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/"{config,scripts} && \
     chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/"{config,scripts}
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{pkgbuild,builddir,pkgdest,srcdest,srcpkgdest,logs} \
+        "${PRIMPATH}/"{pkgbuild,builddir,pkgdest,srcdest,srcpkgdest,logs,home} \
         "${GNUPGHOME}"
 ADD config/gnupg/ ${GNUPGHOME}/
 RUN chown --recursive "${UGNAME}:${UGNAME}" "${GNUPGHOME}" && \
@@ -28,5 +28,9 @@ ADD config/sudoers /etc/
 RUN chown 'root:root' /etc/sudoers && \
     chmod 'u=r,g=r,o=' /etc/sudoers
 
+RUN pacman --sync --noconfirm --refresh --sysupgrade && \
+    pacman --sync --noconfirm python-requests python-pygit2 && \
+    pacman --sync --noconfirm --clean --clean
+
 USER ${UGNAME}
-ENTRYPOINT ["/makepkg/scripts/makepkg.sh"]
+ENTRYPOINT ["/makepkg/scripts/pkgbuild.py"]
