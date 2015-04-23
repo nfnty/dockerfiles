@@ -399,29 +399,29 @@ def prepare_aur(package):
     else:
         print('Failed to download archive')
         sys.exit(1)
-def prepare_remote(args, path):
+def prepare_remote(url, path):
     ''' Prepare remote pkgbuild directory '''
     try:
-        response = requests.get(args.remote)
+        response = requests.get(url)
     except requests.ConnectionError as error:
         print('Failed to download sources')
         error_print_exit(error)
 
     if response.ok:
-        print('Successfully downloaded: ' + args.remote)
+        print('Successfully downloaded: ' + url)
 
-        if args.remote.endswith('.tar.gz'):
+        if url.endswith('.tar.gz'):
             extract(response.content, 'gz')
-        elif args.remote.endswith('.tar.xz'):
+        elif url.endswith('.tar.xz'):
             extract(response.content, 'xz')
-        elif args.remote.rsplit('?')[0].endswith('PKGBUILD'):
+        elif url.rsplit('?')[0].endswith('PKGBUILD'):
             with open(os.path.join(path, 'PKGBUILD'), 'wb') as file:
                 file.write(response.content)
         else:
             print('Incorrect remote type')
             sys.exit(1)
     else:
-        print('Failed to download remote: ' + args.remote)
+        print('Failed to download remote: ' + url)
         sys.exit(1)
 
 def pkg_build(args):
