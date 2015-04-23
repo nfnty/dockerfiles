@@ -9,7 +9,7 @@ PKGBUILDPATH="${HOSTPATH}/pkgbuilds"
 LOGPATH="${HOSTPATH}/logs"
 GNUPGHOME="${HOSTPATH}/crypto/gnupg"
 
-STOREPATH='/mnt/2/docker/builder'
+STOREPATH="/mnt/2/docker/${CNAME}"
 PKGDEST="${STOREPATH}/pkgdest"
 SRCDEST="${STOREPATH}/srcdest"
 PKGCACHE="${STOREPATH}/pkgcache"
