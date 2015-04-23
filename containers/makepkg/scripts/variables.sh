@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-CNAME='makepkg' UGID='99999' PRIMPATH='/makepkg'
+CNAME='builder' UGID='99999' PRIMPATH='/builder'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
@@ -9,7 +9,7 @@ PKGBUILDPATH="${HOSTPATH}/pkgbuilds"
 LOGPATH="${HOSTPATH}/logs"
 GNUPGHOME="${HOSTPATH}/crypto/gnupg"
 
-STOREPATH='/mnt/2/docker/makepkg'
+STOREPATH='/mnt/2/docker/builder'
 PKGDEST="${STOREPATH}/pkgdest"
 SRCDEST="${STOREPATH}/srcdest"
 PKGCACHE="${STOREPATH}/pkgcache"
