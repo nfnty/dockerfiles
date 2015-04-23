@@ -18,5 +18,5 @@ docker run \
     --volume="${GNUPGHOME}:${PRIMPATH}/crypto/gnupg" \
     --volume="${PKGCACHE}:/var/cache/pacman/pkg" \
     --net=bridge \
-    nfnty/arch-makepkg:latest \
+    nfnty/arch-builder:latest \
     ${@}

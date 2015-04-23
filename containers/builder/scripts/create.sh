@@ -18,7 +18,7 @@ docker create \
     --volume="${PKGCACHE}:/var/cache/pacman/pkg" \
     --net=bridge \
     --name="${CNAME}_${PKGNAME}" \
-    nfnty/arch-makepkg:latest \
+    nfnty/arch-builder:latest \
     ${@:2}
 
 CID="$(docker inspect --format='{{.Id}}' "${CNAME}_${PKGNAME}")"
