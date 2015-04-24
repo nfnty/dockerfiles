@@ -49,7 +49,7 @@ def args_parse():
     )
     method.add_argument(
         '--remote', metavar='URL',
-        help='Build from remote PKGBUILD or archive (tar / tar.gz / tar.xz / gz / xz)'
+        help='Build from remote PKGBUILD or archive (tar / tar.gz / tar.xz)'
     )
 
     method.add_argument(
@@ -129,6 +129,8 @@ def paxd_initialize():
             sys.exit(1)
         time.sleep(0.1)
 
+    print('paxd started!')
+
 def print_separator():
     ''' Prints a separator for redability '''
     print('\n##################################################\n')
@@ -191,10 +193,12 @@ def path_clean(path):
         print('Failed to clean ' + path)
         error_print_exit(error)
 
+    print(path + ' cleanup finished!')
+
 def packages_cleanup(path_base, db_name):
     ''' Cleanup packages not present in database '''
     print('Starting cleanup in ' + path_base)
-    print('Database ' + db_name)
+    print('Database ' + db_name + '\n')
 
     path_db = os.path.join(path_base, db_name + '.db.tar.xz')
 
@@ -251,8 +255,9 @@ def packages_cleanup(path_base, db_name):
 
     for filename in files_packages:
         os.remove(os.path.join(path_base, filename))
+        print('Removed: ' + filename)
 
-    print('Package cleanup finished!')
+    print('\nPackage cleanup finished!')
 
 def packages_mtime(path_base):
     ''' Find and sort packages by modification time '''
@@ -340,30 +345,29 @@ def db_update(args):
         print('Failed to create db!')
         error_print_exit(error)
 
-def extract(content, extension):
-    ''' Extract compressed tar archive '''
+def extract_tar(content, extension):
+    ''' Extract tar '''
+    cmd = ['/usr/bin/tar', '--extract', '--strip-components=1', '--file=-']
+
     # Check extension
-    if extension == 'gz':
-        method = '--gzip'
-    elif extension == 'xz':
-        method = '--xz'
+    if extension == '.tar.gz':
+        cmd.insert(2, '--gzip')
+    elif extension == '.tar.xz':
+        cmd.insert(2, '--xz')
+    elif extension == '.tar':
+        pass
     else:
         print('ERROR: Wrong extension')
         sys.exit(1)
 
-    p_tar = subprocess.Popen(
-        [
-            '/usr/bin/tar', '--extract', method, '--strip-components=1', '--file=-'
-        ],
-        stdin=subprocess.PIPE
-    )
+    p_tar = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     p_tar.stdin.write(content)
     p_tar.stdin.close()
     p_tar.wait(30)
     if p_tar.poll() == 0:
-        print('.tar.' + extension + ' archive extracted')
+        print(extension + ' archive extracted!')
     else:
-        print('.tar.' + extension + ' extract failed')
+        print(extension + ' archive extraction failed!')
         sys.exit(1)
 
 def prepare_local(path):
@@ -395,7 +399,7 @@ def prepare_aur(package):
 
     if response.ok:
         print('Successfully downloaded: ' + package)
-        extract(response.content, 'gz')
+        extract_tar(response.content, '.tar.gz')
     else:
         print('Failed to download archive')
         sys.exit(1)
@@ -410,11 +414,15 @@ def prepare_remote(url, path):
     if response.ok:
         print('Successfully downloaded: ' + url)
 
-        if url.endswith('.tar.gz'):
-            extract(response.content, 'gz')
-        elif url.endswith('.tar.xz'):
-            extract(response.content, 'xz')
-        elif url.rsplit('?')[0].endswith('PKGBUILD'):
+        url_base = url.rsplit('?')[0]
+
+        if url_base.endswith('.tar.gz'):
+            extract_tar(response.content, '.tar.gz')
+        elif url_base.endswith('.tar.xz'):
+            extract_tar(response.content, '.tar.xz')
+        elif url_base.endswith('.tar'):
+            extract_tar(response.content, '.tar')
+        elif url_base.endswith('PKGBUILD'):
             with open(os.path.join(path, 'PKGBUILD'), 'wb') as file:
                 file.write(response.content)
         else:
