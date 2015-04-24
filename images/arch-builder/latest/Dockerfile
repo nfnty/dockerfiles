@@ -33,4 +33,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm --clean --clean
 
 USER ${UGNAME}
-ENTRYPOINT ["/builder/scripts/pkgbuild.py"]
+ENTRYPOINT ["/builder/scripts/builder.py"]
