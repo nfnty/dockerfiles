@@ -28,7 +28,6 @@ class Container:
                 continue
 
             self.exts[ext]['exists'] = True
-
     def create(self):
         ''' Create '''
         name = self.name
@@ -45,7 +44,6 @@ class Container:
             return False
 
         return True
-
     def remove(self, ext):
         ''' Remove '''
         name = self.name + self.exts[ext]['name']
@@ -58,7 +56,6 @@ class Container:
             return False
 
         return True
-
     def rename(self, ext_from, ext_to):
         ''' Rename '''
         name_from = self.name + self.exts[ext_from]['name']
@@ -94,7 +91,6 @@ class Container:
             return False
 
         return True
-
     def start(self):
         ''' Start '''
         name = self.name
@@ -109,7 +105,6 @@ class Container:
             return False
 
         return True
-
     def stop(self):
         ''' Stop '''
         name = self.name

@@ -17,7 +17,7 @@ cd "${SCRIPTDIR}"
 "${UPDIMG}"  'arch' 'elasticsearch' 'latest'
 "${UPDIMG}"  'arch' 'kibana'        'latest'
 "${UPDIMG}"  'arch' 'logstash'      'latest'
-"${UPDIMG}"  'arch' 'makepkg'       'latest'
+"${UPDIMG}"  'arch' 'builder'       'latest'
 "${UPDIMG}"  'arch' 'nginx'         'latest'
 "${UPDIMG}"  'arch' 'openhab'       'latest'
 "${UPDIMG}"  'arch' 'postgresql'    'latest'
