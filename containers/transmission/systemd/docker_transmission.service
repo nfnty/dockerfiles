@@ -8,9 +8,9 @@ Environment='CNAME=transmission' 'BRNAME=vbr_docker0' 'DROUTE=172.17.42.1'
 Environment='IFNAME=tmission0' 'IPADDR=172.17.42.2/24' 'MACADDR=02:42:AC:11:00:02'
 
 ExecStart=/usr/bin/docker start --attach ${CNAME}
-ExecStartPost=/usr/bin/bash /opt/docker/scripts/namespace_setup.sh
+ExecStartPost=/opt/docker/scripts/network/namespace_setup.sh
 ExecStop=/usr/bin/docker stop ${CNAME}
-ExecStopPost=-/usr/bin/bash /opt/docker/scripts/scope_stop.sh
+ExecStopPost=-/opt/docker/scripts/systemd/scope_stop.sh
 ExecStopPost=-/usr/bin/ip link delete ve_${IFNAME}
 ExecStopPost=-/usr/bin/find -L /run/netns -type l -delete
 

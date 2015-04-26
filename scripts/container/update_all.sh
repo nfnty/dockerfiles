@@ -4,7 +4,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-UPDCON="${SCRIPTDIR}/update_container.py"
+UPDCON="${SCRIPTDIR}/update.py"
 
 cd "${SCRIPTDIR}"
 
@@ -18,5 +18,6 @@ cd "${SCRIPTDIR}"
 systemctl start docker_logstash
 systemctl start docker_kibana
 
+systemctl stop docker_openhab
 "${UPDCON}"       'psql-openhab'
-"${UPDCON}"       'openhab'
+systemctl start docker_openhab

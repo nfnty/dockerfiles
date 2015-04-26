@@ -4,8 +4,8 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-UPDBIMG="${SCRIPTDIR}/build_baseimage.sh"
-UPDIMG="${SCRIPTDIR}/build_image.sh"
+UPDBIMG="${SCRIPTDIR}/build_base.sh"
+UPDIMG="${SCRIPTDIR}/build.sh"
 
 cd "${SCRIPTDIR}"
 
