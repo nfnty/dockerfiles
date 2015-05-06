@@ -29,22 +29,7 @@ function cleanup {
 }
 trap cleanup EXIT
 
-PKGS=(
-    'bash'
-    'coreutils'
-    'curl'
-    'filesystem'
-    'findutils'
-    'gcc-libs'
-    'glibc'
-    'gzip'
-    'pacman'
-    'shadow'
-    'tar'
-    'xz'
-)
-
-pacstrap -c -d -G -M "${ROOTFS}" ${PKGS[@]}
+pacstrap -c -d -G -M "${ROOTFS}" $( cat "$SCRIPTDIR/packages" )
 
 cd "${DOCKERDIR}/bootstrap"
 DATE="$(date --iso-8601)"
