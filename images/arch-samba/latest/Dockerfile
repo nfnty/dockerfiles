@@ -19,7 +19,7 @@ VOLUME ["${PRIMPATH}/data"]
 RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
         "${SHAREPATH}"
 
-ENV SAMBA_VERSION="4.2.0-2"
+ENV SAMBA_VERSION="4.2.1-2"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "samba=${SAMBA_VERSION}" && \
     pacman --sync --noconfirm --clean --clean && \
