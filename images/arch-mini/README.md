@@ -16,6 +16,6 @@ Arch Linux: Minimal Base Image
 * [tar](https://www.archlinux.org/packages/core/x86_64/tar/)
 * [xz](https://www.archlinux.org/packages/core/x86_64/xz/)
 
-Build archive by running `scripts/build_archive.sh` as root.
+Build archive by running `scripts/bootstrap_archive.sh` as root.
 
 When building the image you need to run [haveged](https://wiki.archlinux.org/index.php/Haveged) or similar if your available random entropy is low.
