@@ -10,11 +10,8 @@ Docker Projects Collection
 Todo:
 
 * Automatic updating and building.
-* arch-postfix
 * arch-dovecot
-* arch-dnsmasq
-* arch-hostsupdate
 * arch-hostapd
-* arch-openvpn
 * arch-prometheus
-* arch-mirror
+* arch-pacman-mirror
+* arch-bitcoin
