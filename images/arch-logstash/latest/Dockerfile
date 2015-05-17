@@ -17,8 +17,10 @@ RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/config" && \
     chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/config"
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{bundle,data,data/sincedb}
-VOLUME ["${PRIMPATH}/data"]
+        "${PRIMPATH}/"{bundle,data,data/sincedb,tmp} && \
+    rmdir /tmp && \
+    ln --symbolic "${PRIMPATH}/tmp" /tmp
+VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/tmp"]
 
 ENV LOGSTASH_VERSION="1.4.2"
 RUN curl "https://download.elasticsearch.org/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \

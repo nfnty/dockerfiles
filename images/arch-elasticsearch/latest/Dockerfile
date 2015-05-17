@@ -16,8 +16,10 @@ RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/config" && \
     chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/config"
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{data,logs,work,plugins}
-VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs"]
+        "${PRIMPATH}/"{data,logs,work,plugins,tmp} && \
+    rmdir /tmp && \
+    ln --symbolic "${PRIMPATH}/tmp" /tmp
+VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs", "${PRIMPATH}/tmp"]
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm util-linux && \

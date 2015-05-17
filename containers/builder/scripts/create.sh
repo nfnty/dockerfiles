@@ -11,13 +11,17 @@ PKGNAME="${1}"
 docker create \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${PKGBUILDPATH}:${PRIMPATH}/host/pkgbuild:ro" \
-    --volume="${PKGDEST}:${PRIMPATH}/pkgdest" \
-    --volume="${SRCDEST}:${PRIMPATH}/srcdest" \
-    --volume="${LOGPATH}:${PRIMPATH}/logs" \
-    --volume="${GNUPGHOME}:${PRIMPATH}/crypto/gnupg" \
-    --volume="${PKGCACHE}:/var/cache/pacman/pkg" \
-    --net=bridge \
+    --volume="${PKGDEST}:${PRIMPATH}/pkgdest:rw" \
+    --volume="${SRCDEST}:${PRIMPATH}/srcdest:rw" \
+    --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
+    --volume="${GNUPGHOME}:${PRIMPATH}/crypto/gnupg:rw" \
+    --volume="${PKGCACHE}:/var/cache/pacman/pkg:rw" \
+    --net='bridge' \
     --name="${CNAME}_${PKGNAME}" \
+    --hostname="${CNAME}_${PKGNAME}" \
+    --memory="${MEMORY}" \
+    --memory-swap='-1' \
+    --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-builder:latest \
     ${@:2}
 

@@ -20,9 +20,9 @@ RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/config" && \
     chmod --recursive 'u=rwX,g=,o=' "${PRIMPATH}/config/private"
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{crypto,data} \
-        /run/postgresql
-VOLUME ["${PRIMPATH}/crypto", "${PRIMPATH}/data"]
+        "${PRIMPATH}/"{crypto,data,run} && \
+        ln --symbolic "${PRIMPATH}/run" /run/postgresql
+VOLUME ["${PRIMPATH}/crypto", "${PRIMPATH}/data", "${PRIMPATH}/run"]
 
 ENV POSTGRESQL_VERSION="9.4.1-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \

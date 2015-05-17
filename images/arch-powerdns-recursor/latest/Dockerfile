@@ -8,8 +8,10 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
 RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}/"{,config,crypto}
-VOLUME ["${PRIMPATH}/crypto"]
+        "${PRIMPATH}/"{,config,crypto,run} && \
+        rmdir /run && \
+        ln --symbolic "${PRIMPATH}/run" /run
+VOLUME ["${PRIMPATH}/crypto", "${PRIMPATH}/run"]
 
 ENV POWERDNS_RECURSOR_VERSION="3.7.2-2"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \

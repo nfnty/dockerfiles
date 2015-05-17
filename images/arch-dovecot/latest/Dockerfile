@@ -11,8 +11,9 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID2}" --gid "${UGID2}" --shell /usr/bin/false "${UGNAME2}"
 
 RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}/"{,auth,config,crypto,data}
-VOLUME ["${PRIMPATH}/auth", "${PRIMPATH}/config", "${PRIMPATH}/crypto", "${PRIMPATH}/data"]
+        "${PRIMPATH}/"{,auth,config,crypto,data,lib} && \
+        ln --symbolic "${PRIMPATH}/lib" /var/lib/dovecot
+VOLUME ["${PRIMPATH}/auth", "${PRIMPATH}/config", "${PRIMPATH}/crypto", "${PRIMPATH}/data", "${PRIMPATH}/lib"]
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         "${PRIMPATH}/data/"{base_dir,maildir}

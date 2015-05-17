@@ -21,7 +21,10 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
 ENV NGINX_VERSION="1.8.0-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx=${NGINX_VERSION}" && \
-    find /var/cache/pacman/pkg -mindepth 1 -delete
+    find /var/cache/pacman/pkg -mindepth 1 -delete && \
+    mv /var/lib/nginx "${PRIMPATH}/lib" && \
+    ln --symbolic "${PRIMPATH}/lib" /var/lib/nginx
+VOLUME ["${PRIMPATH}/lib"]
 
 USER root
 EXPOSE 80 443

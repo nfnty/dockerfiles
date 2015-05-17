@@ -17,14 +17,19 @@ RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/"{config,scripts} && \
     chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/"{config,scripts}
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{data,logs,work}
-VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs", "${PRIMPATH}/work"]
+        "${PRIMPATH}/"{data,logs,tmp,work} && \
+    rmdir /tmp && \
+    ln --symbolic "${PRIMPATH}/tmp" /tmp
+VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs", "${PRIMPATH}/work", "${PRIMPATH}/tmp"]
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm unzip telldus-core-git ttf-dejavu && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     rm /etc/tellstick.conf && \
-    ln --symbolic "${PRIMPATH}/config/tellstick.conf" /etc/tellstick.conf
+    ln --symbolic "${PRIMPATH}/config/tellstick.conf" /etc/tellstick.conf && \
+    mv /var/state "${PRIMPATH}/state" && \
+    ln --symbolic "${PRIMPATH}/state" /var/state
+VOLUME ["${PRIMPATH}/state"]
 
 ENV OPENHAB_VERSION="1.6.2"
 RUN curl --location --output /tmp/openhab-runtime.zip \

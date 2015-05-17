@@ -16,8 +16,10 @@ RUN chown --recursive "root:root" "${PRIMPATH}/"{config,scripts} && \
 VOLUME ["${PRIMPATH}/crypto"]
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/data"
-VOLUME ["${PRIMPATH}/data"]
+        "${PRIMPATH}"{data,tmp} && \
+        rmdir /tmp && \
+        ln --symbolic "${PRIMPATH}/tmp" /tmp
+VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/tmp"]
 
 ENV OPENVPN_VERSION="2.3.6-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \

@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
 CNAME='builder' UGID='99999' PRIMPATH='/builder'
+MEMORY='4G' CPU_SHARES='256'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
@@ -13,4 +14,3 @@ STOREPATH="/mnt/2/docker/${CNAME}"
 PKGDEST="${STOREPATH}/pkgdest"
 SRCDEST="${STOREPATH}/srcdest"
 PKGCACHE="${STOREPATH}/pkgcache"
-
