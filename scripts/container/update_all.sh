@@ -21,3 +21,9 @@ systemctl start docker_kibana
 systemctl stop docker_openhab
 "${UPDCON}"       'psql-openhab'
 systemctl start docker_openhab
+
+"${UPDCON}"       'ntp'
+"${UPDCON}"       'powerdns-recursor'
+"${UPDCON}"       'kea-dhcp4'
+"${UPDCON}"       'openvpn-udp'
+"${UPDCON}"       'openvpn-tcp'
