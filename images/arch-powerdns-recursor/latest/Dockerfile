@@ -11,7 +11,7 @@ RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
         "${PRIMPATH}/"{,config,crypto}
 VOLUME ["${PRIMPATH}/crypto"]
 
-ENV POWERDNS_RECURSOR_VERSION="3.7.2-1"
+ENV POWERDNS_RECURSOR_VERSION="3.7.2-2"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "powerdns-recursor=${POWERDNS_RECURSOR_VERSION}" lua-luajson && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
