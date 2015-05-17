@@ -17,7 +17,7 @@ VOLUME ["${PRIMPATH}/auth", "${PRIMPATH}/config", "${PRIMPATH}/crypto", "${PRIMP
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         "${PRIMPATH}/data/"{base_dir,maildir}
 
-ENV DOVECOT_VERSION="2.2.16-2"
+ENV DOVECOT_VERSION="2.2.18-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${DOVECOT_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
