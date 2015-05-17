@@ -20,7 +20,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
 ENV DOVECOT_VERSION="2.2.16-2"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${DOVECOT_VERSION}" && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER root
 EXPOSE 24 143

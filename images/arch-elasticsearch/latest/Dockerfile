@@ -21,7 +21,7 @@ VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs"]
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm util-linux && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 ENV ELASTICSEARCH_VERSION="1.5.0"
 RUN curl "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz" | \

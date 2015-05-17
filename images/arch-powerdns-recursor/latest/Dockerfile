@@ -14,7 +14,7 @@ VOLUME ["${PRIMPATH}/crypto"]
 ENV POWERDNS_RECURSOR_VERSION="3.7.2-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "powerdns-recursor=${POWERDNS_RECURSOR_VERSION}" lua-luajson && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER root
 EXPOSE 53

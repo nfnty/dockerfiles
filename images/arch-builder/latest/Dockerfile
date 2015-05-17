@@ -30,7 +30,7 @@ RUN chown 'root:root' /etc/sudoers && \
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm python-requests python-pygit2 && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
 ENTRYPOINT ["/builder/scripts/builder.py"]

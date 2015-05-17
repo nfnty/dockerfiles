@@ -15,7 +15,7 @@ RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/config" && \
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm util-linux && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 ENV KIBANA_VERSION="4.0.1"
 RUN curl "https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" | \

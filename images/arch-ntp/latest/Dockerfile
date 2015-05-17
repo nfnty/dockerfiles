@@ -18,7 +18,7 @@ VOLUME ["${PRIMPATH}/data"]
 ENV NTP_VERSION="4.2.8.p2-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "ntp=${NTP_VERSION}" && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER root
 EXPOSE 123

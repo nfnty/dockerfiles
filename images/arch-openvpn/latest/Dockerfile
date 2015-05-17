@@ -22,7 +22,7 @@ VOLUME ["${PRIMPATH}/data"]
 ENV OPENVPN_VERSION="2.3.6-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "openvpn=${OPENVPN_VERSION}" && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER root
 EXPOSE 1194

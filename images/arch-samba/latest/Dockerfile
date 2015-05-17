@@ -22,7 +22,7 @@ RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
 ENV SAMBA_VERSION="4.2.1-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "samba=${SAMBA_VERSION}" && \
-    pacman --sync --noconfirm --clean --clean && \
+    find /var/cache/pacman/pkg -mindepth 1 -delete && \
     rm --recursive '/var/lib/samba' && \
     ln --symbolic '/samba/data' '/var/lib/samba'
 

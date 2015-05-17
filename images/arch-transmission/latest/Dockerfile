@@ -27,7 +27,7 @@ VOLUME ["${PRIMPATH}/config"]
 ENV TRANSMISSION_VERSION="2.84-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "transmission-cli=${TRANSMISSION_VERSION}" && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
 EXPOSE 9091 51413

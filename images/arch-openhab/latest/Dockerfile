@@ -22,7 +22,7 @@ VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs", "${PRIMPATH}/work"]
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm unzip telldus-core-git ttf-dejavu && \
-    pacman --sync --noconfirm --clean --clean && \
+    find /var/cache/pacman/pkg -mindepth 1 -delete && \
     rm /etc/tellstick.conf && \
     ln --symbolic "${PRIMPATH}/config/tellstick.conf" /etc/tellstick.conf
 

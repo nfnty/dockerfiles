@@ -27,7 +27,7 @@ VOLUME ["${PRIMPATH}/crypto", "${PRIMPATH}/data"]
 ENV POSTGRESQL_VERSION="9.4.1-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "postgresql=${POSTGRESQL_VERSION}" && \
-    pacman --sync --noconfirm --clean --clean
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
 EXPOSE 5432
