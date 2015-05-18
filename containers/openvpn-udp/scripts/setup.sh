@@ -5,7 +5,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 CNAME='openvpn-udp' UGID='190000' PRIMPATH='/openvpn'
-MEMORY='2G' CPU_SHARES='1024'
+MEMORY='2G' CPU_SHARES='512'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 

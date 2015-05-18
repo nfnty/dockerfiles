@@ -5,7 +5,7 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 CNAME='samba' UGID='140000' PRIMPATH='/samba'
-MEMORY='4G' CPU_SHARES='1024'
+MEMORY='4G' CPU_SHARES='512'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
@@ -22,7 +22,8 @@ perm_custom "${CACHEPATH}/msg" '0' '0' 'u=rwX,g=,o='
 perm_root "${CONFIGPATH}"
 perm_root "${LIBPATH}"
 perm_root "${LOGPATH}"
-perm_custom "${RUNPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
+perm_custom "${RUNPATH}" '0' '0' 'u=rwX,g=rX,o=rX' '' "-and -not -path ${RUNPATH}/samba/ncalrpc/np*"
+perm_root "${RUNPATH}/samba/ncalrpc/np"
 perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=rX' '-maxdepth 0'
 perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwX,o=' '-mindepth 1 -type f' "-and -not -path ${SHARE1}/torrent*"
 perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=' '-mindepth 1 -type d' "-and -not -path ${SHARE1}/torrent*"
