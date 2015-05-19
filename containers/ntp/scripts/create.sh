@@ -20,7 +20,11 @@ docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
-    --cap-add SYS_TIME \
+    --cap-drop 'ALL' \
+    --cap-add 'NET_BIND_SERVICE' \
+    --cap-add 'SETGID' \
+    --cap-add 'SETUID' \
+    --cap-add 'SYS_TIME' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

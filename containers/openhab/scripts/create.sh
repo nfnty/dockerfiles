@@ -18,7 +18,7 @@ WEBAPPPATH="${HOSTPATH}/webapps"
 perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_group "${ADDONPATH}"
 perm_group "${CONFIGPATH}"
-perm_custom "${STATEPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
+perm_custom "${STATEPATH}" "${UGID}" '0' 'u=rwX,g=rwX,o='
 perm_user "${TMPPATH}"
 perm_group "${WEBAPPPATH}" '' "-and -not -path ${WEBAPPPATH}/static*"
 perm_user "${WEBAPPPATH}/static"
@@ -35,6 +35,7 @@ docker create \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
     --volume="${WEBAPPPATH}:${PRIMPATH}/webapps:rw" \
     --device="${TELLSTICKPATH}" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

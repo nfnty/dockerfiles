@@ -27,6 +27,10 @@ docker create \
     --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
     --volume="${HTPASSWDPATH}:${PRIMPATH}/htpasswd:ro" \
+    --cap-drop 'ALL' \
+    --cap-add 'NET_BIND_SERVICE' \
+    --cap-add 'SETGID' \
+    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

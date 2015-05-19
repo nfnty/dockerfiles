@@ -23,6 +23,7 @@ docker create \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:rw" \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
     --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

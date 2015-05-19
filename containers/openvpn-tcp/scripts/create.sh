@@ -22,9 +22,9 @@ perm_root "${CONFIGPATH}"
 perm_root "${CRYPTOPATH}"
 perm_custom "${DEVPATH}" '0' '0' 'u=rwX,g=rX,o=rX' '-maxdepth 0'
 perm_custom "${TUNPATH}" '0' '0' 'u=rw,g=rw,o=rw'
-perm_user "${DATAPATH}"
+perm_custom "${DATAPATH}" "${UGID}" '0' 'u=rwX,g=rwX,o='
 perm_root "${SCRIPTSPATH}"
-perm_user "${TMPPATH}"
+perm_custom "${TMPPATH}" "${UGID}" '0' 'u=rwX,g=rwX,o='
 
 docker create \
     --read-only \
@@ -34,7 +34,11 @@ docker create \
     --volume="${SCRIPTSPATH}:${PRIMPATH}/scripts:ro" \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
     --device="${TUNPATH}:/dev/net/tun:rw" \
-    --cap-add NET_ADMIN \
+    --cap-drop 'ALL' \
+    --cap-add 'NET_ADMIN' \
+    --cap-add 'NET_RAW' \
+    --cap-add 'SETGID' \
+    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

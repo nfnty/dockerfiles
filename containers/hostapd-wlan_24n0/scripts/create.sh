@@ -17,7 +17,9 @@ perm_root "${CONFIGPATH}"
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
+    --cap-drop 'ALL' \
     --cap-add 'NET_ADMIN' \
+    --cap-add 'NET_RAW' \
     --net='host' \
     --name="${CNAME}" \
     --memory="${MEMORY}" \

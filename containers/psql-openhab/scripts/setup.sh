@@ -23,6 +23,7 @@ docker run \
     --read-only \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:rw" \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}_setup" \

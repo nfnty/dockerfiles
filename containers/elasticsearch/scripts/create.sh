@@ -26,6 +26,7 @@ docker create \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
     --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

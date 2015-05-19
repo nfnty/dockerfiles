@@ -20,6 +20,7 @@ docker run \
     --attach='STDERR' \
     --read-only \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:rw" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}_setup" \

@@ -36,6 +36,10 @@ docker create \
     --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
     --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
     --volume="${SHARE1}:/share/1:rw" \
+    --cap-drop 'ALL' \
+    --cap-add 'NET_BIND_SERVICE' \
+    --cap-add 'SETGID' \
+    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

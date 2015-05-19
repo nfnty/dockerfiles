@@ -27,6 +27,7 @@ docker create \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
     --volume="${ULOGDPATH}:${PRIMPATH}/host/ulogd:ro" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

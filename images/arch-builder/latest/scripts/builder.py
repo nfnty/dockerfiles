@@ -184,7 +184,6 @@ def path_clean(path):
     try:
         subprocess.check_call(
             [
-                '/usr/bin/sudo', '--non-interactive',
                 '/usr/bin/find', path,
                 '-mindepth', '1', '-delete'
             ]

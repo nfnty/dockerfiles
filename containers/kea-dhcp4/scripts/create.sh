@@ -23,6 +23,9 @@ docker create \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
     --volume="${CACHEPATH}:${PRIMPATH}/cache:rw" \
+    --cap-drop 'ALL' \
+    --cap-add 'NET_BIND_SERVICE' \
+    --cap-add 'NET_RAW' \
     --net='host' \
     --name="${CNAME}" \
     --memory="${MEMORY}" \

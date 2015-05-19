@@ -21,6 +21,7 @@ docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:rw" \
     --volume="${TORRENTPATH}:/torrent:rw" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

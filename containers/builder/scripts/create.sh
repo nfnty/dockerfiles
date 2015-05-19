@@ -16,6 +16,11 @@ docker create \
     --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
     --volume="${GNUPGHOME}:${PRIMPATH}/crypto/gnupg:rw" \
     --volume="${PKGCACHE}:/var/cache/pacman/pkg:rw" \
+    --cap-drop 'ALL' \
+    --cap-add 'FOWNER' \
+    --cap-add 'SETGID' \
+    --cap-add 'SETUID' \
+    --cap-add 'SYS_CHROOT' \
     --net='bridge' \
     --name="${CNAME}_${PKGNAME}" \
     --hostname="${CNAME}_${PKGNAME}" \

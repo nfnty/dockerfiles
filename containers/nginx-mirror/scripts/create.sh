@@ -24,6 +24,10 @@ docker create \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
     --volume="${PKGPATH}:${PRIMPATH}/data/root/archlinux/nfnty/os/x86_64:ro" \
+    --cap-drop 'ALL' \
+    --cap-add 'NET_BIND_SERVICE' \
+    --cap-add 'SETGID' \
+    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

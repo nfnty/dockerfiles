@@ -17,6 +17,7 @@ perm_group "${CONFIGPATH}"
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
+    --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \
