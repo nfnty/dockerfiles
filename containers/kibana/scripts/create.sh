@@ -11,7 +11,6 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_group "${CONFIGPATH}"
 
 docker create \

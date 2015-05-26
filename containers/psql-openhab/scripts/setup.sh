@@ -12,7 +12,6 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CRYPTOPATH="${HOSTPATH}/crypto"
 DATAPATH="${HOSTPATH}/data"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_user "${CRYPTOPATH}"
 perm_user "${DATAPATH}"
 

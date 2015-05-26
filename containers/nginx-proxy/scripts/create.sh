@@ -14,7 +14,6 @@ LIBPATH="${HOSTPATH}/lib"
 CRYPTOPATH="${HOSTPATH}/crypto"
 HTPASSWDPATH="${HOSTPATH}/htpasswd"
 
-perm_root "${HOSTPATH}" '-maxdepth 0'
 perm_root "${CONFIGPATH}"
 perm_group "${LIBPATH}" '-maxdepth 0'
 perm_user "${LIBPATH}" '-mindepth 1'

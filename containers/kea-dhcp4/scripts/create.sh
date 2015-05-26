@@ -13,7 +13,6 @@ CONFIGPATH="${HOSTPATH}/config"
 DATAPATH="${HOSTPATH}/data"
 CACHEPATH="${HOSTPATH}/cache"
 
-perm_root "${HOSTPATH}" '-maxdepth 0'
 perm_root "${CACHEPATH}"
 perm_root "${CONFIGPATH}"
 perm_root "${DATAPATH}"

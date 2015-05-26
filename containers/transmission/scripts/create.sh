@@ -12,7 +12,6 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CONFIGPATH="${HOSTPATH}/config"
 TORRENTPATH='/mnt/1/share/torrent'
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwX,o=' '-type f'
 perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwXs,o=' '-type d'
 perm_user "${CONFIGPATH}"

@@ -12,7 +12,6 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CONFIGPATH="${HOSTPATH}/config"
 RUNPATH="${HOSTPATH}/run"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_group "${CONFIGPATH}"
 perm_group "${RUNPATH}"
 

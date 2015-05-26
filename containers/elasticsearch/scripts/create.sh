@@ -14,7 +14,6 @@ DATAPATH="${HOSTPATH}/data"
 LOGPATH="${HOSTPATH}/logs"
 TMPPATH="${HOSTPATH}/tmp"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_group "${CONFIGPATH}"
 perm_user "${DATAPATH}"
 perm_user "${LOGPATH}"

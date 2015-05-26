@@ -11,12 +11,14 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID2}" --gid "${UGID2}" --shell /usr/bin/false "${UGNAME2}"
 
 RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}/"{,auth,config,crypto,data,lib} && \
+        "${PRIMPATH}/"{,config,crypto,lib} && \
         ln --symbolic "${PRIMPATH}/lib" /var/lib/dovecot
-VOLUME ["${PRIMPATH}/auth", "${PRIMPATH}/config", "${PRIMPATH}/crypto", "${PRIMPATH}/data", "${PRIMPATH}/lib"]
+VOLUME ["${PRIMPATH}/config", "${PRIMPATH}/crypto", "${PRIMPATH}/lib"]
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/data/"{base_dir,maildir}
+        "${PRIMPATH}/"{run,maildir} && \
+    ln --symbolic "${PRIMPATH}/run" /run/dovecot
+VOLUME ["${PRIMPATH}/run", "${PRIMPATH}/maildir"]
 
 ENV DOVECOT_VERSION="2.2.18-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \

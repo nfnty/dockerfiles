@@ -13,7 +13,6 @@ CRYPTOPATH="${HOSTPATH}/crypto"
 DATAPATH="${HOSTPATH}/data"
 RUNPATH="${HOSTPATH}/run"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_user "${CRYPTOPATH}"
 perm_user "${DATAPATH}"
 perm_user "${RUNPATH}"

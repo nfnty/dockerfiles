@@ -12,7 +12,6 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CONFIGPATH="${HOSTPATH}/config"
 DATAPATH="${HOSTPATH}/data"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_root "${CONFIGPATH}"
 perm_user "${DATAPATH}"
 

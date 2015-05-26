@@ -16,7 +16,6 @@ LOGPATH="${HOSTPATH}/log"
 RUNPATH="${HOSTPATH}/run"
 SHARE1='/mnt/1/share'
 
-perm_root "${HOSTPATH}" '-maxdepth 0'
 perm_custom "${CACHEPATH}" '0' '0' 'u=rwX,g=rX,o=rX' '' "-and -not -path ${CACHEPATH}/msg*"
 perm_custom "${CACHEPATH}/msg" '0' '0' 'u=rwX,g=,o='
 perm_root "${CONFIGPATH}"
@@ -24,9 +23,8 @@ perm_root "${LIBPATH}"
 perm_root "${LOGPATH}"
 perm_custom "${RUNPATH}" '0' '0' 'u=rwX,g=rX,o=rX' '' "-and -not -path ${RUNPATH}/samba/ncalrpc/np*"
 perm_root "${RUNPATH}/samba/ncalrpc/np"
-perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=rX' '-maxdepth 0'
-perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwX,o=' '-mindepth 1 -type f' "-and -not -path ${SHARE1}/torrent*"
-perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=' '-mindepth 1 -type d' "-and -not -path ${SHARE1}/torrent*"
+perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=' '-type d' "-and -not -path ${SHARE1}/torrent*"
+perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwX,o=' '-type f' "-and -not -path ${SHARE1}/torrent*"
 
 docker create \
     --read-only \

@@ -15,7 +15,6 @@ SINCEDBPATH="${DATAPATH}/sincedb"
 TMPPATH="${HOSTPATH}/tmp"
 ULOGDPATH="/var/log/ulogd"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_group "${CONFIGPATH}"
 perm_user "${SINCEDBPATH}"
 perm_user "${TMPPATH}"

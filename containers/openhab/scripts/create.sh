@@ -15,7 +15,6 @@ STATEPATH="${HOSTPATH}/state"
 TMPPATH="${HOSTPATH}/tmp"
 WEBAPPPATH="${HOSTPATH}/webapps"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_group "${ADDONPATH}"
 perm_group "${CONFIGPATH}"
 perm_custom "${STATEPATH}" "${UGID}" '0' 'u=rwX,g=rwX,o='

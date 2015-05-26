@@ -11,7 +11,6 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CRYPTOPATH="${HOSTPATH}/crypto"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_user "${CRYPTOPATH}"
 
 docker run \

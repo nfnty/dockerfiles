@@ -13,7 +13,6 @@ CONFIGPATH="${HOSTPATH}/config"
 LIBPATH="${HOSTPATH}/lib"
 PKGPATH='/mnt/2/docker/builder/pkgdest'
 
-perm_root "${HOSTPATH}" '-maxdepth 0'
 perm_root "${CONFIGPATH}"
 perm_group "${LIBPATH}" '-maxdepth 0'
 perm_user "${LIBPATH}" '-mindepth 1'

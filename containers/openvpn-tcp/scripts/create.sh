@@ -17,7 +17,6 @@ TUNPATH="${DEVPATH}/tun"
 SCRIPTSPATH="${HOSTPATH}/scripts"
 TMPPATH="${HOSTPATH}/tmp"
 
-perm_group "${HOSTPATH}" '-maxdepth 0'
 perm_root "${CONFIGPATH}"
 perm_root "${CRYPTOPATH}"
 perm_custom "${DEVPATH}" '0' '0' 'u=rwX,g=rX,o=rX' '-maxdepth 0'
