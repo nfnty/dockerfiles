@@ -13,4 +13,8 @@ DOCKERDIR="${SCRIPTDIR}/../../images/${IPREFIX}-${INAME}/${ITAG}"
 cd "${DOCKERDIR}/bootstrap"
 sha512sum --check --strict 'sha512sum.txt' "${DOCKERDIR}/checksums/bootstrap_sha512sum.txt"
 
-docker build --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+if [[ "${4:-}" == '--no-cache' ]]; then
+    docker build --no-cache --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+else
+    docker build --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+fi

@@ -10,4 +10,8 @@ ITAG="${3}"
 
 DOCKERDIR="${SCRIPTDIR}/../../images/${IPREFIX}-${INAME}/${ITAG}"
 
-docker build --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+if [[ "${4:-}" == '--no-cache' ]]; then
+    docker build --no-cache --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+else
+    docker build --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+fi
