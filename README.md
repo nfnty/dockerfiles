@@ -6,12 +6,3 @@ Docker Projects Collection
 `images` contains everything related to images and Dockerfiles.
 
 `scripts` contains general scripts.
-
-Todo:
-
-* Automatic updating and building.
-* arch-dovecot
-* arch-hostapd
-* arch-prometheus
-* arch-pacman-mirror
-* arch-bitcoin
