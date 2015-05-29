@@ -12,14 +12,15 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CONFIGPATH="${HOSTPATH}/config"
 DATAPATH="${HOSTPATH}/data"
 
-perm_root "${CONFIGPATH}"
-perm_user "${DATAPATH}"
+perm_root_ro "${CONFIGPATH}"
+perm_user_rw "${DATAPATH}"
 
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
     --cap-drop 'ALL' \
+    --cap-add 'IPC_LOCK' \
     --cap-add 'NET_BIND_SERVICE' \
     --cap-add 'SETGID' \
     --cap-add 'SETUID' \

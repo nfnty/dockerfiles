@@ -9,7 +9,7 @@ ENV GNUPGHOME="${PRIMPATH}/crypto/gnupg"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false --home-dir "${PRIMPATH}/home" "${UGNAME}"
 
-RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
+RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         "${PRIMPATH}/"{,config,host,host/pkgbuild,scripts}
 ADD config/makepkg.conf ${PRIMPATH}/config/
 ADD scripts/ ${PRIMPATH}/scripts/

@@ -7,9 +7,9 @@ ENV UGID="230000" UGNAME="ntp" PRIMPATH="/ntp"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
+RUN install --directory --owner=root --group="${UGNAME}" --mode=550 \
         "${PRIMPATH}" && \
-    install --directory --owner=root --group=root --mode=700 \
+    install --directory --owner=root --group=root --mode=500 \
         "${PRIMPATH}/config" && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         "${PRIMPATH}/data"

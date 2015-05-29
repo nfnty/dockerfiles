@@ -10,19 +10,20 @@ MEMORY='2G' CPU_SHARES='2048'
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
+CRYPTOPATH="${HOSTPATH}/crypto"
 RUNPATH="${HOSTPATH}/run"
 
-perm_group "${CONFIGPATH}"
-perm_group "${RUNPATH}"
+perm_user_ro "${CONFIGPATH}"
+perm_user_ro "${CRYPTOPATH}"
+perm_user_rw "${RUNPATH}"
 
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
+    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
     --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'SETGID' \
-    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

@@ -18,6 +18,7 @@ cd "${SCRIPTDIR}"
 "${UPDIMG}"    'arch'    'builder'              'latest'
 "${UPDIMG}"    'arch'    'dovecot'              'latest'
 "${UPDIMG}"    'arch'    'elasticsearch'        'latest'
+"${UPDIMG}"    'arch'    'exim'                 'latest'
 "${UPDIMG}"    'arch'    'hostapd'              'latest'
 "${UPDIMG}"    'arch'    'kea'                  'latest'
 "${UPDIMG}"    'arch'    'kibana'               'latest'

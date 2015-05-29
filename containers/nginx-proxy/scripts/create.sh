@@ -10,26 +10,24 @@ MEMORY='2G' CPU_SHARES='512'
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
-LIBPATH="${HOSTPATH}/lib"
 CRYPTOPATH="${HOSTPATH}/crypto"
-HTPASSWDPATH="${HOSTPATH}/htpasswd"
+LIBPATH="${HOSTPATH}/lib"
+LOGPATH="${HOSTPATH}/log"
 
-perm_root "${CONFIGPATH}"
-perm_group "${LIBPATH}" '-maxdepth 0'
-perm_user "${LIBPATH}" '-mindepth 1'
-perm_root "${CRYPTOPATH}"
-perm_group "${HTPASSWDPATH}"
+perm_user_ro "${CONFIGPATH}"
+perm_user_ro "${CRYPTOPATH}"
+perm_user_ro "${LIBPATH}" '-maxdepth 0'
+perm_user_rw "${LIBPATH}" '-mindepth 1'
+perm_user_rw "${LOGPATH}"
 
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
-    --volume="${HTPASSWDPATH}:${PRIMPATH}/htpasswd:ro" \
+    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
+    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'SETGID' \
-    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

@@ -4,14 +4,14 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CNAME='hostapd' UGID='0' PRIMPATH='/hostapd'
+CNAME='hostapd' UGID='270000' PRIMPATH='/hostapd'
 MEMORY='1G' CPU_SHARES='2048'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 
-perm_root "${CONFIGPATH}"
+perm_user_ro "${CONFIGPATH}"
 
 docker create \
     --read-only \

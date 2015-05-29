@@ -11,28 +11,38 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 ADDONPATH="${HOSTPATH}/addons"
 CONFIGPATH="${HOSTPATH}/config"
+DATAPATH="${HOSTPATH}/data"
+LOGPATH="${HOSTPATH}/log"
 STATEPATH="${HOSTPATH}/state"
 TMPPATH="${HOSTPATH}/tmp"
 WEBAPPPATH="${HOSTPATH}/webapps"
+WORKPATH="${HOSTPATH}/work"
 
-perm_group "${ADDONPATH}"
-perm_group "${CONFIGPATH}"
-perm_custom "${STATEPATH}" "${UGID}" '0' 'u=rwX,g=rwX,o='
-perm_user "${TMPPATH}"
-perm_group "${WEBAPPPATH}" '' "-and -not -path ${WEBAPPPATH}/static*"
-perm_user "${WEBAPPPATH}/static"
+perm_user_ro "${ADDONPATH}"
+perm_user_ro "${CONFIGPATH}"
+perm_user_rw "${DATAPATH}"
+perm_user_rw "${LOGPATH}"
+perm_user_ro "${STATEPATH}" '-maxdepth 0'
+perm_user_rw "${STATEPATH}" '-mindepth 1'
+perm_user_rw "${TMPPATH}"
+perm_user_ro "${WEBAPPPATH}" '' "-and -not -path ${WEBAPPPATH}/static*"
+perm_user_rw "${WEBAPPPATH}/static"
+perm_user_rw "${WORKPATH}"
 
 TELLSTICKPATH="$(readlink --canonicalize /dev/tellstickduo0)"
 
-perm_user "${TELLSTICKPATH}"
+perm_user_rw "${TELLSTICKPATH}"
 
 docker create \
     --read-only \
     --volume="${ADDONPATH}:${PRIMPATH}/addons:ro" \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
+    --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
+    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
     --volume="${STATEPATH}:${PRIMPATH}/state:rw" \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
     --volume="${WEBAPPPATH}:${PRIMPATH}/webapps:rw" \
+    --volume="${WORKPATH}:${PRIMPATH}/work:rw" \
     --device="${TELLSTICKPATH}" \
     --cap-drop 'ALL' \
     --net='none' \

@@ -13,13 +13,13 @@ CRYPTOPATH="${HOSTPATH}/crypto"
 DATAPATH="${HOSTPATH}/data"
 RUNPATH="${HOSTPATH}/run"
 
-perm_user "${CRYPTOPATH}"
-perm_user "${DATAPATH}"
-perm_user "${RUNPATH}"
+perm_user_ro "${CRYPTOPATH}"
+perm_user_rw "${DATAPATH}"
+perm_user_rw "${RUNPATH}"
 
 docker create \
     --read-only \
-    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:rw" \
+    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
     --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
     --cap-drop 'ALL' \

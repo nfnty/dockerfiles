@@ -14,10 +14,10 @@ CRYPTOPATH="${HOSTPATH}/crypto"
 LOGPATH="${HOSTPATH}/log"
 SPOOLPATH="${HOSTPATH}/spool"
 
-perm_group "${CONFIGPATH}"
-perm_group "${CRYPTOPATH}"
-perm_user "${LOGPATH}"
-perm_user "${SPOOLPATH}"
+perm_rg_ro "${CONFIGPATH}"
+perm_user_ro "${CRYPTOPATH}"
+perm_ur_rw "${LOGPATH}"
+perm_user_rw "${SPOOLPATH}"
 
 docker create \
     --read-only \
@@ -32,7 +32,7 @@ docker create \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \
-    --hostname="${CNAME}" \
+    --hostname="cloud.nfnty.se" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \

@@ -3,28 +3,28 @@ FROM nfnty/arch-mini:latest
 MAINTAINER "nfnty <docker@nfnty.se>"
 
 ENV UGID="220000" UGNAME="dovecot" PRIMPATH="/dovecot"
-ENV UGID2="220001" UGNAME2="dovenull"
 
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}" && \
-    groupadd --gid "${UGID2}" "${UGNAME2}" && \
-    useradd --uid "${UGID2}" --gid "${UGID2}" --shell /usr/bin/false "${UGNAME2}"
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}/"{,config,crypto,lib} && \
-        ln --symbolic "${PRIMPATH}/lib" /var/lib/dovecot
-VOLUME ["${PRIMPATH}/config", "${PRIMPATH}/crypto", "${PRIMPATH}/lib"]
-
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{run,maildir} && \
-    ln --symbolic "${PRIMPATH}/run" /run/dovecot
-VOLUME ["${PRIMPATH}/run", "${PRIMPATH}/maildir"]
+RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
+        "${PRIMPATH}/"{,config,crypto} && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
+        "${PRIMPATH}/"{lib,log,maildir,run,tmp} && \
+    ln --symbolic "${PRIMPATH}/lib" /var/lib/dovecot && \
+    ln --symbolic "${PRIMPATH}/run" /run/dovecot && \
+    rmdir /tmp && \
+    ln --symbolic "${PRIMPATH}/tmp" /tmp
+VOLUME ["${PRIMPATH}/lib", "${PRIMPATH}/log", "${PRIMPATH}/maildir", "${PRIMPATH}/run", "${PRIMPATH}/tmp"]
 
 ENV DOVECOT_VERSION="2.2.18-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${DOVECOT_VERSION}" && \
-    find /var/cache/pacman/pkg -mindepth 1 -delete
+    find /var/cache/pacman/pkg -mindepth 1 -delete && \
+    setcap 'cap_net_bind_service=ep' /usr/bin/dovecot && \
+    setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/anvil && \
+    setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/imap-login
 
-USER root
+USER ${UGNAME}
 EXPOSE 24 143
 ENTRYPOINT ["/usr/bin/dovecot", "-F", "-c", "/dovecot/config/dovecot.conf"]

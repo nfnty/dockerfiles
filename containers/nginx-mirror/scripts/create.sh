@@ -11,22 +11,23 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 LIBPATH="${HOSTPATH}/lib"
+LOGPATH="${HOSTPATH}/log"
 PKGPATH='/mnt/2/docker/builder/pkgdest'
 
-perm_root "${CONFIGPATH}"
-perm_group "${LIBPATH}" '-maxdepth 0'
-perm_user "${LIBPATH}" '-mindepth 1'
+perm_user_ro "${CONFIGPATH}"
+perm_user_ro "${LIBPATH}" '-maxdepth 0'
+perm_user_rw "${LIBPATH}" '-mindepth 1'
+perm_user_rw "${LOGPATH}"
 perm_custom "${PKGPATH}" '99999' '99999' 'u=rwX,g=rX,o=rX'
 
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
-    --volume="${PKGPATH}:${PRIMPATH}/data/root/archlinux/nfnty/os/x86_64:ro" \
+    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
+    --volume="${PKGPATH}:${PRIMPATH}/content/archlinux/nfnty/os/x86_64:ro" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'SETGID' \
-    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

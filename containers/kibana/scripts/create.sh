@@ -11,7 +11,7 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 
-perm_group "${CONFIGPATH}"
+perm_user_ro "${CONFIGPATH}"
 
 docker create \
     --read-only \

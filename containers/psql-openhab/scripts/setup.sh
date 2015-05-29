@@ -12,8 +12,8 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CRYPTOPATH="${HOSTPATH}/crypto"
 DATAPATH="${HOSTPATH}/data"
 
-perm_user "${CRYPTOPATH}"
-perm_user "${DATAPATH}"
+perm_user_rw "${CRYPTOPATH}"
+perm_user_rw "${DATAPATH}"
 
 docker run \
     --rm \

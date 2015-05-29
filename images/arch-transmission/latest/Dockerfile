@@ -4,25 +4,18 @@ MAINTAINER "nfnty <docker@nfnty.se>"
 
 ENV UGID="100000" UGNAME="transmission" PRIMPATH="/transmission"
 
-ENV TORRENTPATH="/torrent"
-
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}/"{,scripts} \
-        "${TORRENTPATH}"
+RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
+        "${PRIMPATH}/"{,scripts}
 ADD scripts/ ${PRIMPATH}/scripts/
-RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/scripts" && \
-    chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/scripts"
+RUN chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/scripts" && \
+    chmod --recursive 'u=rX,g=,o=' "${PRIMPATH}/scripts"
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/config" \
-        "${TORRENTPATH}/"{completed,downloading,seeding}
-ADD config/ ${PRIMPATH}/config/
-RUN chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/config" && \
-    chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/config"
-VOLUME ["${PRIMPATH}/config"]
+        "${PRIMPATH}/"{completed,config,downloading,seeding}
+VOLUME ["${PRIMPATH}/completed", "${PRIMPATH}/config", "${PRIMPATH}/downloading", "${PRIMPATH}/seeding"]
 
 ENV TRANSMISSION_VERSION="2.84-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \

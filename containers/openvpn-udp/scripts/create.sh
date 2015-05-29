@@ -12,18 +12,16 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CONFIGPATH="${HOSTPATH}/config"
 CRYPTOPATH="${HOSTPATH}/crypto"
 DATAPATH="${HOSTPATH}/data"
-DEVPATH="${HOSTPATH}/dev"
-TUNPATH="${DEVPATH}/tun"
 SCRIPTSPATH="${HOSTPATH}/scripts"
 TMPPATH="${HOSTPATH}/tmp"
+TUNPATH="${HOSTPATH}/tun"
 
-perm_root "${CONFIGPATH}"
-perm_root "${CRYPTOPATH}"
-perm_custom "${DEVPATH}" '0' '0' 'u=rwX,g=rX,o=rX' '-maxdepth 0'
-perm_custom "${TUNPATH}" '0' '0' 'u=rw,g=rw,o=rw'
-perm_custom "${DATAPATH}" "${UGID}" '0' 'u=rwX,g=rwX,o='
-perm_root "${SCRIPTSPATH}"
-perm_custom "${TMPPATH}" "${UGID}" '0' 'u=rwX,g=rwX,o='
+perm_root_ro "${CONFIGPATH}"
+perm_root_ro "${CRYPTOPATH}"
+perm_ur_rw "${DATAPATH}"
+perm_root_ro "${SCRIPTSPATH}"
+perm_ur_rw "${TMPPATH}"
+perm_ur_rw "${TUNPATH}"
 
 docker create \
     --read-only \

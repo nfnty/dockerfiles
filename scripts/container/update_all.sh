@@ -28,3 +28,5 @@ systemctl start docker_openhab
 "${UPDCON}"       'kea-dhcp4'
 "${UPDCON}"       'openvpn-udp'
 "${UPDCON}"       'openvpn-tcp'
+"${UPDCON}"       'dovecot'
+"${UPDCON}"       'exim'

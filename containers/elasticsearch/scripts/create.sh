@@ -13,11 +13,13 @@ CONFIGPATH="${HOSTPATH}/config"
 DATAPATH="${HOSTPATH}/data"
 LOGPATH="${HOSTPATH}/logs"
 TMPPATH="${HOSTPATH}/tmp"
+WORKPATH="${HOSTPATH}/work"
 
-perm_group "${CONFIGPATH}"
-perm_user "${DATAPATH}"
-perm_user "${LOGPATH}"
-perm_user "${TMPPATH}"
+perm_user_ro "${CONFIGPATH}"
+perm_user_rw "${DATAPATH}"
+perm_user_rw "${LOGPATH}"
+perm_user_rw "${TMPPATH}"
+perm_user_rw "${WORKPATH}"
 
 docker create \
     --read-only \
@@ -25,6 +27,7 @@ docker create \
     --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
     --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
+    --volume="${WORKPATH}:${PRIMPATH}/work:rw" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

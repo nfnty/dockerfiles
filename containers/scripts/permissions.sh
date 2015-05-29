@@ -24,7 +24,7 @@ perm_base() {
     echo
 }
 
-perm_user() {
+perm_user_rw() {
     local path="${1}"
     local uid="${UGID}"
     local gid="${UGID}"
@@ -32,8 +32,24 @@ perm_user() {
 
     perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
 }
+perm_user_ro() {
+    local path="${1}"
+    local uid="${UGID}"
+    local gid="${UGID}"
+    local perms='u=rX,g=,o='
 
-perm_group() {
+    perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
+}
+
+perm_group_rw() {
+    local path="${1}"
+    local uid='0'
+    local gid="${UGID}"
+    local perms='u=rwX,g=rwX,o='
+
+    perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
+}
+perm_group_ro() {
     local path="${1}"
     local uid='0'
     local gid="${UGID}"
@@ -42,11 +58,53 @@ perm_group() {
     perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
 }
 
-perm_root() {
+perm_root_rw() {
     local path="${1}"
     local uid='0'
     local gid='0'
     local perms='u=rwX,g=,o='
+
+    perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
+}
+perm_root_ro() {
+    local path="${1}"
+    local uid='0'
+    local gid='0'
+    local perms='u=rX,g=,o='
+
+    perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
+}
+
+perm_ur_rw() {
+    local path="${1}"
+    local uid="${UGID}"
+    local gid='0'
+    local perms='u=rwX,g=rwX,o='
+
+    perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
+}
+perm_ur_rw_ro() {
+    local path="${1}"
+    local uid="${UGID}"
+    local gid='0'
+    local perms='u=rwX,g=rX,o='
+
+    perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
+}
+perm_ur_ro() {
+    local path="${1}"
+    local uid="${UGID}"
+    local gid='0'
+    local perms='u=rX,g=rX,o='
+
+    perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
+}
+
+perm_rg_ro() {
+    local path="${1}"
+    local uid='0'
+    local gid="${UGID}"
+    local perms='u=rX,g=rX,o='
 
     perm_base "${path}" "${uid}" "${gid}" "${perms}" "${2:-}" "${3:-}"
 }

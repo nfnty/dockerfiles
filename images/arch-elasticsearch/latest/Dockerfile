@@ -9,27 +9,23 @@ ENV JAVA_HOME="/usr/lib/jvm/default-runtime"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}/"{,bin,config}
-ADD config/ ${PRIMPATH}/config/
-RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/config" && \
-    chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/config"
-
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{data,logs,work,plugins,tmp} && \
+RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
+        "${PRIMPATH}/"{,bin,config} && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
+        "${PRIMPATH}/"{data,logs,plugins,tmp,work} && \
     rmdir /tmp && \
     ln --symbolic "${PRIMPATH}/tmp" /tmp
-VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs", "${PRIMPATH}/tmp"]
+VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/logs", "${PRIMPATH}/tmp", "${PRIMPATH}/work"]
 
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm util-linux && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
-ENV ELASTICSEARCH_VERSION="1.5.0"
-RUN curl "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz" | \
+ENV ELASTICSEARCH_VERSION="1.5.2"
+RUN curl "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz" | \
         tar --extract --gzip --strip-components=1 --file=- --directory="${PRIMPATH}/bin" && \
-    chown --recursive "root:${UGNAME}" "${PRIMPATH/bin}" && \
-    chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/bin"  && \
+    chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH/bin}" && \
+    chmod --recursive 'u=rX,g=,o=' "${PRIMPATH}/bin"  && \
     rm --recursive "${PRIMPATH}/bin/config" && \
     ln --symbolic "${PRIMPATH}/config" "${PRIMPATH}/bin/config"
 

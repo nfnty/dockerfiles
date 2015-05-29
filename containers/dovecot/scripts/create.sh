@@ -14,30 +14,29 @@ CONFIGPATH="${HOSTPATH}/config"
 CRYPTOPATH="${HOSTPATH}/crypto"
 MAILDIRPATH="${HOSTPATH}/maildir"
 LIBPATH="${HOSTPATH}/lib"
+LOGPATH="${HOSTPATH}/log"
 RUNPATH="${HOSTPATH}/run"
 TMPDIR="${HOSTPATH}/tmp"
 
-perm_group "${CONFIGPATH}"
-perm_root "${CRYPTOPATH}"
-perm_user "${MAILDIRPATH}"
-perm_group "${LIBPATH}"
-perm_custom "${RUNPATH}" '0' '0' 'u=rwX,g=rX,o=rX' '-maxdepth 0'
-perm_user "${TMPDIR}"
+perm_user_ro "${CONFIGPATH}"
+perm_user_ro "${CRYPTOPATH}"
+perm_user_rw "${MAILDIRPATH}"
+perm_user_rw "${LIBPATH}"
+perm_user_rw "${LOGPATH}"
+perm_user_rw "${RUNPATH}" '-maxdepth 0'
+perm_user_rw "${TMPDIR}"
 
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
     --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
+    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
     --volume="${MAILDIRPATH}:${PRIMPATH}/maildir:rw" \
     --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
-    --volume="${TMPDIR}:/tmp:rw" \
+    --volume="${TMPDIR}:${PRIMPATH}/tmp:rw" \
     --cap-drop='ALL' \
     --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'CHOWN' \
-    --cap-add 'KILL' \
-    --cap-add 'SETGID' \
-    --cap-add 'SETUID' \
     --cap-add 'SYS_CHROOT' \
     --net='none' \
     --dns="${DNSSERVER}" \

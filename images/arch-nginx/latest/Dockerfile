@@ -7,25 +7,20 @@ ENV UGID="160000" UGNAME="nginx" PRIMPATH="/nginx"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group="${UGNAME}" --mode=750 \
-        "${PRIMPATH}/"{,htpasswd} && \
-    install --directory --owner=root --group=root --mode=700 \
-        "${PRIMPATH}/"{config,crypto}
-ADD config/ ${PRIMPATH}/config/
-RUN chown --recursive "root:${UGNAME}" "${PRIMPATH}/config" && \
-    chmod --recursive 'u=rwX,g=rX,o=' "${PRIMPATH}/config"
-
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/data"
+RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
+        "${PRIMPATH}"{,config,content,crypto} && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
+        "${PRIMPATH}"{lib,lib/proxy,log}
+VOLUME ["${PRIMPATH}/lib", "${PRIMPATH}/log"]
 
 ENV NGINX_VERSION="1.8.0-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx=${NGINX_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    mv /var/lib/nginx "${PRIMPATH}/lib" && \
+    setcap 'cap_net_bind_service=ep' /usr/bin/nginx && \
+    rm --recursive /var/lib/nginx && \
     ln --symbolic "${PRIMPATH}/lib" /var/lib/nginx
-VOLUME ["${PRIMPATH}/lib"]
 
-USER root
+USER ${UGNAME}
 EXPOSE 80 443
 ENTRYPOINT ["/usr/bin/nginx", "-c", "/nginx/config/nginx.conf", "-g", "daemon off;"]

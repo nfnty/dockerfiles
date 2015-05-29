@@ -10,20 +10,22 @@ MEMORY='4G' CPU_SHARES='1024'
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
-DATAPATH="${HOSTPATH}/data"
-SINCEDBPATH="${DATAPATH}/sincedb"
+BUNDLEPATH="${HOSTPATH}/bundle"
+SINCEDBPATH="${HOSTPATH}/sincedb"
 TMPPATH="${HOSTPATH}/tmp"
 ULOGDPATH="/var/log/ulogd"
 
-perm_group "${CONFIGPATH}"
-perm_user "${SINCEDBPATH}"
-perm_user "${TMPPATH}"
+perm_user_ro "${CONFIGPATH}"
+perm_user_rw "${BUNDLEPATH}"
+perm_user_rw "${SINCEDBPATH}"
+perm_user_rw "${TMPPATH}"
 perm_custom "${ULOGDPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
 
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
+    --volume="${BUNDLEPATH}:${PRIMPATH}/bundle:rw" \
+    --volume="${SINCEDBPATH}:${PRIMPATH}/sincedb:rw" \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
     --volume="${ULOGDPATH}:${PRIMPATH}/host/ulogd:ro" \
     --cap-drop 'ALL' \

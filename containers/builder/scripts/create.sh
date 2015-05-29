@@ -10,12 +10,12 @@ PKGNAME="${1}"
 
 docker create \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${PKGBUILDPATH}:${PRIMPATH}/host/pkgbuild:ro" \
-    --volume="${PKGDEST}:${PRIMPATH}/pkgdest:rw" \
-    --volume="${SRCDEST}:${PRIMPATH}/srcdest:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
     --volume="${GNUPGHOME}:${PRIMPATH}/crypto/gnupg:rw" \
+    --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
+    --volume="${SRCDEST}:${PRIMPATH}/srcdest:rw" \
+    --volume="${PKGBUILDPATH}:${PRIMPATH}/host/pkgbuild:ro" \
     --volume="${PKGCACHE}:/var/cache/pacman/pkg:rw" \
+    --volume="${PKGDEST}:${PRIMPATH}/pkgdest:rw" \
     --cap-drop 'ALL' \
     --cap-add 'FOWNER' \
     --cap-add 'SETGID' \
