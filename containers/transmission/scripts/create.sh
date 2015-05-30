@@ -13,15 +13,13 @@ CONFIGPATH="${HOSTPATH}/config"
 TORRENTPATH='/mnt/1/share/torrent'
 
 perm_user_rw "${CONFIGPATH}"
-perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwXs,o=' '-mindepth 1 -type d'
-perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwX,o=' '-mindepth 1 -type f'
+perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwXs,o=' '-type d'
+perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwX,o=' '-type f'
 
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:rw" \
-    --volume="${TORRENTPATH}/completed:${PRIMPATH}/completed:rw" \
-    --volume="${TORRENTPATH}/downloading:${PRIMPATH}/downloading:rw" \
-    --volume="${TORRENTPATH}/seeding:${PRIMPATH}/seeding:rw" \
+    --volume="${TORRENTPATH}:${PRIMPATH}/torrent:rw" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

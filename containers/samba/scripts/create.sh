@@ -14,6 +14,7 @@ CONFIGPATH="${HOSTPATH}/config"
 LIBPATH="${HOSTPATH}/lib"
 LOGPATH="${HOSTPATH}/log"
 RUNPATH="${HOSTPATH}/run"
+SHAREPATH="${HOSTPATH}/share"
 SHARE1='/mnt/1/share'
 
 perm_user_rw "${CACHEPATH}" '' "-and -not -path ${CACHEPATH}/lck*"
@@ -23,8 +24,9 @@ perm_user_rw "${LIBPATH}"
 perm_user_rw "${LIBPATH}/private"
 perm_user_rw "${LOGPATH}"
 perm_user_rw "${RUNPATH}"
-perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=' '-type d' "-and -not -path ${SHARE1}/torrent/*"
-perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwX,o=' '-type f' "-and -not -path ${SHARE1}/torrent/*"
+perm_user_ro "${SHAREPATH}"
+perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwXs,o=' '-type d' "-and -not -path ${SHARE1}/torrent*"
+perm_custom "${SHARE1}" "${UGID}" "${UGID}" 'u=rwX,g=rwX,o=' '-type f' "-and -not -path ${SHARE1}/torrent*"
 
 docker create \
     --read-only \
@@ -33,6 +35,7 @@ docker create \
     --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
     --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
     --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
+    --volume="${SHAREPATH}:${PRIMPATH}/share:rw" \
     --volume="${SHARE1}:${PRIMPATH}/share/1:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \

@@ -14,8 +14,8 @@ RUN chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/scripts" && \
     chmod --recursive 'u=rX,g=,o=' "${PRIMPATH}/scripts"
 
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{completed,config,downloading,seeding}
-VOLUME ["${PRIMPATH}/completed", "${PRIMPATH}/config", "${PRIMPATH}/downloading", "${PRIMPATH}/seeding"]
+        "${PRIMPATH}/"{config,torrent,torrent/completed,torrent/downloading,torrent/seeding}
+VOLUME ["${PRIMPATH}/config", "${PRIMPATH}/torrent"]
 
 ENV TRANSMISSION_VERSION="2.84-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
