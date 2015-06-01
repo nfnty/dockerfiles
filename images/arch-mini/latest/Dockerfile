@@ -2,7 +2,7 @@ FROM scratch
 
 MAINTAINER "nfnty <docker@nfnty.se>"
 
-ADD bootstrap/arch-mini-bootstrap_2015-05-30.tar.xz /
+ADD bootstrap/arch-mini-bootstrap.tar.xz /
 
 ADD config/mirrorlist /etc/pacman.d/
 ADD config/locale.conf config/pacman.conf /etc/
