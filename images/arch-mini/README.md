@@ -16,6 +16,6 @@ Arch Linux: Minimal Base Image
 * [tar](https://www.archlinux.org/packages/core/x86_64/tar/)
 * [xz](https://www.archlinux.org/packages/core/x86_64/xz/)
 
-Build archive with `arch-bootstrap`
+Bootstrap archive is built by `arch-bootstrap`
 
 When building the image you need to run [haveged](https://wiki.archlinux.org/index.php/Haveged) or similar if your available random entropy is low.
