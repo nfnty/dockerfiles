@@ -4,14 +4,19 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-IPREFIX="${1}"
-INAME="${2}"
-ITAG="${3}"
+NAME="${1%:*}"
+NAME="${NAME#*/}"
+TAG="${1#*:}"
 
-DOCKERDIR="${SCRIPTDIR}/../../images/${IPREFIX}-${INAME}/${ITAG}"
+DOCKERPATH="${SCRIPTDIR}/../../images/${NAME}/${TAG}"
+
+if [[ -d "${DOCKERPATH}/bootstrap" ]]; then
+    cd "${DOCKERPATH}/bootstrap"
+    sha512sum --check --strict "${NAME}-bootstrap.tar.xz.sha512sum"
+fi
 
 if [[ "${4:-}" == '--no-cache' ]]; then
-    docker build --no-cache --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+    docker build --no-cache --tag="${1}" "${DOCKERPATH}"
 else
-    docker build --tag="nfnty/${IPREFIX}-${INAME}:${ITAG}" "${DOCKERDIR}"
+    docker build --tag="${1}" "${DOCKERPATH}"
 fi

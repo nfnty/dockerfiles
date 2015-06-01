@@ -4,32 +4,24 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-UPDBIMG="${SCRIPTDIR}/build_base.sh"
-UPDIMG="${SCRIPTDIR}/build.sh"
+older_1h() {
+    if [[ "$( "${SCRIPTDIR}/older_1h.py" "${1}" )" == 'True' ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
-cd "${SCRIPTDIR}"
+update() {
+    if older_1h "${1}"; then
+        echo -e "\033[33mBuilding: ${1}\033[0m"
+        "${SCRIPTDIR}/build.sh" "${1}"
+        echo -e "\033[32mCompleted: ${1}\033[0m\n"
+    else
+        echo -e "\033[34mNot older than 1h: ${1}\033[0m\n"
+    fi
+}
 
-"${UPDBIMG}" 'arch' 'mini'          'latest'
-
-"${UPDIMG}"  'arch' 'devel'         'latest'
-"${UPDIMG}"  'arch' 'java'          'jre8-openjdk-headless'
-"${UPDIMG}"  'arch' 'nodejs'        'latest'
-
-"${UPDIMG}"    'arch'    'builder'              'latest'
-"${UPDIMG}"    'arch'    'dovecot'              'latest'
-"${UPDIMG}"    'arch'    'elasticsearch'        'latest'
-"${UPDIMG}"    'arch'    'exim'                 'latest'
-"${UPDIMG}"    'arch'    'hostapd'              'latest'
-"${UPDIMG}"    'arch'    'kea'                  'latest'
-"${UPDIMG}"    'arch'    'kibana'               'latest'
-"${UPDIMG}"    'arch'    'logstash'             'latest'
-"${UPDIMG}"    'arch'    'nginx'                'latest'
-"${UPDIMG}"    'arch'    'ntp'                  'latest'
-"${UPDIMG}"    'arch'    'openhab'              'latest'
-"${UPDIMG}"    'arch'    'openvpn'              'latest'
-"${UPDIMG}"    'arch'    'postgresql'           'latest'
-"${UPDIMG}"    'arch'    'powerdns-recursor'    'latest'
-"${UPDIMG}"    'arch'    'samba'                'latest'
-"${UPDIMG}"    'arch'    'transmission'         'latest'
+source "${SCRIPTDIR}/images.sh"
 
 docker rmi $(docker images --filter='dangling=true' --quiet)

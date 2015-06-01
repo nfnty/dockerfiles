@@ -145,7 +145,7 @@ def main():
 
     # Initialize containers
     containers = [Container(args.name)]
-    for num in range(1, args.backups+1):
+    for num in range(1, int(args.backups)+1):
         containers.append(Container(args.prefix + str(num) + '_' + args.name))
 
     # Rename containers

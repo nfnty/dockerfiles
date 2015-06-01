@@ -4,29 +4,31 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-UPDCON="${SCRIPTDIR}/update.py"
+UPD="${SCRIPTDIR}/update.py"
 
 cd "${SCRIPTDIR}"
 
-"${UPDCON}"       'transmission'
-"${UPDCON}"       'nginx-proxy'
-"${UPDCON}"       'nginx-mirror'
-"${UPDCON}"       'samba'
-"${UPDCON}" --off 'kibana'
-"${UPDCON}" --off 'logstash'
-"${UPDCON}"       'elasticsearch'
+"${UPD}"       'transmission'
+"${UPD}"       'nginx-proxy'
+"${UPD}"       'nginx-mirror'
+"${UPD}"       'samba'
+"${UPD}" --off 'kibana'
+"${UPD}" --off 'logstash'
+"${UPD}"       'elasticsearch'
 systemctl start docker_logstash
 systemctl start docker_kibana
 
 systemctl stop docker_openhab
-"${UPDCON}"       'psql-openhab'
+"${UPD}"       'psql-openhab'
 systemctl start docker_openhab
 
-"${UPDCON}"       'ntp'
-"${UPDCON}"       'hostapd'
-"${UPDCON}"       'powerdns-recursor'
-"${UPDCON}"       'kea-dhcp4'
-"${UPDCON}"       'openvpn-udp'
-"${UPDCON}"       'openvpn-tcp'
-"${UPDCON}"       'dovecot'
-"${UPDCON}"       'exim'
+"${UPD}" --off 'kea-dhcp4'
+"${UPD}"       'hostapd'
+systemctl start docker_kea-dhcp4
+
+"${UPD}"       'ntp'
+"${UPD}"       'powerdns-recursor'
+"${UPD}"       'openvpn-udp'
+"${UPD}"       'openvpn-tcp'
+"${UPD}"       'dovecot'
+"${UPD}"       'exim'

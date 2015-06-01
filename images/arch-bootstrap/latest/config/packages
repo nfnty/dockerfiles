@@ -1,0 +1,12 @@
+bash
+coreutils
+curl
+filesystem
+findutils
+gcc-libs
+glibc
+gzip
+pacman
+shadow
+tar
+xz
