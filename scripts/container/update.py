@@ -23,28 +23,28 @@ class Container:
     ''' Container class '''
     def __init__(self, name):
         self.name = name
-
+        self.exists = False
+    def doesexist(self):
+        ''' Exists? '''
         try:
             CLIENT.inspect_container(self.name)
             self.exists = True
         except (requests.exceptions.HTTPError, docker.errors.APIError):
             self.exists = False
-    def create(self):
+    def create(self, name):
         ''' Create '''
         try:
             subprocess.check_call([
                 os.path.join(
                     os.path.abspath(os.path.join(SCRIPTDIR, '../..')),
-                    'containers', self.name, 'scripts/create.sh'
-                )
+                    'containers', name, 'scripts/create.sh'
+                ),
+                self.name
             ])
             self.exists = True
             print('Created ' + self.name)
-            return True
         except subprocess.CalledProcessError as error:
-            print('Failed to create ' + self.name)
-            print(str(error))
-            return False
+            error_print_exit(error)
     def remove(self):
         ''' Remove '''
         try:
@@ -73,40 +73,33 @@ class Container:
     def stop(self):
         ''' Stop '''
         try:
-            CLIENT.stop(self.name)
-            print('Stopped ' + self.name)
-            return True
-        except (requests.exceptions.HTTPError, docker.errors.APIError) as error:
-            print('Failed to stop ' + self.name)
-            print(str(error))
-            return False
-    def restart(self):
-        ''' Restart '''
-        try:
             subprocess.check_call(
-                ['/usr/bin/systemctl', 'restart', 'docker_' + self.name],
+                ['/usr/bin/systemctl', 'stop', 'docker_' + self.name],
                 stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
             )
-            print('Restarted ' + self.name)
-            return True
+            print('Stopped ' + self.name)
         except subprocess.CalledProcessError as error:
-            print('Failed to restart ' + self.name)
-            print(str(error))
-            return False
+            print('Failed to stop ' + self.name)
+            error_print_exit(error)
+    def start(self):
+        ''' Start '''
+        try:
+            subprocess.check_call(
+                ['/usr/bin/systemctl', 'start', 'docker_' + self.name],
+                stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+            )
+            print('Started ' + self.name)
+        except subprocess.CalledProcessError as error:
+            print('Failed to start ' + self.name)
+            error_print_exit(error)
 
 def rename(containers, name, prefix):
     ''' Rename containers '''
     for index, container in reversed(list(enumerate(containers))):
-        if container.exists:
-            container.rename(prefix + str(index+1) + '_' + name)
-def rename_revert(containers, name, prefix):
-    ''' Revert renaming '''
-    for index, container in enumerate(containers):
-        if container.exists:
-            if index == 0:
-                container.rename(name)
-            else:
-                container.rename(prefix + str(index) + '_' + name)
+        if index == 0:
+            container.rename(name)
+        else:
+            container.rename(prefix + str(index) + '_' + name)
 
 def args_parse():
     ''' Parse arguments '''
@@ -118,6 +111,10 @@ def args_parse():
     parser.add_argument(
         '--off', action='store_true',
         help='Keep container turned off after update'
+    )
+    parser.add_argument(
+        '--nostop', action='store_true',
+        help='Do not stop container'
     )
     parser.add_argument(
         '--backups', default=1,
@@ -144,37 +141,39 @@ def main():
     args = args_parse()
 
     # Initialize containers
-    containers = [Container(args.name)]
-    for num in range(1, int(args.backups)+1):
-        containers.append(Container(args.prefix + str(num) + '_' + args.name))
+    containers = []
+    for index in range(int(args.backups)+1):
+        if index == 0:
+            container = Container(args.name)
+        else:
+            container = Container(args.prefix + str(index) + '_' + args.name)
+
+        container.doesexist()
+
+        if container.exists:
+            containers.append(container)
+        else:
+            break
+
+    # Create container
+    containers.insert(0, Container(args.prefix + '0' + '_' + args.name))
+    containers[0].create(args.name)
+
+    # Stop container
+    if not args.nostop and len(containers) > 1 and containers[1].running():
+        containers[1].stop()
 
     # Rename containers
     rename(containers, args.name, args.prefix)
 
-    # Create container
-    containers.insert(0, Container(args.name))
-    if not containers[0].create():
-        containers = containers[1:]
-        rename_revert(containers, args.name, args.prefix)
-        sys.exit(1)
-
-    # Stop container
-    if containers[1].running():
-        if not containers[1].stop():
-            rename_revert(containers, args.name, args.prefix)
-            sys.exit(1)
-
     # Start container
     if not args.off:
-        if not containers[0].restart():
-            containers[0].remove()
-            containers = containers[1:]
-            rename_revert(containers, args.name, args.prefix)
-            sys.exit(1)
+        containers[0].start()
 
     # Remove abundant backup
-    if containers[-1].exists:
+    if containers[-1].name == args.prefix + str(int(args.backups)+1) + '_' + args.name:
         containers[-1].remove()
+        del containers[-1]
 
 if __name__ == '__main__':
     main()
