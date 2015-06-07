@@ -22,5 +22,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     ln --symbolic "${PRIMPATH}/lib" /var/lib/nginx
 
 USER ${UGNAME}
-EXPOSE 80 443
+EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/usr/bin/nginx", "-c", "/nginx/config/nginx.conf", "-g", "daemon off;"]

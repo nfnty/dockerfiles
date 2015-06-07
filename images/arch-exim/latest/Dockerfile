@@ -25,5 +25,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     ln --symbolic "${PRIMPATH}/config/exim.conf" /etc/mail/exim.conf
 
 USER root
-EXPOSE 25 587
+EXPOSE 25/tcp 587/tcp
 ENTRYPOINT ["/usr/bin/exim", "-bdf", "-q30m"]

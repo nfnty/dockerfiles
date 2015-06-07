@@ -12,7 +12,7 @@ source "${SCRIPTDIR}/../../scripts/variables.sh"
 CONFIGPATH="${HOSTPATH}/config"
 LIBPATH="${HOSTPATH}/lib"
 LOGPATH="${HOSTPATH}/log"
-PKGPATH='/mnt/2/docker/builder/pkgdest'
+PKGPATH='/srv/docker/builder/pkgdest'
 
 perm_user_ro "${CONFIGPATH}"
 perm_user_ro "${LIBPATH}" '-maxdepth 0'
@@ -30,7 +30,7 @@ docker create \
     --cap-add 'NET_BIND_SERVICE' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \

@@ -6,12 +6,9 @@ MEMORY='4G' CPU_SHARES='256'
 source "${SCRIPTDIR}/../../scripts/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
-CRYPTOPATH="${HOSTPATH}/crypto"
-GNUPGHOME="${CRYPTOPATH}/gnupg"
+GNUPGHOME="${HOSTPATH}/crypto/gnupg"
 LOGPATH="${HOSTPATH}/logs"
 PKGBUILDPATH="${HOSTPATH}/pkgbuilds"
-
-STOREPATH="/mnt/2/docker/${CNAME}"
-SRCDEST="${STOREPATH}/srcdest"
-PKGCACHE="${STOREPATH}/pkgcache"
-PKGDEST="${STOREPATH}/pkgdest"
+PKGCACHE="${HOSTPATH}/pkgcache"
+PKGDEST="${HOSTPATH}/pkgdest"
+SRCDEST="${HOSTPATH}/srcdest"

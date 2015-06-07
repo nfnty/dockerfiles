@@ -19,14 +19,14 @@ docker create \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-kibana:latest
 
-CID="$(docker inspect --format='{{.Id}}' "${CNAME}")"
+CID="$( docker inspect --format='{{.Id}}' "${1:-"${CNAME}"}" )"
 
 cd "${BTRFSPATH}/${CID}"
 setfattr --name=user.pax.flags --value=em kibana/bin/node/bin/node

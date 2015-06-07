@@ -26,5 +26,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/imap-login
 
 USER ${UGNAME}
-EXPOSE 24 143
+EXPOSE 24/tcp 143/tcp
 ENTRYPOINT ["/usr/bin/dovecot", "-F", "-c", "/dovecot/config/dovecot.conf"]

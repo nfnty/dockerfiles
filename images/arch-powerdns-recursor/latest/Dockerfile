@@ -22,5 +22,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_net_bind_service=ep' /usr/bin/pdns_recursor
 
 USER ${UGNAME}
-EXPOSE 53
+EXPOSE 53/tcp 53/udp
 ENTRYPOINT ["/usr/bin/pdns_recursor", "--config-dir=/powerdns/config"]

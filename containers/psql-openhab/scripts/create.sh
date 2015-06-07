@@ -25,7 +25,7 @@ docker create \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \

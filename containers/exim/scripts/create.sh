@@ -31,7 +31,7 @@ docker create \
     --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --hostname="cloud.nfnty.se" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \

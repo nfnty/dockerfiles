@@ -26,7 +26,7 @@ docker create \
     --cap-add 'NET_BIND_SERVICE' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \

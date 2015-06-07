@@ -24,5 +24,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
-EXPOSE 5432
+EXPOSE 5432/tcp
 ENTRYPOINT ["/usr/bin/postgres"]

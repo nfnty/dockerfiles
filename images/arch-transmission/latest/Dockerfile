@@ -23,5 +23,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
-EXPOSE 9091 51413
+EXPOSE 9091/tcp 51413/tcp 51413/udp
 ENTRYPOINT ["/usr/bin/transmission-daemon", "--foreground", "--config-dir", "/transmission/config"]

@@ -30,5 +30,5 @@ RUN curl "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-
     ln --symbolic "${PRIMPATH}/config" "${PRIMPATH}/bin/config"
 
 USER ${UGNAME}
-EXPOSE 9200 9300
+EXPOSE 9200/tcp 9300/tcp
 ENTRYPOINT ["/elasticsearch/bin/bin/elasticsearch"]

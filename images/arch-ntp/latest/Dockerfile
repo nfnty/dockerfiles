@@ -21,5 +21,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER root
-EXPOSE 123
+EXPOSE 123/udp
 ENTRYPOINT ["/usr/bin/ntpd", "--panicgate", "--user=ntp:ntp", "--configfile=/ntp/config/ntp.conf", "--nofork"]

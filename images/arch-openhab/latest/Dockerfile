@@ -44,5 +44,5 @@ RUN curl --location --output /tmp/openhab-runtime.zip \
     ln --symbolic "${PRIMPATH}/webapps" "${PRIMPATH}/bin/webapps"
 
 USER ${UGNAME}
-EXPOSE 8080 8443 5555 9001
+EXPOSE 8080/tcp 8443/tcp
 ENTRYPOINT ["/openhab/scripts/start.sh"]

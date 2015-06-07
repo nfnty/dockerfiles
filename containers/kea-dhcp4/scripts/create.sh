@@ -29,7 +29,7 @@ docker create \
     --cap-add 'NET_BIND_SERVICE' \
     --cap-add 'NET_RAW' \
     --net='host' \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \

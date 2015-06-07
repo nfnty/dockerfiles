@@ -29,7 +29,7 @@ docker run \
     --cap-add 'CHOWN' \
     --cap-add 'SYS_CHROOT' \
     --net='bridge' \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \

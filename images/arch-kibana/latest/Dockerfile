@@ -23,5 +23,5 @@ RUN curl "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-lin
     ln --symbolic "${PRIMPATH}/config" "${PRIMPATH}/bin/config"
 
 USER ${UGNAME}
-EXPOSE 5601
+EXPOSE 5601/tcp
 ENTRYPOINT ["/kibana/bin/bin/kibana"]

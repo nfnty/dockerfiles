@@ -47,14 +47,14 @@ docker create \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${CNAME}" \
+    --name="${1:-"${CNAME}"}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-openhab:latest
 
-CID="$(docker inspect --format='{{.Id}}' "${CNAME}")"
+CID="$( docker inspect --format='{{.Id}}' "${1:-"${CNAME}"}" )"
 
 cd "${BTRFSPATH}/${CID}"
 setfattr --name=user.pax.flags --value=em usr/lib/jvm/java-8-openjdk/jre/bin/java
