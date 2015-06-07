@@ -4,24 +4,9 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CNAME='openvpn-tcp' UGID='190000' PRIMPATH='/openvpn'
-MEMORY='2G' CPU_SHARES='512'
+CNAME="${1}"
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
-
-CONFIGPATH="${HOSTPATH}/config"
-CRYPTOPATH="${HOSTPATH}/crypto"
-DATAPATH="${HOSTPATH}/data"
-SCRIPTSPATH="${HOSTPATH}/scripts"
-TMPPATH="${HOSTPATH}/tmp"
-TUNPATH="${HOSTPATH}/tun"
-
-perm_root_ro "${CONFIGPATH}"
-perm_root_ro "${CRYPTOPATH}"
-perm_ur_rw "${DATAPATH}"
-perm_root_ro "${SCRIPTSPATH}"
-perm_ur_rw "${TMPPATH}"
-perm_ur_rw "${TUNPATH}"
+source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \

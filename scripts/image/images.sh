@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 if older_1h 'nfnty/arch-mini:latest'; then
-    "${SCRIPTDIR}/../../containers/bootstrap/scripts/run.sh"
+    "${SCRIPTDIR}/../../containers/bootstrap/scripts/run.sh" 'bootstrap'
 fi
 update 'nfnty/arch-mini:latest'
 
@@ -12,6 +12,7 @@ update 'nfnty/arch-nodejs:latest'
 update 'nfnty/arch-bootstrap:latest'
 update 'nfnty/arch-builder:latest'
 update 'nfnty/arch-dovecot:latest'
+update 'nfnty/arch-emby:latest'
 update 'nfnty/arch-elasticsearch:latest'
 update 'nfnty/arch-exim:latest'
 update 'nfnty/arch-hostapd:latest'

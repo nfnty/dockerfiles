@@ -4,20 +4,9 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CNAME='exim' UGID='250000' PRIMPATH='/exim'
-MEMORY='2G' CPU_SHARES='1024'
+CNAME="${1}"
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
-
-CONFIGPATH="${HOSTPATH}/config"
-CRYPTOPATH="${HOSTPATH}/crypto"
-LOGPATH="${HOSTPATH}/log"
-SPOOLPATH="${HOSTPATH}/spool"
-
-perm_rg_ro "${CONFIGPATH}"
-perm_user_ro "${CRYPTOPATH}"
-perm_ur_rw "${LOGPATH}"
-perm_user_rw "${SPOOLPATH}"
+source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
@@ -31,8 +20,8 @@ docker create \
     --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${1:-"${CNAME}"}" \
-    --hostname="cloud.nfnty.se" \
+    --name="${CNAME}" \
+    --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \

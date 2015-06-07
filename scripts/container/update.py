@@ -9,14 +9,14 @@ import docker
 import requests
 
 SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
-CLIENT = docker.Client(base_url='unix://var/run/docker.sock', version='auto')
+CLIENT = docker.Client(base_url='unix://run/docker.sock', version='auto')
 
 def error_print_exit(error):
     ''' Print error and exit '''
     print(error)
     sys.exit(1)
 def print_separator():
-    ''' Prints a separator for redability '''
+    ''' Prints a separator for readability '''
     print('\n##################################################\n')
 
 class Container:
@@ -31,13 +31,13 @@ class Container:
             self.exists = True
         except (requests.exceptions.HTTPError, docker.errors.APIError):
             self.exists = False
-    def create(self, name):
+    def create(self, basename):
         ''' Create '''
         try:
             subprocess.check_call([
                 os.path.join(
                     os.path.abspath(os.path.join(SCRIPTDIR, '../..')),
-                    'containers', name, 'scripts/create.sh'
+                    'containers', basename, 'scripts/create.sh'
                 ),
                 self.name
             ])
@@ -124,11 +124,15 @@ def args_parse():
         '--prefix', default='bak',
         help='Name prefix to use; default = \'bak\''
     )
+    parser.add_argument(
+        '--name', action='store',
+        help='Name of container'
+    )
 
     # Positional
     parser.add_argument(
-        'name', metavar='NAME', action='store',
-        help='Name of container',
+        'basename', metavar='BASENAME', action='store',
+        help='Base name of container',
     )
 
     return parser.parse_args()
@@ -139,6 +143,8 @@ def main():
 
     # Parse arguments
     args = args_parse()
+    if not args.name:
+        args.name = args.basename
 
     # Initialize containers
     containers = []
@@ -156,8 +162,11 @@ def main():
             break
 
     # Create container
-    containers.insert(0, Container(args.prefix + '0' + '_' + args.name))
-    containers[0].create(args.name)
+    containers[0].rename('tmp_' + args.name)
+    containers.insert(0, Container(args.name))
+    containers[0].create(args.basename)
+    containers[0].rename(args.prefix + '0' + '_' + args.name)
+    containers[1].rename(args.name)
 
     # Stop container
     if not args.nostop and len(containers) > 1 and containers[1].running():

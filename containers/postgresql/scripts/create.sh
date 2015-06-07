@@ -4,18 +4,9 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CNAME='psql-openhab' UGID='180000' PRIMPATH='/postgres'
-MEMORY='2G' CPU_SHARES='1024'
+CNAME="${1}"
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
-
-CRYPTOPATH="${HOSTPATH}/crypto"
-DATAPATH="${HOSTPATH}/data"
-RUNPATH="${HOSTPATH}/run"
-
-perm_user_ro "${CRYPTOPATH}"
-perm_user_rw "${DATAPATH}"
-perm_user_rw "${RUNPATH}"
+source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
@@ -25,7 +16,7 @@ docker create \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${1:-"${CNAME}"}" \
+    --name="${CNAME}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \

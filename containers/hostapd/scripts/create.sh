@@ -4,14 +4,9 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CNAME='hostapd' UGID='270000' PRIMPATH='/hostapd'
-MEMORY='1G' CPU_SHARES='2048'
+CNAME="${1}"
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
-
-CONFIGPATH="${HOSTPATH}/config"
-
-perm_user_ro "${CONFIGPATH}"
+source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
@@ -20,7 +15,7 @@ docker create \
     --cap-add 'NET_ADMIN' \
     --cap-add 'NET_RAW' \
     --net='host' \
-    --name="${1:-"${CNAME}"}" \
+    --name="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \

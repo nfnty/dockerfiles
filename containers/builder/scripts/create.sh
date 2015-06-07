@@ -4,9 +4,9 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "${SCRIPTDIR}/variables.sh"
+CNAME="${1}"
 
-PKGNAME="${1}"
+source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
@@ -22,15 +22,14 @@ docker create \
     --cap-add 'SETUID' \
     --cap-add 'SYS_CHROOT' \
     --net='bridge' \
-    --name="${CNAME}_${PKGNAME}" \
-    --hostname="${CNAME}_${PKGNAME}" \
+    --name="${CNAME}" \
+    --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-builder:latest \
     ${@:2}
 
-CID="$( docker inspect --format='{{.Id}}' "${CNAME}_${PKGNAME}" )"
-
+CID="$( docker inspect --format='{{.Id}}' "${CNAME}" )"
 cd "${BTRFSPATH}/${CID}"
 setfattr --name=user.pax.flags --value=em usr/bin/python3

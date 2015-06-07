@@ -4,20 +4,9 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CNAME='kea-dhcp4' UGID='260000' PRIMPATH='/kea'
-MEMORY='1G' CPU_SHARES='2048'
+CNAME="${1}"
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
-
-CACHEPATH="${HOSTPATH}/cache"
-CONFIGPATH="${HOSTPATH}/config"
-CRYPTOPATH="${HOSTPATH}/crypto"
-DATAPATH="${HOSTPATH}/data"
-
-perm_user_rw "${CACHEPATH}"
-perm_user_ro "${CONFIGPATH}"
-perm_user_ro "${CRYPTOPATH}"
-perm_user_rw "${DATAPATH}"
+source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
@@ -29,7 +18,7 @@ docker create \
     --cap-add 'NET_BIND_SERVICE' \
     --cap-add 'NET_RAW' \
     --net='host' \
-    --name="${1:-"${CNAME}"}" \
+    --name="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \

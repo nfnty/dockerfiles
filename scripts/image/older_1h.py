@@ -4,7 +4,7 @@ from datetime import datetime
 import docker
 import sys
 
-CLIENT = docker.Client(base_url='unix://var/run/docker.sock', version='auto')
+CLIENT = docker.Client(base_url='unix://run/docker.sock', version='auto')
 
 def main():
     ''' Main '''

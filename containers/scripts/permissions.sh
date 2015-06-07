@@ -1,5 +1,3 @@
-#!/usr/bin/bash
-
 perm_base() {
     local path="${1}"
     local uid="${2}"

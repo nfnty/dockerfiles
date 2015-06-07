@@ -4,16 +4,9 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CNAME='ntp' UGID='230000' PRIMPATH='/ntp'
-MEMORY='512M' CPU_SHARES='2048'
+CNAME="${1}"
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
-
-CONFIGPATH="${HOSTPATH}/config"
-DATAPATH="${HOSTPATH}/data"
-
-perm_root_ro "${CONFIGPATH}"
-perm_user_rw "${DATAPATH}"
+source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
@@ -27,7 +20,7 @@ docker create \
     --cap-add 'SYS_TIME' \
     --net='none' \
     --dns="${DNSSERVER}" \
-    --name="${1:-"${CNAME}"}" \
+    --name="${CNAME}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \

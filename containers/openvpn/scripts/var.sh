@@ -1,0 +1,13 @@
+UGID='190000'
+PRIMPATH='/openvpn'
+MEMORY='2G'
+CPU_SHARES='512'
+
+source "${SCRIPTDIR}/../../scripts/variables.sh"
+
+CONFIGPATH="${HOSTPATH}/config"
+CRYPTOPATH="${HOSTPATH}/crypto"
+DATAPATH="${HOSTPATH}/data"
+SCRIPTSPATH="${HOSTPATH}/scripts"
+TMPPATH="${HOSTPATH}/tmp"
+TUNPATH="${HOSTPATH}/tun"
