@@ -1,6 +1,6 @@
 FROM nfnty/arch-devel:latest
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID="99999" UGNAME="builder" PRIMPATH="/builder"
 

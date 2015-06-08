@@ -1,6 +1,6 @@
 FROM scratch
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ADD bootstrap/arch-mini-bootstrap.tar.xz /
 

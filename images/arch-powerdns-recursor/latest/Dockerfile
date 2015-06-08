@@ -1,6 +1,6 @@
 FROM nfnty/arch-mini:latest
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID="240000" UGNAME="powerdns" PRIMPATH="/powerdns"
 

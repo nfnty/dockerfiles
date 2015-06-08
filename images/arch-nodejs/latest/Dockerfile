@@ -1,6 +1,6 @@
 FROM nfnty/arch-mini:latest
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ENV NODEJS_VERSION="0.12.4-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \

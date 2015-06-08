@@ -1,6 +1,6 @@
 FROM nfnty/arch-java:jre8-openjdk-headless
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID="130000" UGNAME="logstash" PRIMPATH="/logstash"
 

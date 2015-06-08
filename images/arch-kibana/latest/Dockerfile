@@ -1,6 +1,6 @@
 FROM nfnty/arch-mini:latest
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID="120000" UGNAME="kibana" PRIMPATH="/kibana"
 

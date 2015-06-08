@@ -1,6 +1,6 @@
 FROM nfnty/arch-mini:latest
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID="280000" UGNAME="emby" PRIMPATH="/emby"
 ENV UGID2="140000" UGNAME2="media"

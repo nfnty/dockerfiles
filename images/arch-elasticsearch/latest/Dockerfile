@@ -1,6 +1,6 @@
 FROM nfnty/arch-java:jre8-openjdk-headless
 
-MAINTAINER "nfnty <docker@nfnty.se>"
+MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID="110000" UGNAME="elasticsearch" PRIMPATH="/elasticsearch"
 
