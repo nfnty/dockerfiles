@@ -1,9 +1,11 @@
+BNAME='builder'
 UGID='99999'
 PRIMPATH='/builder'
 MEMORY='4G'
 CPU_SHARES='256'
 
 source "${SCRIPTDIR}/../../scripts/variables.sh"
+HOSTPATH="${SRVPATH}/${BNAME}"
 
 CONFIGPATH="${HOSTPATH}/config"
 GNUPGHOME="${HOSTPATH}/crypto/gnupg"
