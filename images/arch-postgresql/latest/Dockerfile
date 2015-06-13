@@ -18,7 +18,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         ln --symbolic "${PRIMPATH}/run" /run/postgresql
 VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/run"]
 
-ENV POSTGRESQL_VERSION="9.4.2-1"
+ENV POSTGRESQL_VERSION="9.4.4-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "postgresql=${POSTGRESQL_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
