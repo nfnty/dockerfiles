@@ -4,6 +4,8 @@ MAINTAINER nfnty <docker@nfnty.se>
 
 ADD bootstrap/arch-mini-bootstrap.tar.xz /
 
+ENV PATH '/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl'
+
 RUN localedef --inputfile=en_US --charmap=UTF-8 en_US.UTF-8 && \
     localedef --inputfile=en_DK --charmap=UTF-8 en_DK.UTF-8
 
