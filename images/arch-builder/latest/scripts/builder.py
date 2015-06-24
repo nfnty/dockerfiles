@@ -94,6 +94,10 @@ def args_parse():
         '--removeold', action='store_true',
         help='Remove old package after build',
     )
+    parser.add_argument(
+        '--repackage', action='store_true',
+        help='Repackage',
+    )
 
     args = parser.parse_args()
 
@@ -257,7 +261,6 @@ def packages_cleanup(path_base, db_name):
         print('Removed: ' + filename)
 
     print('\nPackage cleanup finished!')
-
 def packages_mtime(path_base):
     ''' Find and sort packages by modification time '''
     print('Finding and sorting packages by modification time in ' + path_base)
@@ -431,8 +434,8 @@ def prepare_remote(url, path):
         print('Failed to download remote: ' + url)
         sys.exit(1)
 
-def pkg_build(args):
-    ''' Build package '''
+def pkg_make(args):
+    ''' Make package '''
     cmd = [
         '/usr/bin/makepkg', '--config', MAKEPKGCFG,
         '--noconfirm', '--log', '--syncdeps'
@@ -450,10 +453,13 @@ def pkg_build(args):
         cmd.append('--pkg')
         cmd.append(','.join(args.pkg))
 
+    if args.repackage:
+        cmd.append('--repackage')
+
     try:
         subprocess.check_call(cmd)
     except subprocess.CalledProcessError as error:
-        print('Failed to build package!')
+        print('Failed to make package!')
         error_print_exit(error)
 
 def main():
@@ -472,6 +478,7 @@ def main():
     # Upgrade databases and packages
     pacman_upgrade()
 
+    # Options
     if args.gpginit:
         print_separator()
         gpg_init()
@@ -485,18 +492,14 @@ def main():
         packages_cleanup(PKGDEST, args.db)
         sys.exit(0)
 
-    # Clean builddir
-    if not args.noclean:
-        path_clean(BUILDDIR)
-
-    # cd to PKGBUILD root
-    os.chdir(PKGBUILD)
+    print_separator()
 
     # Clean pkgbuild directory
     path_clean(PKGBUILD)
 
-    # Prepare
-    print_separator()
+    # cd to PKGBUILD root
+    os.chdir(PKGBUILD)
+
     if args.local:
         prepare_local(args.local)
     elif args.git:
@@ -514,9 +517,22 @@ def main():
         os.chdir(os.path.join(PKGBUILD, args.path))
         print('Successfully changed directory to ' + args.path)
 
+    # Repackage if wanted
+    try:
+        os.stat(os.path.join(BUILDDIR, '.repackage'))
+        args.repackage = True
+    except FileNotFoundError:
+        pass
+    if args.repackage:
+        args.noclean = True
+
+    # Clean builddir
+    if not args.noclean:
+        path_clean(BUILDDIR)
+
     # Build package
     print_separator()
-    pkg_build(args)
+    pkg_make(args)
 
     # Create Database
     if args.db:
