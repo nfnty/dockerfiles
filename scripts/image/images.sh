@@ -1,6 +1,4 @@
-#!/usr/bin/bash
-
-if older_1h 'nfnty/arch-mini:latest'; then
+if older 'nfnty/arch-mini:latest' "${AGE}"; then
     "${SCRIPTDIR}/../../containers/bootstrap/scripts/run.sh" 'bootstrap'
 fi
 update 'nfnty/arch-mini:latest'
