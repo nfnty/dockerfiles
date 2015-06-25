@@ -18,7 +18,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
     ln --symbolic "${PRIMPATH}/tmp" /tmp
 VOLUME ["${PRIMPATH}/bundle", "${PRIMPATH}/sincedb", "${PRIMPATH}/tmp"]
 
-ENV LOGSTASH_VERSION="1.5.0"
+ENV LOGSTASH_VERSION="1.5.1"
 RUN curl "https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \
         tar --extract --gzip --strip-components=1 --file=- --directory="${PRIMPATH}/bin" && \
     chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/bin" && \
