@@ -14,7 +14,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm util-linux && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
-ENV KIBANA_VERSION="4.0.2"
+ENV KIBANA_VERSION="4.1.0"
 RUN curl "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" | \
         tar --extract --gzip --strip-components=1 --file=- --directory="${PRIMPATH}/bin" && \
     chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/bin" && \
