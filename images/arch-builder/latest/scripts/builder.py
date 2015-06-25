@@ -186,12 +186,8 @@ def pacman_upgrade():
 def path_clean(path):
     ''' Clean builddir '''
     try:
-        subprocess.check_call(
-            [
-                '/usr/bin/find', path,
-                '-mindepth', '1', '-delete'
-            ]
-        )
+        subprocess.check_call(['/usr/bin/chmod', '--recursive', 'u+rwX', path])
+        subprocess.check_call(['/usr/bin/find', path, '-mindepth', '1', '-delete'])
     except subprocess.CalledProcessError as error:
         print('Failed to clean ' + path)
         error_print_exit(error)
