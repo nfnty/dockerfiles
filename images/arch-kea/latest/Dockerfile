@@ -13,7 +13,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         "${PRIMPATH}/"{data,cache}
 VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/cache"]
 
-ENV KEA_VERSION="0.9.1-1"
+ENV KEA_VERSION="0.9.2-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "kea=${KEA_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
