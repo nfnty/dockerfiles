@@ -468,12 +468,6 @@ def main():
     # Parse arguments
     args = args_parse()
 
-    # Initialize paxd
-    paxd_initialize()
-
-    # Upgrade databases and packages
-    pacman_upgrade()
-
     # Options
     if args.gpginit:
         print_separator()
@@ -487,6 +481,12 @@ def main():
         print_separator()
         packages_cleanup(PKGDEST, args.db)
         sys.exit(0)
+
+    # Initialize paxd
+    paxd_initialize()
+
+    # Upgrade databases and packages
+    pacman_upgrade()
 
     print_separator()
 
