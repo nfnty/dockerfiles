@@ -15,7 +15,7 @@ RUN install --directory --owner=root --group="${UGNAME}" --mode=550 \
         "${PRIMPATH}/data"
 VOLUME ["${PRIMPATH}/data"]
 
-ENV NTP_VERSION="4.2.8.p2-1"
+ENV NTP_VERSION="4.2.8.p3-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "ntp=${NTP_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
