@@ -22,7 +22,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
     ln --symbolic "${PRIMPATH}/tmp" /tmp
 VOLUME ["${PRIMPATH}/lib", "${PRIMPATH}/tmp"]
 
-ENV EMBY_VERSION="3.0.5666.5-1"
+ENV EMBY_VERSION="3.0.5675.1-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm emby-server="${EMBY_VERSION}" openjpeg2 libpng libwebp && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
