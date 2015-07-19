@@ -16,7 +16,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
     ln --symbolic "${PRIMPATH}/run" /run/samba
 VOLUME ["${PRIMPATH}/cache", "${PRIMPATH}/lib", "${PRIMPATH}/log", "${PRIMPATH}/run"]
 
-ENV SAMBA_VERSION="4.2.2-1"
+ENV SAMBA_VERSION="4.2.3-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "samba=${SAMBA_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
