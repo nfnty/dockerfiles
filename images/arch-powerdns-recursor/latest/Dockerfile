@@ -15,7 +15,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         ln --symbolic "${PRIMPATH}/run" /run
 VOLUME ["${PRIMPATH}/run"]
 
-ENV POWERDNS_RECURSOR_VERSION="3.7.2-2"
+ENV POWERDNS_RECURSOR_VERSION="3.7.3-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "powerdns-recursor=${POWERDNS_RECURSOR_VERSION}" lua-luajson && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

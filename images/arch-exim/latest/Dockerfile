@@ -13,7 +13,7 @@ RUN install --directory --owner="${UGNAME}" --group=root --mode=550 \
         "${PRIMPATH}/"{log,spool,spool/db}
 VOLUME ["${PRIMPATH}/log", "${PRIMPATH}/spool"]
 
-ENV EXIM_VERSION="4.85-2"
+ENV EXIM_VERSION="4.86-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "exim=${EXIM_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

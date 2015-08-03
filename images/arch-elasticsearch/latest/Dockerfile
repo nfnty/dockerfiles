@@ -21,7 +21,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm util-linux && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
-ENV ELASTICSEARCH_VERSION="1.6.0"
+ENV ELASTICSEARCH_VERSION="1.7.1"
 RUN curl "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz" | \
         tar --extract --gzip --strip-components=1 --file=- --directory="${PRIMPATH}/bin" && \
     chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH/bin}" && \
