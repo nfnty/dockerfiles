@@ -7,6 +7,8 @@ gcc-libs
 glibc
 gzip
 pacman
+perl
+sed
 shadow
 tar
 xz
