@@ -11,6 +11,42 @@ import requests
 SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
 CLIENT = docker.Client(base_url='unix://run/docker.sock', version='auto')
 
+def args_parse():
+    ''' Parse arguments '''
+    parser = argparse.ArgumentParser(
+        description='Docker container updater'
+    )
+
+    # Optional
+    parser.add_argument(
+        '--off', action='store_true',
+        help='Keep container turned off after update'
+    )
+    parser.add_argument(
+        '--nostop', action='store_true',
+        help='Do not stop container'
+    )
+    parser.add_argument(
+        '--backups', default=1,
+        help='Number of backups to keep; default = \'1\''
+    )
+    parser.add_argument(
+        '--prefix', default='bak',
+        help='Name prefix to use; default = \'bak\''
+    )
+    parser.add_argument(
+        '--name', action='store',
+        help='Name of container'
+    )
+
+    # Positional
+    parser.add_argument(
+        'basename', metavar='BASENAME', action='store',
+        help='Base name of container',
+    )
+
+    return parser.parse_args()
+
 def error_print_exit(error):
     ''' Print error and exit '''
     print(error)
@@ -37,7 +73,7 @@ class Container:
             subprocess.check_call([
                 os.path.join(
                     os.path.abspath(os.path.join(SCRIPTDIR, '../..')),
-                    'containers', basename, 'scripts/create.sh'
+                    'containers', basename, 'create.sh'
                 ),
                 self.name
             ])
@@ -101,42 +137,6 @@ def rename(containers, name, prefix):
         else:
             container.rename(prefix + str(index) + '_' + name)
 
-def args_parse():
-    ''' Parse arguments '''
-    parser = argparse.ArgumentParser(
-        description='Docker container updater'
-    )
-
-    # Optional
-    parser.add_argument(
-        '--off', action='store_true',
-        help='Keep container turned off after update'
-    )
-    parser.add_argument(
-        '--nostop', action='store_true',
-        help='Do not stop container'
-    )
-    parser.add_argument(
-        '--backups', default=1,
-        help='Number of backups to keep; default = \'1\''
-    )
-    parser.add_argument(
-        '--prefix', default='bak',
-        help='Name prefix to use; default = \'bak\''
-    )
-    parser.add_argument(
-        '--name', action='store',
-        help='Name of container'
-    )
-
-    # Positional
-    parser.add_argument(
-        'basename', metavar='BASENAME', action='store',
-        help='Base name of container',
-    )
-
-    return parser.parse_args()
-
 def main():
     ''' Main '''
     print_separator()
@@ -162,14 +162,16 @@ def main():
             break
 
     # Create container
-    containers[0].rename('tmp_' + args.name)
+    if len(containers) >= 1:
+        containers[0].rename('tmp_' + args.name)
     containers.insert(0, Container(args.name))
     containers[0].create(args.basename)
     containers[0].rename(args.prefix + '0' + '_' + args.name)
-    containers[1].rename(args.name)
+    if len(containers) >= 2:
+        containers[1].rename(args.name)
 
     # Stop container
-    if not args.nostop and len(containers) > 1 and containers[1].running():
+    if not args.nostop and len(containers) >= 2 and containers[1].running():
         containers[1].stop()
 
     # Rename containers
