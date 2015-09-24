@@ -30,7 +30,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     rm --recursive /var/state && \
     ln --symbolic "${PRIMPATH}/state" /var/state
 
-ENV OPENHAB_VERSION="1.7.0"
+ENV OPENHAB_VERSION="1.7.1"
 RUN curl --location --output /tmp/openhab-runtime.zip \
     "https://bintray.com/artifact/download/openhab/bin/distribution-${OPENHAB_VERSION}-runtime.zip" && \
     unzip /tmp/openhab-runtime.zip -d "${PRIMPATH}/bin" && \

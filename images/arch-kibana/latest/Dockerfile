@@ -10,11 +10,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         "${PRIMPATH}/"{,bin,config,crypto}
 
-RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm util-linux && \
-    find /var/cache/pacman/pkg -mindepth 1 -delete
-
-ENV KIBANA_VERSION="4.1.1"
+ENV KIBANA_VERSION="4.1.2"
 RUN curl "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" | \
         tar --extract --gzip --strip-components=1 --file=- --directory="${PRIMPATH}/bin" && \
     chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/bin" && \

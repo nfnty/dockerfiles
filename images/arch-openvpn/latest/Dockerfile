@@ -15,7 +15,7 @@ RUN install --directory --owner="${UGNAME}" --group=root --mode=550 \
         ln --symbolic "${PRIMPATH}/tmp" /tmp
 VOLUME ["${PRIMPATH}/data", "${PRIMPATH}/tmp"]
 
-ENV OPENVPN_VERSION="2.3.6-1"
+ENV OPENVPN_VERSION="2.3.8-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "openvpn=${OPENVPN_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
