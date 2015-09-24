@@ -1,4 +1,4 @@
-FROM nfnty/arch-java:jre8-openjdk-headless
+FROM nfnty/arch-jre8:latest
 
 MAINTAINER nfnty <docker@nfnty.se>
 
