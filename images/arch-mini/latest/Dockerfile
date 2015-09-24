@@ -25,10 +25,10 @@ ENV LANG='en_US.UTF-8' \
     LC_IDENTIFICATION='en_US.UTF-8'
 
 ADD config/mirrorlist /etc/pacman.d/
-ADD config/locale.conf config/pacman.conf /etc/
+ADD config/locale.conf config/locale.gen config/pacman.conf /etc/
 RUN ln --symbolic /usr/share/zoneinfo/UTC /etc/localtime && \
-    chown 'root:root' /etc/{pacman.d/mirrorlist,locale.conf,pacman.conf} && \
-    chmod 'u=rwX,g=rX,o=rX' /etc/{pacman.d/mirrorlist,locale.conf,pacman.conf}
+    chown 'root:root' /etc/{pacman.d/mirrorlist,locale.conf,locale.gen,pacman.conf} && \
+    chmod 'u=rwX,g=rX,o=rX' /etc/{pacman.d/mirrorlist,locale.conf,locale.gen,pacman.conf}
 
 RUN pacman-key --init && \
     pacman-key --populate archlinux
