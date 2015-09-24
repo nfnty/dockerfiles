@@ -67,10 +67,6 @@ def args_parse():
 
     # Options
     parser.add_argument(
-        '--pkg', metavar='PKG', nargs='+',
-        help='Name of specific package(s) of group'
-    )
-    parser.add_argument(
         '--db', metavar='NAME',
         help='Create database in pkgdest root'
     )
@@ -427,10 +423,6 @@ def pkg_make(args):
         cmd.append('--nosign')
     else:
         cmd.append('--sign')
-
-    if args.pkg:
-        cmd.append('--pkg')
-        cmd.append(','.join(args.pkg))
 
     if args.repackage:
         cmd.append('--repackage')
