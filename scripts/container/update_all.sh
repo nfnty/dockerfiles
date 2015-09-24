@@ -38,3 +38,4 @@ systemctl start docker_kea-dhcp4
 "${UPD}" --name 'openvpn-admin-udp' 'openvpn'
 
 "${UPD}"       'emby'
+# "${UPD}"       'heka'
