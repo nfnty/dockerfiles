@@ -384,23 +384,6 @@ def prepare_git(url, path):
         error_print_exit(error)
 
     print('Successfully cloned repository: ' + url)
-def prepare_aur(package):
-    ''' Prepare AUR pkgbuild directory '''
-    try:
-        response = requests.get(
-            'https://aur.archlinux.org/packages/' +
-            package[:2] + '/' + package + '/' + package + '.tar.gz'
-        )
-    except requests.ConnectionError as error:
-        print('Failed to download archive')
-        error_print_exit(error)
-
-    if response.ok:
-        print('Successfully downloaded: ' + package)
-        extract_tar(response.content, '.tar.gz')
-    else:
-        print('Failed to download archive')
-        sys.exit(1)
 def prepare_remote(url, path):
     ''' Prepare remote pkgbuild directory '''
     try:
@@ -501,7 +484,7 @@ def main():
     elif args.git:
         prepare_git(args.git, PKGBUILD)
     elif args.aur:
-        prepare_aur(args.aur)
+        prepare_git('https://aur.archlinux.org/{:1s}.git'.format(args.aur), PKGBUILD)
     elif args.remote:
         prepare_remote(args.remote, PKGBUILD)
     else:
