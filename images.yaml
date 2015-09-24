@@ -1,0 +1,327 @@
+meta:
+    archlinux:
+        xpath: &ARCH_XPATH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
+        attribute: &ARCH_ATTRIBUTE 'content'
+    regex:
+        ver_2num: &VER_2NUM '(\d+\.\d+)'
+        ver_3num: &VER_3NUM '(\d+\.\d+\.\d+)'
+        ver_3num_vtag: &VER_3NUM_VTAG '^v(\d+\.\d+\.\d+)$'
+        ver_4num: &VER_4NUM '(\d+\.\d+\.\d+\.\d+)'
+    headers:
+        User-Agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    repos: [
+        'nfnty',
+        'core',
+        'extra',
+        'community',
+    ]
+    limits:
+        # (2**10)**3
+        memory: 1073741824
+        memswap: -1
+        cpushares: 128
+        processes: 8
+    name: 'nfnty'
+
+#################
+#  BASE IMAGES  #
+#################
+
+'arch-mini:latest':
+    build: True
+    scratch:
+        call: 'containers/bootstrap/run.sh'
+        args: [
+            'bootstrap',
+        ]
+
+'arch-devel:latest':
+    build: False
+
+'arch-jre8:latest':
+    build: False
+    packages:
+        jre8-openjdk-headless:
+            variable: 'JAVA_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'http://openjdk.java.net/projects/jdk8u'
+                    xpath: '(//li[text()[contains(., "Released")]])[1]/a[1]'
+                    regex: '(\du\d+)'
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/jre8-openjdk-headless'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+######################
+#  CONTAINER IMAGES  #
+######################
+
+'arch-bootstrap:latest':
+    build: True
+
+'arch-builder:latest':
+    build: True
+
+'arch-dovecot:latest':
+    build: True
+    packages:
+        dovecot:
+            variable: 'DOVECOT_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'http://dovecot.org/download.html'
+                    xpath: '(//h3[text()="Stable releases"]/following-sibling::ul/li/a)[1]'
+                    regex: *VER_3NUM
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/dovecot'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-elasticsearch:latest':
+    build: True
+    packages:
+        elasticsearch:
+            variable: 'ELASTICSEARCH_VERSION'
+            download: 'upstream'
+            sources:
+                upstream:
+                    url: 'https://www.elastic.co/downloads/elasticsearch'
+                    xpath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
+                    regex: *VER_3NUM
+                github:
+                    url: 'https://github.com/elastic/elasticsearch/tags'
+                    xpath: '//span[@class="tag-name"]'
+                    regex: *VER_3NUM_VTAG
+
+'arch-emby:latest':
+    build: True
+    packages:
+        emby-server:
+            variable: 'EMBY_VERSION'
+            download: 'nfnty'
+            sources:
+                github:
+                    url: 'https://github.com/MediaBrowser/Emby/releases'
+                    xpath: '//h1[@class="release-title"]/a'
+                    regex: '^(\d+\.\d+\.\d+\.\d+) Stable$'
+
+'arch-exim:latest':
+    build: True
+    packages:
+        exim:
+            variable: 'EXIM_VERSION'
+            download: 'nfnty'
+            sources:
+                upstream:
+                    url: 'http://exim.org/index.html'
+                    xpath: '//div[@id="content"]/h2[contains(text(), "Latest Version")]'
+                    regex: *VER_2NUM
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/community/x86_64/exim'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-heka:latest':
+    disabled: True
+    build: False
+    packages:
+        heka:
+            variable: 'HEKA_VERSION'
+            download: 'nfnty'
+            sources:
+                github:
+                    url: 'https://github.com/mozilla-services/heka/tags'
+                    xpath: '//span[@class="tag-name"]'
+                    regex: *VER_3NUM_VTAG
+
+
+'arch-hostapd:latest':
+    build: True
+    packages:
+        hostapd:
+            variable: 'HOSTAPD_VERSION'
+            download: 'nfnty'
+            sources:
+                upstream:
+                    url: 'https://w1.fi/hostapd'
+                    xpath: '//li[contains(text(), "Latest release")]//a'
+                    regex: *VER_2NUM
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/community/x86_64/hostapd'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-kea:latest':
+    build: True
+    packages:
+        kea:
+            variable: 'KEA_VERSION'
+            download: 'nfnty'
+            sources:
+                upstream:
+                    url: 'http://ftp.isc.org/isc/kea'
+                    xpath: '//table[@id="indexlist"]//td[@class="indexcolname"]/a'
+                    regex: '^(\d+\.\d+(?:\.\d+)?)/$'
+
+'arch-kibana:latest':
+    build: True
+    packages:
+        kibana:
+            variable: 'KIBANA_VERSION'
+            download: 'upstream'
+            sources:
+                upstream:
+                    url: 'https://www.elastic.co/downloads/kibana'
+                    xpath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
+                    regex: *VER_3NUM
+                github:
+                    url: 'https://github.com/elastic/kibana/tags'
+                    xpath: '//span[@class="tag-name"]'
+                    regex: *VER_3NUM_VTAG
+
+'arch-logstash:latest':
+    build: True
+    packages:
+        logstash:
+            variable: 'LOGSTASH_VERSION'
+            download: 'upstream'
+            sources:
+                upstream:
+                    url: 'https://www.elastic.co/downloads/logstash'
+                    xpath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
+                    regex: *VER_3NUM
+                github:
+                    url: 'https://github.com/elastic/logstash/tags'
+                    xpath: '//span[@class="tag-name"]'
+                    regex: *VER_3NUM_VTAG
+
+'arch-nginx:latest':
+    build: True
+    packages:
+        nginx:
+            variable: 'NGINX_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'http://nginx.org/en/download.html'
+                    xpath: '((//h4[text()="Stable version"]/../following-sibling::table)[1]//a[contains(@href, "tar.gz")])[1]'
+                    regex: '^nginx-(\d+\.\d+\.\d+)$'
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/nginx'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-ntp:latest':
+    build: True
+    packages:
+        ntp:
+            variable: 'NTP_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'http://www.ntp.org/downloads.html'
+                    xpath: '(//th[text()="Production"]/following-sibling::td)[1]'
+                    regex: '^(\d+\.\d+\.\d+(?:.+)?)$'
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/ntp'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-openhab:latest':
+    build: True
+    packages:
+        openhab:
+            variable: 'OPENHAB_VERSION'
+            download: 'github'
+            sources:
+                github:
+                    url: 'https://github.com/openhab/openhab/tags'
+                    xpath: '//span[@class="tag-name"]'
+                    regex: *VER_3NUM_VTAG
+
+'arch-openvpn:latest':
+    build: True
+    packages:
+        openvpn:
+            variable: 'OPENVPN_VERSION'
+            download: 'core'
+            sources:
+                upstream:
+                    url: 'https://openvpn.net/index.php/open-source/downloads.html'
+                    xpath: '(//span[text()="Source Tarball (gzip)"]/../following-sibling::td)[1]//strong'
+                    regex: '^openvpn-(\d+\.\d+\.\d+).tar.gz$'
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/core/x86_64/openvpn'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-postgresql:latest':
+    build: True
+    packages:
+        postgresql:
+            variable: 'POSTGRESQL_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'http://www.postgresql.org/ftp/source'
+                    xpath: '//h2[text()="Directories"]/following-sibling::div//tr/td/a[2]'
+                    regex: *VER_3NUM_VTAG
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/postgresql'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-powerdns-recursor:latest':
+    build: True
+    packages:
+        powerdns-recursor:
+            variable: 'POWERDNS_RECURSOR_VERSION'
+            download: 'community'
+            sources:
+                upstream:
+                    url: 'https://downloads.powerdns.com/releases/'
+                    xpath: '//div[@class="list"]/table/tbody//a[contains(text(), "pdns-recursor")]'
+                    regex: '^pdns-recursor-(\d+\.\d+\.\d+)\.tar\.bz2'
+                github:
+                    url: 'https://github.com/PowerDNS/pdns/tags'
+                    xpath: '//span[@class="tag-name"]'
+                    regex: '^rec-(\d+\.\d+\.\d+)$'
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/community/x86_64/powerdns-recursor'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-samba:latest':
+    build: True
+    packages:
+        samba:
+            variable: 'SAMBA_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'https://download.samba.org/pub/samba/stable'
+                    xpath: '//td/a[contains(text(), "samba-")]'
+                    regex: '^samba-(\d+\.\d+\.\d+(?:\w+)?).tar.gz$'
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/samba'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-transmission:latest':
+    build: True
+    packages:
+        transmission-cli:
+            variable: 'TRANSMISSION_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'http://download.transmissionbt.com/files'
+                    xpath: '//a[contains(text(), "transmission-")]'
+                    regex: '^transmission-(\d+\.\d+?).tar.xz$'
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/transmission-cli'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
