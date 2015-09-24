@@ -13,7 +13,7 @@ docker create \
     --volume="${CACHEPATH}:${PRIMPATH}/cache:rw" \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
     --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
-    --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
+    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
     --cap-add 'NET_RAW' \

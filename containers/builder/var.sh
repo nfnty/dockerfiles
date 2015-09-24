@@ -4,7 +4,7 @@ PRIMPATH='/builder'
 MEMORY='4G'
 CPU_SHARES='256'
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
+source "${SCRIPTDIR}/../_misc/variables.sh"
 HOSTPATH="${SRVPATH}/${BNAME}"
 
 CONFIGPATH="${HOSTPATH}/config"

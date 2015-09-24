@@ -3,7 +3,7 @@ PRIMPATH='/openvpn'
 MEMORY='2G'
 CPU_SHARES='512'
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
+source "${SCRIPTDIR}/../_misc/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 CRYPTOPATH="${HOSTPATH}/crypto"

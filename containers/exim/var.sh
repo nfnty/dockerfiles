@@ -3,7 +3,7 @@ PRIMPATH='/exim'
 MEMORY='2G'
 CPU_SHARES='1024'
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
+source "${SCRIPTDIR}/../_misc/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 CRYPTOPATH="${HOSTPATH}/crypto"

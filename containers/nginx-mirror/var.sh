@@ -3,7 +3,7 @@ PRIMPATH='/nginx'
 MEMORY='2G'
 CPU_SHARES='512'
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
+source "${SCRIPTDIR}/../_misc/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 LIBPATH="${HOSTPATH}/lib"

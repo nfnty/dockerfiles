@@ -7,10 +7,11 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CNAME="${1}"
 
 source "${SCRIPTDIR}/var.sh"
-source "${SCRIPTDIR}/../../scripts/permissions.sh"
+source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_user_rw "${CACHEPATH}" '' "-and -not -path ${CACHEPATH}/lck*"
+perm_user_rw "${CACHEPATH}" '' "-and -not -path ${CACHEPATH}/lck* -and -not -path ${CACHEPATH}/msg*"
 perm_custom "${CACHEPATH}/lck" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
+perm_custom "${CACHEPATH}/msg" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
 perm_user_ro "${CONFIGPATH}"
 perm_user_rw "${LIBPATH}"
 perm_user_rw "${LIBPATH}/private"

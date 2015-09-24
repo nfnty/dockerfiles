@@ -3,7 +3,7 @@ PRIMPATH='/elasticsearch'
 MEMORY='4G'
 CPU_SHARES='1024'
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
+source "${SCRIPTDIR}/../_misc/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
 DATAPATH="${HOSTPATH}/data"

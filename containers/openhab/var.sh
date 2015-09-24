@@ -3,7 +3,7 @@ PRIMPATH='/openhab'
 MEMORY='4G'
 CPU_SHARES='1024'
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
+source "${SCRIPTDIR}/../_misc/variables.sh"
 
 ADDONPATH="${HOSTPATH}/addons"
 CONFIGPATH="${HOSTPATH}/config"

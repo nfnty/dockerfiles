@@ -3,7 +3,7 @@ PRIMPATH='/postgres'
 MEMORY='2G'
 CPU_SHARES='1024'
 
-source "${SCRIPTDIR}/../../scripts/variables.sh"
+source "${SCRIPTDIR}/../_misc/variables.sh"
 
 CRYPTOPATH="${HOSTPATH}/crypto"
 DATAPATH="${HOSTPATH}/data"
