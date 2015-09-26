@@ -35,6 +35,10 @@ def args_parse():
         '--no-cache', action='store_true',
         help='Force image update'
     )
+    parser.add_argument(
+        '--no-scratch', action='store_true',
+        help='Do not build scratch'
+    )
 
     # Positional
     parser.add_argument(
@@ -67,7 +71,7 @@ class Build:
         self.state = 'running'
         image = self.name.split('/')[-1]
 
-        if 'scratch' in IMAGES[image]:
+        if 'scratch' in IMAGES[image] and not ARGS.no_scratch:
             print('\n\033[33m### Building scratch: {0:s} ###\033[0m'.format(self.name))
             try:
                 self.log += subprocess.check_output(
@@ -140,40 +144,46 @@ class FromTree:
             if not IMAGES[image.partition('/')[-1]]['build'] and degrees[image] == 0
         ]
         self.graph.remove_nodes_from(set(images))
-
     def prune(self, images):
-        ''' Prune '''
+        ''' Prune not in images '''
         nodes = {}
         for image in images:
             nodes[image] = []
             nodes.update(networkx.dfs_successors(self.graph, source=image))
         nodes = set([item for key, values in nodes.items() for item in [key]+values])
         self.graph.remove_nodes_from(set(self.graph.nodes()) - set(nodes))
+    def successors(self):
+        ''' Add attribute successors to all nodes '''
+        successors = {}
+        for image in self.graph.nodes_iter():
+            successors[image] = len(set([
+                successor
+                for values in networkx.dfs_successors(self.graph, source=image).values()
+                for successor in values
+            ]))
+        networkx.set_node_attributes(self.graph, 'successors', successors)
     def build(self):
         ''' Build '''
-        processqueue = queue.Queue(maxsize=META['limits']['processes'])
-        completedqueue = queue.Queue()
-        for _ in range(META['limits']['processes']):
-            ThreadBuild(processqueue, completedqueue).start()
+        queue_out = queue.Queue(maxsize=META['limits']['threads'])
+        queue_in = queue.Queue()
+        for _ in range(META['limits']['threads']):
+            ThreadBuild(queue_out, queue_in).start()
 
         active = []
         while self.graph:
-            degrees = self.graph.in_degree()
-            images = [image for image in degrees if image not in active and degrees[image] == 0]
-            images = sorted(images, reverse=True, key=lambda image: len(set([
-                item
-                for key, values in networkx.dfs_successors(self.graph, source=image).items()
-                for item in [key]+values
-            ])))
+            degree = self.graph.in_degree()
+            images = [image for image in degree if image not in active and degree[image] == 0]
+            images = sorted(images, reverse=True,
+                            key=lambda image: self.graph.node[image]['successors'])
 
             for image in images:
                 try:
-                    processqueue.put(image, block=False)
+                    queue_out.put(image, block=False)
                 except queue.Full:
                     break
                 active.append(image)
 
-            build = completedqueue.get()
+            build = queue_in.get()
             active.remove(build.name)
             print('\n\033[33m### Build log: {0:s} ###\033[0m'.format(build.name))
             for line in build.log:
@@ -186,15 +196,16 @@ class FromTree:
                 self.graph.remove_node(build.name)
             elif build.state == 'failed':
                 print('\033[31m### Build failed: {0:s} ###\033[0m\n'.format(build.name))
-                nodes = networkx.dfs_successors(self.graph, source=build.name)
-                if not nodes:
+                successors = networkx.dfs_successors(self.graph, source=build.name)
+                if not successors:
                     self.graph.remove_node(build.name)
                 else:
-                    nodes = set([item for key, values in nodes.items() for item in [key]+values])
-                    self.graph.remove_nodes_from(set(nodes))
+                    self.graph.remove_nodes_from(set(
+                        [image for key, values in successors.items() for image in [key]+values]
+                    ))
             else:
-                raise RuntimeError('State is unknown: {0:s}'.format(build.state))
-            completedqueue.task_done()
+                raise RuntimeError('State is unknown: {0:s} {1:s}'.format(build.name, build.state))
+            queue_in.task_done()
 
 def main():
     ''' Main '''
@@ -202,6 +213,7 @@ def main():
     fromtree = FromTree()
     if ARGS.images:
         fromtree.prune(ARGS.images)
+    fromtree.successors()
 
     print('\n### Building images ###')
     fromtree.build()

@@ -1,4 +1,22 @@
 meta:
+    name: 'nfnty'
+
+    repos: [
+        'nfnty',
+        'core',
+        'extra',
+        'community',
+    ]
+
+    limits:
+        threads: 8
+        # 1GiB
+        memory: 1073741824
+        memswap: -1
+        cpushares: 128
+
+    headers:
+        User-Agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
     archlinux:
         xpath: &ARCH_XPATH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
         attribute: &ARCH_ATTRIBUTE 'content'
@@ -7,21 +25,6 @@ meta:
         ver_3num: &VER_3NUM '(\d+\.\d+\.\d+)'
         ver_3num_vtag: &VER_3NUM_VTAG '^v(\d+\.\d+\.\d+)$'
         ver_4num: &VER_4NUM '(\d+\.\d+\.\d+\.\d+)'
-    headers:
-        User-Agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
-    repos: [
-        'nfnty',
-        'core',
-        'extra',
-        'community',
-    ]
-    limits:
-        # (2**10)**3
-        memory: 1073741824
-        memswap: -1
-        cpushares: 128
-        processes: 8
-    name: 'nfnty'
 
 #################
 #  BASE IMAGES  #
