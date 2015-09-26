@@ -1,4 +1,4 @@
-FROM nfnty/arch-mini:latest
+FROM nfnty/arch-mono:latest
 
 MAINTAINER nfnty <docker@nfnty.se>
 

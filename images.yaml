@@ -57,6 +57,18 @@ meta:
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
 
+'arch-mono:latest':
+    build: False
+    packages:
+        mono:
+            variable: 'MONO_VERSION'
+            download: 'extra'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/mono'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
 ######################
 #  CONTAINER IMAGES  #
 ######################
