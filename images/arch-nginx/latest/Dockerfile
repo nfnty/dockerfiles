@@ -13,7 +13,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         "${PRIMPATH}"{lib,lib/proxy,log}
 VOLUME ["${PRIMPATH}/lib", "${PRIMPATH}/log"]
 
-ENV NGINX_VERSION="1.8.0-1"
+ENV NGINX_VERSION="1.8.0-2"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx=${NGINX_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

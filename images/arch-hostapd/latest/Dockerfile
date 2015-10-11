@@ -10,7 +10,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         "${PRIMPATH}/"{,config}
 
-ENV HOSTAPD_VERSION="2.4-2"
+ENV HOSTAPD_VERSION="2.5-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "hostapd=${HOSTAPD_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

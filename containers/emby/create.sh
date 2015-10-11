@@ -12,6 +12,7 @@ docker create \
     --read-only \
     --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
     --volume="${SHARE1}/Anime:${PRIMPATH}/media/Anime:ro" \
+    --volume="${SHARE1}/Home:${PRIMPATH}/media/Home:ro" \
     --volume="${SHARE1}/Movies:${PRIMPATH}/media/Movies:ro" \
     --volume="${SHARE1}/Series:${PRIMPATH}/media/Series:ro" \
     --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \

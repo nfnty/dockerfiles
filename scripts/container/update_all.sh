@@ -10,6 +10,7 @@ cd "${SCRIPTDIR}"
 
 "${UPD}"       'transmission'
 "${UPD}"       'nginx-proxy'
+"${UPD}" --name 'nginx-proxy-wan' 'nginx-proxy'
 "${UPD}"       'nginx-mirror'
 "${UPD}"       'samba'
 "${UPD}" --off 'kibana'

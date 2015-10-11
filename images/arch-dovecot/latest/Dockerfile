@@ -17,7 +17,7 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
     ln --symbolic "${PRIMPATH}/tmp" /tmp
 VOLUME ["${PRIMPATH}/lib", "${PRIMPATH}/log", "${PRIMPATH}/maildir", "${PRIMPATH}/run", "${PRIMPATH}/tmp"]
 
-ENV DOVECOT_VERSION="2.2.18-1"
+ENV DOVECOT_VERSION="2.2.19-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${DOVECOT_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

@@ -11,6 +11,5 @@ source "${SCRIPTDIR}/../_misc/permissions.sh"
 
 perm_user_ro "${CONFIGPATH}"
 perm_user_ro "${CRYPTOPATH}"
-perm_user_ro "${LIBPATH}" '-maxdepth 0'
-perm_user_rw "${LIBPATH}" '-mindepth 1'
+perm_user_rw "${LIBPATH}"
 perm_user_rw "${LOGPATH}"
