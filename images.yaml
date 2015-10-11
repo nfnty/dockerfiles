@@ -16,7 +16,7 @@ meta:
         cpushares: 128
 
     headers:
-        User-Agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
+        user-agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
     archlinux:
         xpath: &ARCH_XPATH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
         attribute: &ARCH_ATTRIBUTE 'content'
@@ -116,7 +116,7 @@ meta:
     packages:
         emby-server:
             variable: 'EMBY_VERSION'
-            download: 'nfnty'
+            download: 'community'
             sources:
                 github:
                     url: 'https://github.com/MediaBrowser/Emby/releases'
