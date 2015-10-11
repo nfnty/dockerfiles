@@ -1,22 +1,20 @@
 #!/usr/bin/python3
 ''' Check image package versions '''
-import os
-import urllib.request
-import yaml
-import lxml.html
-import re
 import distutils.version
+import lxml.html
+import os
+import re
+import requests
 import subprocess
-import pygit2
+import yaml
 
-SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
-REPODIR = pygit2.Repository(pygit2.discover_repository(SCRIPTDIR)).workdir
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+REPODIR = subprocess.check_output([
+    '/usr/bin/git', 'rev-parse', '--show-toplevel'
+]).decode('UTF-8').strip()
 IMAGEDIR = os.path.join(REPODIR, 'images')
 
-CONFIG = yaml.load(
-    open(os.path.join(REPODIR, 'images.yaml')),
-    Loader=yaml.CLoader,
-)
+CONFIG = yaml.load(open(os.path.join(REPODIR, 'images.yaml')), Loader=yaml.CLoader)
 META = CONFIG['meta']
 IMAGES = CONFIG.copy()
 del IMAGES['meta']
@@ -31,10 +29,7 @@ def print_version(source, version):
 
 def scrape(url, xpath, attribute, regex):
     ''' Scrape latest version from url '''
-    with urllib.request.urlopen(
-        urllib.request.Request(url, headers=META['headers'])
-    ) as filed:
-        document = lxml.html.parse(filed)
+    document = lxml.html.document_fromstring(requests.get(url, headers=META['headers']).content)
 
     nodes = document.xpath(xpath)
     if not nodes:

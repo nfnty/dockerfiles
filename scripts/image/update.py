@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 ''' Update images '''
-
 import argparse
 import docker
 import json
 import networkx
 import os
-import pygit2
 import queue
 import subprocess
 import threading
@@ -14,11 +12,13 @@ import yaml
 
 CLIENT = docker.Client(base_url='unix://run/docker.sock', version='auto')
 
-SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
-REPODIR = pygit2.Repository(pygit2.discover_repository(SCRIPTDIR)).workdir
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+REPODIR = subprocess.check_output([
+    '/usr/bin/git', 'rev-parse', '--show-toplevel'
+]).decode('UTF-8').strip()
 IMAGEDIR = os.path.join(REPODIR, 'images')
 
-CONFIG = yaml.load(open(os.path.join(REPODIR, 'images.yaml')), Loader=yaml.CLoader,)
+CONFIG = yaml.load(open(os.path.join(REPODIR, 'images.yaml')), Loader=yaml.CLoader)
 META = CONFIG['meta']
 IMAGES = CONFIG.copy()
 del IMAGES['meta']
