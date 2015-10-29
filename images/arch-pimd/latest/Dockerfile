@@ -9,7 +9,9 @@ ENV PIMD_VERSION="2.3.1-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "pimd=${PIMD_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    setcap 'cap_net_admin,cap_net_raw=ep' /usr/bin/pimd
+    setcap 'cap_net_admin,cap_net_raw=ep' /usr/bin/pimd && \
+    rm /var/run && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/run
 
 USER ${UGNAME}
 ENTRYPOINT ["/usr/bin/pimd", "--foreground", "--disable-vifs"]

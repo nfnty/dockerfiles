@@ -10,7 +10,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx=${NGINX_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_bind_service=ep' /usr/bin/nginx && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/nginx /var/log/nginx
+    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/nginx /var/log/nginx && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/nginx
 VOLUME ["/var/lib/nginx", "/var/log/nginx"]
 
 USER ${UGNAME}

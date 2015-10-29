@@ -13,7 +13,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/anvil && \
     setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/imap-login && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        /var/lib/dovecot /var/log/dovecot
+        /run/dovecot /var/lib/dovecot /var/log/dovecot
 VOLUME ["/var/lib/dovecot", "/var/log/dovecot"]
 
 USER ${UGNAME}

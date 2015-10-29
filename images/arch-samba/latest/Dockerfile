@@ -10,7 +10,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "samba=${SAMBA_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_bind_service=ep' /usr/bin/smbd && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/cache/samba /var/lib/samba /var/log/samba
+    chown --recursive "${UGNAME}:${UGNAME}" /var/cache/samba /var/lib/samba /var/log/samba && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/samba
 VOLUME ["/var/cache/samba", "/var/lib/samba", "/var/log/samba"]
 
 USER ${UGNAME}

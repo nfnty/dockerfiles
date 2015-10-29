@@ -9,7 +9,8 @@ ENV POSTGRESQL_VERSION="9.4.5-1" PGDATA="/var/lib/postgres/data"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "postgresql=${POSTGRESQL_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/postgres
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
+        /run/postgresql /var/lib/postgres
 VOLUME ["/var/lib/postgres"]
 
 USER ${UGNAME}
