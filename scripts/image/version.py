@@ -82,7 +82,7 @@ def dockerfile_update(path, variable, version):
     ''' Update Dockerfiles with current version '''
     with open(path, 'r') as filed:
         newfile, found = re.subn(
-            variable + r'=".+"',
+            variable + r'=\S+',
             '{:1s}="{:2s}"'.format(variable, version),
             filed.read(),
         )
