@@ -10,13 +10,8 @@ perm_base() {
     echo "${uid}:${gid} ${perms} ${@:5}"
 
     echo -ne '\033[31m'
-    if [[ ${#options[@]} -gt 0 ]]; then
-        find "${path}" ${options[@]:-} '(' -not -uid "${uid}" -or -not -gid "${gid}" ')' ${arguments[@]:-} -print -exec chown "${uid}:${gid}" '{}' '+'
-        find "${path}" ${options[@]:-} '(' -not -perm "${perms}" ')' ${arguments[@]:-} -print -exec chmod "${perms}" '{}' '+'
-    else
-        find "${path}" '(' -not -uid "${uid}" -or -not -gid "${gid}" ')' ${arguments[@]:-} -print -exec chown "${uid}:${gid}" '{}' '+'
-        find "${path}" '(' -not -perm "${perms}" ')' ${arguments[@]:-} -print -exec chmod "${perms}" '{}' '+'
-    fi
+    find "${path}" ${options[@]:-} '(' -not -uid "${uid}" -or -not -gid "${gid}" ')' ${arguments[@]:-} -print -exec chown "${uid}:${gid}" '{}' '+'
+    find "${path}" ${options[@]:-} '(' -not -perm "${perms}" ')' ${arguments[@]:-} -print -exec chmod "${perms}" '{}' '+'
     echo -ne '\033[0m'
 
     echo
