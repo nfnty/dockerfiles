@@ -352,3 +352,15 @@ meta:
                     url: 'https://github.com/troglobit/pimd/tags'
                     xpath: '//span[@class="tag-name"]'
                     regex: *VER_3NUM
+
+'arch-avahi:latest':
+    build: True
+    packages:
+        avahi:
+            variable: 'AVAHI_VERSION'
+            download: 'extra'
+            sources:
+                upstream:
+                    url: 'http://www.avahi.org/wiki/DownloadAvahi'
+                    xpath: '//p[contains(text(), "latest version")]/a'
+                    regex: *VER_3NUM
