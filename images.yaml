@@ -340,3 +340,15 @@ meta:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/transmission-cli'
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
+
+'arch-pimd:latest':
+    build: True
+    packages:
+        pimd:
+            variable: 'PIMD_VERSION'
+            download: 'nfnty'
+            sources:
+                github:
+                    url: 'https://github.com/troglobit/pimd/tags'
+                    xpath: '//span[@class="tag-name"]'
+                    regex: *VER_3NUM
