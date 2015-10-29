@@ -10,12 +10,12 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${GNUPGHOME}:${PRIMPATH}/crypto/gnupg:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
-    --volume="${SRCDEST}:${PRIMPATH}/srcdest:rw" \
-    --volume="${PKGBUILDPATH}:${PRIMPATH}/host/pkgbuild:ro" \
-    --volume="${PKGCACHE}:/var/cache/pacman/pkg:rw" \
-    --volume="${PKGDEST}:${PRIMPATH}/pkgdest:rw" \
+    --volume="${GNUPGHOME}:${PRIMPATH}/gnupg:rw" \
+    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
+    --volume="${SRCPATH}:${PRIMPATH}/src:rw" \
+    --volume="${PKGBUILDPATH}:${PRIMPATH}/host:ro" \
+    --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
+    --volume="${PKGPATH}:${PRIMPATH}/pkg:rw" \
     --cap-drop 'ALL' \
     --cap-add 'FOWNER' \
     --cap-add 'SETGID' \
@@ -29,7 +29,3 @@ docker create \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-builder:latest \
     ${@:2}
-
-CID="$( docker inspect --format='{{.Id}}' "${CNAME}" )"
-cd "${BTRFSPATH}/${CID}"
-setfattr --name=user.pax.flags --value=em usr/bin/python3

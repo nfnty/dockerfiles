@@ -10,10 +10,10 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CACHEPATH}:${PRIMPATH}/cache:rw" \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
-    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
+    --volume="${CONFIGPATH}:/etc/kea:ro" \
+    --volume="${LIBPATH}:/var/lib/kea:rw" \
+    --volume="${LOGPATH}:/var/log/kea:rw" \
+    --volume="${RUNPATH}:/run/kea:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
     --cap-add 'NET_RAW' \
@@ -22,6 +22,4 @@ docker create \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
-    --entrypoint='/usr/bin/kea-dhcp4' \
-    nfnty/arch-kea:latest \
-    -c '/kea/config/kea.conf'
+    nfnty/arch-kea:latest

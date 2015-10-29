@@ -9,6 +9,6 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_root_rw "${CACHEPATH}"
 perm_root_rw "${DESTPATH}"
 perm_root_rw "${GNUPGPATH}"
+perm_root_rw "${PKGCACHEPATH}"

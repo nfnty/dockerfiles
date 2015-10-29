@@ -1,23 +1,17 @@
 FROM nfnty/arch-mini:latest
-
 MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID="0" UGNAME="root" PRIMPATH="/bootstrap"
-
-ENV GNUPGHOME="${PRIMPATH}/crypto/gnupg"
-
+ENV GNUPGHOME="${PRIMPATH}/gnupg"
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
         "${PRIMPATH}/"{,config,crypto,scripts} && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{cache,dest,rootfs} \
-        "${GNUPGHOME}" && \
-    rmdir /var/cache/pacman/pkg && \
-    ln --symbolic "${PRIMPATH}/cache" /var/cache/pacman/pkg
-VOLUME ["${PRIMPATH}/cache", "${PRIMPATH}/dest", "${PRIMPATH}/rootfs", "${GNUPGHOME}"]
+        "${PRIMPATH}/dest" "${GNUPGHOME}" \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=755 \
+        "${PRIMPATH}/rootfs"
+VOLUME ["${PRIMPATH}/dest", "${PRIMPATH}/rootfs", "${GNUPGHOME}", "/var/cache/pacman/pkg"]
 
-ADD config/packages ${PRIMPATH}/config/
-ADD scripts/ ${PRIMPATH}/scripts/
-ADD config/gnupg/ ${GNUPGHOME}/
+COPY ["primpath/", "${PRIMPATH}/"]
 RUN chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/"{config,scripts} && \
     chmod --recursive 'u=rX,g=,o=' "${PRIMPATH}/"{config,scripts} && \
     chown --recursive "${UGNAME}:${UGNAME}" "${GNUPGHOME}" && \

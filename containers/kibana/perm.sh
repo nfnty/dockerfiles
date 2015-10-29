@@ -10,3 +10,5 @@ source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
 perm_user_ro "${CONFIGPATH}"
+perm_user_rw "${LOGPATH}"
+perm_user_rw "${TMPPATH}"

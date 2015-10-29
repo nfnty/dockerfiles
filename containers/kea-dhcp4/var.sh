@@ -1,11 +1,10 @@
 UGID='260000'
-PRIMPATH='/kea'
 MEMORY='1G'
 CPU_SHARES='2048'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-CACHEPATH="${HOSTPATH}/cache"
 CONFIGPATH="${HOSTPATH}/config"
-CRYPTOPATH="${HOSTPATH}/crypto"
 LIBPATH="${HOSTPATH}/lib"
+LOGPATH="${HOSTPATH}/log"
+RUNPATH="${HOSTPATH}/run"

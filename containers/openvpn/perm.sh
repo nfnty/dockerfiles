@@ -9,9 +9,8 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_root_ro "${CONFIGPATH}"
-perm_root_ro "${CRYPTOPATH}"
-perm_ur_rw "${DATAPATH}"
-perm_ur_ro "${SCRIPTSPATH}"
+perm_ur_ro "${CONFIGPATH}"
+perm_ur_rw "${LIBPATH}"
+perm_ur_rw "${LOGPATH}"
 perm_ur_rw "${TMPPATH}"
-perm_ur_rw "${TUNPATH}"
+perm_custom "${TUNPATH}" '0' '0' 'u=rw,g=rw,o=rw'

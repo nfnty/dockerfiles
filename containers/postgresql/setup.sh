@@ -10,8 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker run \
     --read-only \
-    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
-    --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
+    --volume="${LIBPATH}:/var/lib/postgres:rw" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

@@ -1,14 +1,11 @@
 UGID='220000'
-PRIMPATH='/dovecot'
 MEMORY='2G'
 CPU_SHARES='1024'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
 CONFIGPATH="${HOSTPATH}/config"
-CRYPTOPATH="${HOSTPATH}/crypto"
-MAILDIRPATH="${HOSTPATH}/maildir"
 LIBPATH="${HOSTPATH}/lib"
 LOGPATH="${HOSTPATH}/log"
 RUNPATH="${HOSTPATH}/run"
-TMPDIR="${HOSTPATH}/tmp"
+TMPPATH="${HOSTPATH}/tmp"

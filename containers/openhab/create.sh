@@ -10,14 +10,15 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${ADDONPATH}:${PRIMPATH}/addons:ro" \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
-    --volume="${STATEPATH}:${PRIMPATH}/state:rw" \
-    --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
-    --volume="${WEBAPPPATH}:${PRIMPATH}/webapps:rw" \
-    --volume="${WORKPATH}:${PRIMPATH}/work:rw" \
+    --volume="${ADDONPATH}:/opt/openhab/addons:ro" \
+    --volume="${CONFIGPATH_JETTY}:/opt/openhab/etc:ro" \
+    --volume="${CONFIGPATH_OPENHAB}:/opt/openhab/configurations:ro" \
+    --volume="${CONFIGPATH_TELLDUS}:/etc/tellstick.conf:ro" \
+    --volume="${LIBPATH_OPENHAB}:/var/lib/openhab:rw" \
+    --volume="${LIBPATH_TELLDUS}:/var/lib/telldus:rw" \
+    --volume="${LOGPATH}:/var/log/openhab:rw" \
+    --volume="${TMPPATH}:/tmp:rw" \
+    --volume="${WEBAPPSPATH}:/opt/openhab/webapps/static:rw" \
     --device="${TELLSTICKPATH}" \
     --cap-drop 'ALL' \
     --net='none' \
@@ -28,7 +29,3 @@ docker create \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-openhab:latest
-
-CID="$( docker inspect --format='{{.Id}}' "${CNAME}" )"
-cd "${BTRFSPATH}/${CID}"
-setfattr --name=user.pax.flags --value=em usr/lib/jvm/java-8-openjdk/jre/bin/java

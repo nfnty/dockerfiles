@@ -10,10 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
-    --volume="${PKGPATH}:${PRIMPATH}/content/archlinux/nfnty/os/x86_64:ro" \
+    --volume="${CONFIGPATH}:/etc/nginx:ro" \
+    --volume="${LIBPATH}:/var/lib/nginx:rw" \
+    --volume="${LOGPATH}:/var/log/nginx:rw" \
+    --volume="${RUNPATH}:/run/nginx:rw" \
+    --volume="${PKGPATH}:/mnt/mirror/archlinux/nfnty/os/x86_64:ro" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
     --net='none' \

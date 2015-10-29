@@ -10,10 +10,9 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${BASEPATH}:${PRIMPATH}/base:rw" \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${LUAPATH}:${PRIMPATH}/lua:ro" \
-    --volume="${ULOGDPATH}:${PRIMPATH}/host/ulogd:ro" \
+    --volume="${BASEPATH}:/var/cache/hekad:rw" \
+    --volume="${CONFIGPATH}:/etc/heka:ro" \
+    --volume="${ULOGDPATH}:/mnt/ulogd:ro" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

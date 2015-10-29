@@ -1,29 +1,20 @@
 FROM nfnty/arch-mini:latest
-
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="250000" UGNAME="exim" PRIMPATH="/exim"
-
+ENV UGID="250000" UGNAME="exim"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
-
-RUN install --directory --owner="${UGNAME}" --group=root --mode=550 \
-        "${PRIMPATH}/"{,config,crypto} && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{log,spool,spool/db}
-VOLUME ["${PRIMPATH}/log", "${PRIMPATH}/spool"]
 
 ENV EXIM_VERSION="4.86-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "exim=${EXIM_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    rm --recursive /var/spool/exim && \
-    ln --symbolic "${PRIMPATH}/spool" /var/spool/exim && \
-    rmdir /var/log/exim && \
-    ln --symbolic "${PRIMPATH}/log" /var/log/exim && \
-    rm /etc/mail/exim.conf && \
-    ln --symbolic "${PRIMPATH}/config/exim.conf" /etc/mail/exim.conf
+    chmod -s /usr/bin/exim && \
+    setcap 'cap_net_bind_service=ep' /usr/bin/exim && \
+    chown --recursive "${UGNAME}:${UGNAME}" /etc/mail /var/log/exim /var/spool/exim && \
+    chmod --recursive 700 /var/log/exim /var/spool/exim
+VOLUME ["/var/log/exim", "/var/spool/exim"]
 
-USER root
+USER ${UGNAME}
 EXPOSE 25/tcp 587/tcp
 ENTRYPOINT ["/usr/bin/exim", "-bdf", "-q30m"]

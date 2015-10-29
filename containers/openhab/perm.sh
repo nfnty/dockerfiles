@@ -10,14 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
 perm_user_ro "${ADDONPATH}"
-perm_user_ro "${CONFIGPATH}"
-perm_user_rw "${DATAPATH}"
+perm_user_ro "${CONFIGPATH_JETTY}"
+perm_user_ro "${CONFIGPATH_OPENHAB}"
+perm_user_ro "${CONFIGPATH_TELLDUS}"
+perm_user_rw "${LIBPATH_OPENHAB}"
+perm_user_rw "${LIBPATH_TELLDUS}"
 perm_user_rw "${LOGPATH}"
-perm_user_ro "${STATEPATH}" '-maxdepth 0'
-perm_user_rw "${STATEPATH}" '-mindepth 1'
 perm_user_rw "${TMPPATH}"
-perm_user_ro "${WEBAPPPATH}" '' "-and -not -path ${WEBAPPPATH}/static*"
-perm_user_rw "${WEBAPPPATH}/static"
-perm_user_rw "${WORKPATH}"
-
-perm_user_rw "${TELLSTICKPATH}"
+perm_user_rw "${WEBAPPSPATH}"

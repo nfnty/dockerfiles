@@ -234,7 +234,7 @@ meta:
     packages:
         ntp:
             variable: 'NTP_VERSION'
-            download: 'extra'
+            download: 'nfnty'
             sources:
                 upstream:
                     url: 'http://www.ntp.org/downloads.html'

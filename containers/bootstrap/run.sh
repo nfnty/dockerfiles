@@ -13,9 +13,9 @@ docker run \
     --attach='STDOUT' \
     --attach='STDERR' \
     --read-only \
-    --volume="${CACHEPATH}:${PRIMPATH}/cache:rw" \
     --volume="${DESTPATH}:${PRIMPATH}/dest:rw" \
-    --volume="${GNUPGPATH}:${PRIMPATH}/crypto/gnupg:rw" \
+    --volume="${GNUPGPATH}:${PRIMPATH}/gnupg:rw" \
+    --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
     --cap-drop 'ALL' \
     --cap-add 'CHOWN' \
     --cap-add 'SYS_CHROOT' \

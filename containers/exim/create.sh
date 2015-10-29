@@ -10,14 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
-    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
-    --volume="${SPOOLPATH}:${PRIMPATH}/spool:rw" \
+    --volume="${CONFIGPATH}:/etc/mail:ro" \
+    --volume="${LOGPATH}:/var/log/exim:rw" \
+    --volume="${SPOOLPATH}:/var/spool/exim:rw" \
     --cap-drop='ALL' \
     --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'SETGID' \
-    --cap-add 'SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

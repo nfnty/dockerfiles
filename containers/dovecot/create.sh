@@ -10,13 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
-    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
-    --volume="${MAILDIRPATH}:${PRIMPATH}/maildir:rw" \
-    --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
-    --volume="${TMPDIR}:${PRIMPATH}/tmp:rw" \
+    --volume="${CONFIGPATH}:/etc/dovecot:ro" \
+    --volume="${LIBPATH}:/var/lib/dovecot:rw" \
+    --volume="${LOGPATH}:/var/log/dovecot:rw" \
+    --volume="${RUNPATH}:/run/dovecot:rw" \
+    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop='ALL' \
     --cap-add 'NET_BIND_SERVICE' \
     --cap-add 'SYS_CHROOT' \

@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker run \
     --read-only \
-    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:rw" \
+    --volume="${CONFIGPATH}:/etc/openvpn:rw" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
@@ -25,4 +25,4 @@ docker run \
     --user="${UGID}" \
     --entrypoint='/usr/bin/openvpn' \
     nfnty/arch-openvpn:latest \
-    --genkey --secret /openvpn/crypto/ta.key
+    --genkey --secret /etc/openvpn/crypto/ta.key

@@ -10,12 +10,12 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
-    --volume="${SHARE1}/Anime:${PRIMPATH}/media/Anime:ro" \
-    --volume="${SHARE1}/Home:${PRIMPATH}/media/Home:ro" \
-    --volume="${SHARE1}/Movies:${PRIMPATH}/media/Movies:ro" \
-    --volume="${SHARE1}/Series:${PRIMPATH}/media/Series:ro" \
-    --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
+    --volume="${LIBPATH}:/var/lib/emby:rw" \
+    --volume="${SHARE1}/Anime:/mnt/Anime:ro" \
+    --volume="${SHARE1}/Home:/mnt/Home:ro" \
+    --volume="${SHARE1}/Movies:/mnt/Movies:ro" \
+    --volume="${SHARE1}/Series:/mnt/Series:ro" \
+    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
@@ -25,7 +25,3 @@ docker create \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-emby:latest
-
-CID="$( docker inspect --format='{{.Id}}' "${CNAME}" )"
-cd "${BTRFSPATH}/${CID}"
-setfattr --name=user.pax.flags --value=em 'usr/bin/mono'

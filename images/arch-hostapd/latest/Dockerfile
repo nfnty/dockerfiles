@@ -1,14 +1,9 @@
 FROM nfnty/arch-mini:latest
-
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="270000" UGNAME="hostapd" PRIMPATH="/hostapd"
-
+ENV UGID="270000" UGNAME="hostapd"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
-
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
-        "${PRIMPATH}/"{,config}
 
 ENV HOSTAPD_VERSION="2.5-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
@@ -17,4 +12,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_net_admin,cap_net_raw=ep' /usr/bin/hostapd
 
 USER ${UGNAME}
-ENTRYPOINT ["/usr/bin/hostapd", "/hostapd/config/hostapd.conf"]
+ENTRYPOINT ["/usr/bin/hostapd", "/etc/hostapd/hostapd.conf"]

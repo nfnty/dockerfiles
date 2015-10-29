@@ -1,29 +1,19 @@
 FROM nfnty/arch-jre8:latest
-
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="130000" UGNAME="logstash" PRIMPATH="/logstash"
-
-ENV JAVA_HOME="/usr/lib/jvm/default-runtime"
-ENV SINCEDB_DIR="${PRIMPATH}/sincedb"
-
+ENV UGID="130000" UGNAME="logstash"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
-        "${PRIMPATH}/"{,bin,config,host} && \
+ENV LOGSTASH_VERSION="2.0.0" JAVA_HOME="/usr/lib/jvm/default-runtime" SINCEDB_DIR="/var/lib/logstash"
+RUN mkdir /opt/logstash && \
+    curl "https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \
+        tar --extract --gzip --strip-components=1 --file=- --directory=/opt/logstash && \
+    chown --recursive "${UGNAME}:${UGNAME}" /opt/logstash && \
+    chmod --recursive 'u=rX,g=,o=' /opt/logstash && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{bundle,sincedb,tmp} && \
-    rmdir /tmp && \
-    ln --symbolic "${PRIMPATH}/tmp" /tmp
-VOLUME ["${PRIMPATH}/bundle", "${PRIMPATH}/sincedb", "${PRIMPATH}/tmp"]
-
-ENV LOGSTASH_VERSION="1.5.4"
-RUN curl "https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \
-        tar --extract --gzip --strip-components=1 --file=- --directory="${PRIMPATH}/bin" && \
-    chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/bin" && \
-    chmod --recursive 'u=rX,g=,o=' "${PRIMPATH}/bin"  && \
-    ln --symbolic "${PRIMPATH}/bundle" "${PRIMPATH}/bin/.bundle"
+        /var/lib/logstash /var/log/logstash
+VOLUME ["/var/lib/logstash", "/var/log/logstash"]
 
 USER ${UGNAME}
-ENTRYPOINT ["/logstash/bin/bin/logstash", "--config", "/logstash/config"]
+ENTRYPOINT ["/opt/logstash/bin/logstash", "--config", "/etc/logstash/conf.d", "--log", "/var/log/logstash/log"]

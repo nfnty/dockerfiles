@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
+    --volume="${CONFIGPATH}:/etc/hostapd:ro" \
     --cap-drop 'ALL' \
     --cap-add 'NET_ADMIN' \
     --cap-add 'NET_RAW' \
@@ -21,5 +21,5 @@ docker create \
     --cpu-shares="${CPU_SHARES}" \
     --entrypoint='/usr/bin/hostapd' \
     nfnty/arch-hostapd:latest \
-    /hostapd/config/wlan_24n0/hostapd.conf \
-    /hostapd/config/wlan_50n0/hostapd.conf
+    /etc/hostapd/wlan_24n0/hostapd.conf \
+    /etc/hostapd/wlan_50n0/hostapd.conf

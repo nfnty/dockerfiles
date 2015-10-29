@@ -9,5 +9,5 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_root_ro "${CONFIGPATH}"
-perm_user_rw "${DATAPATH}"
+perm_user_ro "${CONFIGPATH}"
+perm_user_rw "${LIBPATH}"

@@ -10,12 +10,12 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CACHEPATH}:${PRIMPATH}/cache:rw" \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${LIBPATH}:${PRIMPATH}/lib:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
-    --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
-    --volume="${SHARE1}:${PRIMPATH}/share/1:rw" \
+    --volume="${CACHEPATH}:/var/cache/samba:rw" \
+    --volume="${CONFIGPATH}:/etc/samba:ro" \
+    --volume="${LIBPATH}:/var/lib/samba:rw" \
+    --volume="${LOGPATH}:/var/log/samba:rw" \
+    --volume="${RUNPATH}:/run/samba:rw" \
+    --volume="${SHARE1}:/mnt/1:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
     --net='none' \

@@ -10,9 +10,8 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${CRYPTOPATH}:${PRIMPATH}/crypto:ro" \
-    --volume="${RUNPATH}:${PRIMPATH}/run:rw" \
+    --volume="${CONFIGPATH}:/etc/powerdns:ro" \
+    --volume="${RUNPATH}:/run:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_BIND_SERVICE' \
     --net='none' \

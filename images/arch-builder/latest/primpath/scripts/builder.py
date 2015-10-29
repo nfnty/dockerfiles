@@ -6,16 +6,14 @@ import os
 import sys
 import argparse
 import requests
-import pygit2
-import time
 import signal
 
 PRIMPATH = os.environ['PRIMPATH']
 PKGBUILD = os.path.join(PRIMPATH, 'pkgbuild')
-BUILDDIR = os.path.join(PRIMPATH, 'builddir')
+BUILDDIR = os.path.join(PRIMPATH, 'build')
 MAKEPKGCFG = os.path.join(PRIMPATH, 'config/makepkg.conf')
-PKGDEST = os.path.join(PRIMPATH, 'pkgdest')
-HOSTPKGBUILD = os.path.join(PRIMPATH, 'host/pkgbuild')
+PKGDEST = os.path.join(PRIMPATH, 'pkg')
+HOSTPKGBUILD = os.path.join(PRIMPATH, 'host')
 GPGPATH = os.environ['GNUPGHOME']
 
 def signal_handle_sigchld(signum, frame):
@@ -109,27 +107,6 @@ def args_parse():
         sys.exit(2)
 
     return args
-
-def paxd_initialize():
-    ''' Initalize paxd '''
-    process = subprocess.Popen(
-        [
-            '/usr/bin/sudo', '--non-interactive',
-            '/usr/bin/paxd'
-        ],
-        stderr=subprocess.PIPE
-    )
-
-    for timer_wait in range(51):
-        if process.stderr.readline().decode('UTF-8').strip() == \
-                'loading configuration and applying all exceptions':
-            break
-        if timer_wait == 50:
-            print('paxd took too long time to start')
-            sys.exit(1)
-        time.sleep(0.1)
-
-    print('paxd started!')
 
 def print_separator():
     ''' Prints a separator for redability '''
@@ -374,8 +351,8 @@ def prepare_local(path):
 def prepare_git(url, path):
     ''' Prepare git pkgbuild directory '''
     try:
-        pygit2.clone_repository(url=url, path=path)
-    except pygit2.GitError as error:
+        subprocess.check_call(['/usr/bin/git', 'clone', url, path])
+    except subprocess.CalledProcessError as error:
         print('Failed to clone repository')
         error_print_exit(error)
 
@@ -457,9 +434,6 @@ def main():
         packages_cleanup(PKGDEST, args.db)
         sys.exit(0)
 
-    # Initialize paxd
-    paxd_initialize()
-
     # Upgrade databases and packages
     pacman_upgrade()
 
@@ -479,9 +453,6 @@ def main():
         prepare_git('https://aur.archlinux.org/{:1s}.git'.format(args.aur), PKGBUILD)
     elif args.remote:
         prepare_remote(args.remote, PKGBUILD)
-    else:
-        print('Argument error')
-        sys.exit(1)
 
     # cd to specified relpath
     if args.path and not args.local:
@@ -489,11 +460,8 @@ def main():
         print('Successfully changed directory to ' + args.path)
 
     # Repackage if wanted
-    try:
-        os.stat(os.path.join(BUILDDIR, '.repackage'))
+    if os.path.exists(os.path.join(BUILDDIR, '.repackage')):
         args.repackage = True
-    except FileNotFoundError:
-        pass
     if args.repackage:
         args.noclean = True
 

@@ -10,21 +10,18 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${DATAPATH}:${PRIMPATH}/data:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/logs:rw" \
-    --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
-    --volume="${WORKPATH}:${PRIMPATH}/work:rw" \
+    --volume="${CONFIGPATH}:/opt/elasticsearch/config:ro" \
+    --volume="${LIBPATH}:/var/lib/elasticsearch:rw" \
+    --volume="${LOGPATH}:/var/log/elasticsearch:rw" \
+    --volume="${PLUGINPATH}:/opt/elasticsearch/plugins:ro" \
+    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
+    --add-host="${CNAME}:127.0.0.1" \
     --name="${CNAME}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-elasticsearch:latest
-
-CID="$( docker inspect --format='{{.Id}}' "${CNAME}" )"
-cd "${BTRFSPATH}/${CID}"
-setfattr --name=user.pax.flags --value=em usr/lib/jvm/java-8-openjdk/jre/bin/java

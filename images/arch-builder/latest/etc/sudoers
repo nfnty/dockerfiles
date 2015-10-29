@@ -1,0 +1,2 @@
+root ALL=(ALL) ALL
+builder ALL=NOPASSWD: /usr/bin/pacman, /usr/bin/find

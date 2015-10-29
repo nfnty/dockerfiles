@@ -10,7 +10,8 @@ source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
 perm_user_ro "${CONFIGPATH}"
-perm_user_ro "${LIBPATH}" '-maxdepth 0'
-perm_user_rw "${LIBPATH}" '-mindepth 1'
+perm_user_rw "${LIBPATH}"
 perm_user_rw "${LOGPATH}"
+perm_user_rw "${RUNPATH}"
+
 perm_custom "${PKGPATH}" '99999' '99999' 'u=rwX,g=rX,o=rX'

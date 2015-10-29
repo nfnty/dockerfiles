@@ -10,8 +10,10 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:rw" \
-    --volume="${TORRENTPATH}:${PRIMPATH}/torrent:rw" \
+    --volume="${LIBPATH}:/var/lib/transmission:rw" \
+    --volume="${LOGPATH}:/var/log/transmission:rw" \
+    --volume="${OPTPATH}:/opt/transmission:ro" \
+    --volume="${TORRENTPATH}:/mnt/torrent:rw" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

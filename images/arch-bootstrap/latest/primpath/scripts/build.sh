@@ -10,7 +10,6 @@ DESTPATH="${PRIMPATH}/dest"
 CONFIGPATH="${PRIMPATH}/config"
 
 umask 022
-install --directory --owner=root --group=root --mode=755 "${ROOTFS}"
 pacstrap -c -d -G -M "${ROOTFS}" $( cat "${CONFIGPATH}/packages" )
 
 cd "${DESTPATH}"

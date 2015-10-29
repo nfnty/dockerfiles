@@ -1,25 +1,17 @@
 FROM nfnty/arch-mini:latest
-
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="230000" UGNAME="ntp" PRIMPATH="/ntp"
-
+ENV UGID="230000" UGNAME="ntp"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner=root --group="${UGNAME}" --mode=550 \
-        "${PRIMPATH}" && \
-    install --directory --owner=root --group=root --mode=500 \
-        "${PRIMPATH}/config" && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/data"
-VOLUME ["${PRIMPATH}/data"]
-
-ENV NTP_VERSION="4.2.8.p3-1"
+ENV NTP_VERSION="4.2.8.p4-1"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "ntp=${NTP_VERSION}" && \
-    find /var/cache/pacman/pkg -mindepth 1 -delete
+    find /var/cache/pacman/pkg -mindepth 1 -delete && \
+    setcap 'cap_ipc_lock,cap_net_bind_service,cap_sys_time=ep' /usr/bin/ntpd && \
+    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/ntp
 
-USER root
+USER ${UGNAME}
 EXPOSE 123/udp
-ENTRYPOINT ["/usr/bin/ntpd", "--panicgate", "--user=ntp:ntp", "--configfile=/ntp/config/ntp.conf", "--nofork"]
+ENTRYPOINT ["/usr/bin/ntpd", "--nofork", "--panicgate"]

@@ -12,7 +12,7 @@ source "${SCRIPTDIR}/../_misc/permissions.sh"
 perm_user_ro "${CONFIGPATH}"
 perm_user_rw "${GNUPGHOME}"
 perm_user_rw "${LOGPATH}"
-perm_user_rw "${SRCDEST}"
+perm_user_rw "${SRCPATH}"
 perm_user_ro "${PKGBUILDPATH}"
-perm_root_rw "${PKGCACHE}"
-perm_custom "${PKGDEST}" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
+perm_root_rw "${PKGCACHEPATH}"
+perm_custom "${PKGPATH}" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'

@@ -10,7 +10,9 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
+    --volume="${CONFIGPATH}:/opt/kibana/config:ro" \
+    --volume="${LOGPATH}:/var/log/kibana:rw" \
+    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
@@ -20,7 +22,3 @@ docker create \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-kibana:latest
-
-CID="$( docker inspect --format='{{.Id}}' "${CNAME}" )"
-cd "${BTRFSPATH}/${CID}"
-setfattr --name=user.pax.flags --value=em kibana/bin/node/bin/node

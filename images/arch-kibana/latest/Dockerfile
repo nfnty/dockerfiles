@@ -1,23 +1,19 @@
 FROM nfnty/arch-mini:latest
-
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="120000" UGNAME="kibana" PRIMPATH="/kibana"
-
+ENV UGID="120000" UGNAME="kibana"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
-        "${PRIMPATH}/"{,bin,config,crypto}
-
-ENV KIBANA_VERSION="4.1.2"
-RUN curl "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" | \
-        tar --extract --gzip --strip-components=1 --file=- --directory="${PRIMPATH}/bin" && \
-    chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/bin" && \
-    chmod --recursive 'u=rX,g=,o=' "${PRIMPATH}/bin"  && \
-    rm --recursive "${PRIMPATH}/bin/config" && \
-    ln --symbolic "${PRIMPATH}/config" "${PRIMPATH}/bin/config"
+ENV KIBANA_VERSION="4.2.0" BABEL_CACHE_PATH='/tmp/babel.json'
+RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 /opt/kibana && \
+    curl "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" | \
+        tar --extract --gzip --strip-components=1 --file=- --directory='/opt/kibana' && \
+    chown --recursive "${UGNAME}:${UGNAME}" "/opt/kibana" && \
+    chmod --recursive 'u=rX,g=,o=' "/opt/kibana" && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/log/kibana
+VOLUME ["/var/log/kibana"]
 
 USER ${UGNAME}
 EXPOSE 5601/tcp
-ENTRYPOINT ["/kibana/bin/bin/kibana"]
+ENTRYPOINT ["/opt/kibana/bin/kibana"]

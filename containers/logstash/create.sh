@@ -10,21 +10,18 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${BUNDLEPATH}:${PRIMPATH}/bundle:rw" \
-    --volume="${SINCEDBPATH}:${PRIMPATH}/sincedb:rw" \
-    --volume="${TMPPATH}:${PRIMPATH}/tmp:rw" \
-    --volume="${ULOGDPATH}:${PRIMPATH}/host/ulogd:ro" \
+    --volume="${CONFIGPATH}:/etc/logstash:ro" \
+    --volume="${LIBPATH}:/var/lib/logstash:rw" \
+    --volume="${LOGPATH}:/var/log/logstash:rw" \
+    --volume="${TMPPATH}:/tmp:rw" \
+    --volume="${ULOGDPATH}:/mnt/ulogd:ro" \
     --cap-drop 'ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
+    --add-host="${CNAME}:127.0.0.1" \
     --name="${CNAME}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
     nfnty/arch-logstash:latest
-
-CID="$( docker inspect --format='{{.Id}}' "${CNAME}" )"
-cd "${BTRFSPATH}/${CID}"
-setfattr --name=user.pax.flags --value=em usr/lib/jvm/java-8-openjdk/jre/bin/java

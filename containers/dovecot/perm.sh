@@ -10,9 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
 perm_user_ro "${CONFIGPATH}"
-perm_user_ro "${CRYPTOPATH}"
-perm_user_rw "${MAILDIRPATH}"
 perm_user_rw "${LIBPATH}"
 perm_user_rw "${LOGPATH}"
 perm_user_rw "${RUNPATH}" '-maxdepth 0'
-perm_user_rw "${TMPDIR}"
+perm_user_rw "${TMPPATH}"

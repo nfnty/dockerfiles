@@ -1,15 +1,10 @@
 FROM scratch
-
 MAINTAINER nfnty <docker@nfnty.se>
 
-ADD bootstrap/arch-mini-bootstrap.tar.xz /
+ADD ["bootstrap/arch-mini-bootstrap.tar.xz", "/"]
 
-ENV PATH '/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl'
-
-RUN localedef --inputfile=en_US --charmap=UTF-8 en_US.UTF-8 && \
-    localedef --inputfile=en_DK --charmap=UTF-8 en_DK.UTF-8
-
-ENV LANG='en_US.UTF-8' \
+ENV PATH='/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl' \
+    LANG='en_US.UTF-8' \
     LANGUAGE='en_US:en' \
     LC_CTYPE='en_US.UTF-8' \
     LC_NUMERIC='en_US.UTF-8' \
@@ -24,32 +19,30 @@ ENV LANG='en_US.UTF-8' \
     LC_MEASUREMENT='en_DK.UTF-8' \
     LC_IDENTIFICATION='en_US.UTF-8'
 
-ADD config/mirrorlist /etc/pacman.d/
-ADD config/locale.conf config/locale.gen config/pacman.conf /etc/
-RUN ln --symbolic /usr/share/zoneinfo/UTC /etc/localtime && \
-    chown 'root:root' /etc/{pacman.d/mirrorlist,locale.conf,locale.gen,pacman.conf} && \
-    chmod 'u=rwX,g=rX,o=rX' /etc/{pacman.d/mirrorlist,locale.conf,locale.gen,pacman.conf}
+COPY ["etc/", "/etc/"]
+COPY ["crypto/", "/tmp/crypto/"]
+RUN localedef --inputfile=en_US --charmap=UTF-8 en_US.UTF-8 && \
+    localedef --inputfile=en_DK --charmap=UTF-8 en_DK.UTF-8 && \
 
-RUN pacman-key --init && \
-    pacman-key --populate archlinux
+    chmod 'u=rwX,g=rX,o=rX' /etc/{locale.conf,locale.gen,pacman.conf,pacman.d,pacman.d/mirrorlist} && \
 
-ADD crypto/ca-certificates/ /tmp/ca-certificates/
-RUN find /tmp/ca-certificates -mindepth 1 -type f -not -path '*/.gitignore' \
-        -exec cp --target-directory='/etc/ca-certificates/trust-source/anchors' '{}' '+' && \
-    rm --recursive /tmp/ca-certificates && \
-    chown --recursive 'root:root' /etc/ca-certificates/trust-source/anchors && \
-    chmod --recursive 'u=rwX,g=rX,o=rX' /etc/ca-certificates/trust-source/anchors && \
-    setfattr --name=user.pax.flags --value=E /usr/bin/trust && \
-    update-ca-trust
+    ln --symbolic /usr/share/zoneinfo/UTC /etc/localtime && \
 
-ADD crypto/gnupg/ /tmp/gnupg/
-RUN find /tmp/gnupg/keys -mindepth 1 -type f -not -path '*/.gitignore' \
-        -exec pacman-key --add '{}' '+' && \
-    find /tmp/gnupg/trust -mindepth 1 -type f -not -path '*/.gitignore' \
+    pacman-key --init && \
+    pacman-key --populate archlinux && \
+
+    find /tmp/crypto/ca-certificates -type f -not -name '.gitignore' \
+        -exec install --owner=root --group=root --mode=755 \
+            --target-directory='/etc/ca-certificates/trust-source/anchors' '{}' '+' && \
+    update-ca-trust && \
+
+    find /tmp/crypto/pacman/keys -type f -not -name '.gitignore' -exec pacman-key --add '{}' '+' && \
+    find /tmp/crypto/pacman/trust -type f -not -name '.gitignore' \
         -exec gpg --homedir /etc/pacman.d/gnupg --import-ownertrust '{}' '+' && \
-    rm --recursive /tmp/gnupg
 
-RUN pacman --sync --noconfirm --refresh --sysupgrade && \
+    rm --recursive /tmp/crypto && \
+
+    pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
 CMD ["/usr/bin/bash"]
