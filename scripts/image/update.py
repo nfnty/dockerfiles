@@ -218,13 +218,14 @@ def main():
     print('\n### Building images ###')
     fromtree.build()
 
-    print('\n### Cleaning up dangling images ###')
-    for image in CLIENT.images(quiet=True, filters={'dangling': True}):
-        try:
-            CLIENT.remove_image(image)
-            print('Removed: {0:s}'.format(image))
-        except docker.errors.APIError as error:
-            print(str(error))
+    if not ARGS.images:
+        print('\n### Cleaning up dangling images ###')
+        for image in CLIENT.images(quiet=True, filters={'dangling': True}):
+            try:
+                CLIENT.remove_image(image)
+                print('Removed: {0:s}'.format(image))
+            except docker.errors.APIError as error:
+                print(str(error))
 
 if __name__ == '__main__':
     main()
