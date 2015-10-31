@@ -14,7 +14,6 @@ docker create \
     --volume="${LOGPATH}:/var/log/builder:rw" \
     --volume="${PKGBUILDPATH}:/mnt/pkgbuild:rw" \
     --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop 'ALL' \
     --cap-add 'FOWNER' \
     --cap-add 'SETGID' \

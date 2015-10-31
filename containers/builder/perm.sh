@@ -15,4 +15,3 @@ perm_custom "${LIBPATH}/pkg" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
 perm_user_rw "${LOGPATH}"
 perm_custom "${PKGCACHEPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
 perm_user_rw "${PKGBUILDPATH}"
-perm_user_rw "${TMPPATH}"
