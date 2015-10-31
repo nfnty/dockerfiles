@@ -139,11 +139,12 @@ class FromTree:
                 self.graph.add_edge(image_dict['from'], image_full)
 
         degrees = self.graph.out_degree()
-        images = [
+        self.graph.remove_nodes_from(set(
             image for image in degrees
-            if not IMAGES[image.partition('/')[-1]]['build'] and degrees[image] == 0
-        ]
-        self.graph.remove_nodes_from(set(images))
+            if not IMAGES[image.partition('/')[-1]]['build'] \
+                and degrees[image] == 0 \
+                and not image in ARGS.images
+        ))
     def prune(self, images):
         ''' Prune not in images '''
         nodes = {}
