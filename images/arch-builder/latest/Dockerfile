@@ -1,26 +1,28 @@
 FROM nfnty/arch-devel:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="99999" UGNAME="builder" PRIMPATH="/builder"
+ENV UGID="99999" UGNAME="builder" GNUPGHOME="/var/lib/builder/gnupg"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false --home-dir "${PRIMPATH}/home" "${UGNAME}"
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}" && \
 
-ENV GNUPGHOME="${PRIMPATH}/gnupg"
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 "${PRIMPATH}" && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{build,home,log,pkg,pkgbuild,src}
-COPY ["primpath/", "${PRIMPATH}/"]
-COPY ["etc/", "/etc/"]
-RUN chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/"{config,scripts} "${GNUPGHOME}" && \
-    chmod --recursive 'u=rX,g=rX,o=' "${PRIMPATH}/"{config,scripts} && \
-    chmod --recursive 'u=rwX,g=,o=' "${GNUPGHOME}" && \
-    chown 'root:root' /etc/sudoers && \
-    chmod 'u=r,g=r,o=' /etc/sudoers
-VOLUME ["${PRIMPATH}/log", "${PRIMPATH}/pkg", "${PRIMPATH}/src", "${GNUPGHOME}"]
+        /tmp/{build,pkgbuild} \
+        /var/lib/builder/{,gnupg,pkg,src} \
+        /var/log/builder
 
-RUN pacman --sync --noconfirm --refresh --sysupgrade && \
+COPY ["etc/", "/etc/"]
+COPY ["gnupg/", "${GNUPGHOME}/"]
+COPY ["scripts/", "/opt/builder/"]
+RUN chmod 'u=rw,g=r,o=r' /etc/makepkg.conf && \
+    chmod 'u=r,g=r,o=' /etc/sudoers && \
+    chown --recursive "${UGNAME}:${UGNAME}" "${GNUPGHOME}" && \
+    chmod --recursive 'u=rwX,g=,o=' "${GNUPGHOME}" && \
+    chmod --recursive 'u=rwX,g=rX,o=rX' /opt/builder && \
+
+    pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm python-requests && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
+VOLUME ["/var/lib/builder", "/var/log/builder"]
 USER ${UGNAME}
-ENTRYPOINT ["/builder/scripts/builder.py"]
+ENTRYPOINT ["/opt/builder/builder.py"]

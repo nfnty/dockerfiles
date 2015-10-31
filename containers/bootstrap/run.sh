@@ -9,20 +9,22 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 
 docker run \
-    --rm \
-    --attach='STDOUT' \
-    --attach='STDERR' \
     --read-only \
-    --volume="${DESTPATH}:${PRIMPATH}/dest:rw" \
-    --volume="${GNUPGPATH}:${PRIMPATH}/gnupg:rw" \
+    --volume="${ARCHIVEPATH}:/var/lib/bootstrap/archive:rw" \
+    --volume="${GNUPGPATH}:/var/lib/bootstrap/gnupg:rw" \
     --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
+    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop 'ALL' \
     --cap-add 'CHOWN' \
     --cap-add 'SYS_CHROOT' \
+    --cap-add 'DAC_OVERRIDE' \
     --net='bridge' \
     --name="${CNAME}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
+    --attach='STDOUT' \
+    --attach='STDERR' \
+    --rm \
     nfnty/arch-bootstrap:latest

@@ -9,6 +9,7 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_root_rw "${DESTPATH}"
+perm_root_rw "${ARCHIVEPATH}"
 perm_root_rw "${GNUPGPATH}"
-perm_root_rw "${PKGCACHEPATH}"
+perm_custom "${PKGCACHEPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
+perm_root_rw "${TMPPATH}"

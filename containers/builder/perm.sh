@@ -9,10 +9,10 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_user_ro "${CONFIGPATH}"
-perm_user_rw "${GNUPGHOME}"
+perm_user_ro "${MAKEPKGCONF}"
+perm_user_rw "${LIBPATH}" "-path ${LIBPATH}/pkg -prune -or"
+perm_custom "${LIBPATH}/pkg" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
 perm_user_rw "${LOGPATH}"
-perm_user_rw "${SRCPATH}"
-perm_user_ro "${PKGBUILDPATH}"
-perm_root_rw "${PKGCACHEPATH}"
-perm_custom "${PKGPATH}" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
+perm_custom "${PKGCACHEPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
+perm_user_rw "${PKGBUILDPATH}"
+perm_user_rw "${TMPPATH}"

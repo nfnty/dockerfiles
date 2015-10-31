@@ -9,13 +9,12 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 
 docker create \
-    --volume="${CONFIGPATH}:${PRIMPATH}/config:ro" \
-    --volume="${GNUPGHOME}:${PRIMPATH}/gnupg:rw" \
-    --volume="${LOGPATH}:${PRIMPATH}/log:rw" \
-    --volume="${SRCPATH}:${PRIMPATH}/src:rw" \
-    --volume="${PKGBUILDPATH}:${PRIMPATH}/host:ro" \
+    --volume="${MAKEPKGCONF}:/etc/makepkg.conf:ro" \
+    --volume="${LIBPATH}:/var/lib/builder:rw" \
+    --volume="${LOGPATH}:/var/log/builder:rw" \
+    --volume="${PKGBUILDPATH}:/mnt/pkgbuild:rw" \
     --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
-    --volume="${PKGPATH}:${PRIMPATH}/pkg:rw" \
+    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop 'ALL' \
     --cap-add 'FOWNER' \
     --cap-add 'SETGID' \

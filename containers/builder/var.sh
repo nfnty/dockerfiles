@@ -1,16 +1,14 @@
 BNAME='builder'
 UGID='99999'
-PRIMPATH='/builder'
 MEMORY='4G'
 CPU_SHARES='256'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 HOSTPATH="${SRVPATH}/${BNAME}"
 
-CONFIGPATH="${HOSTPATH}/config"
-GNUPGHOME="${HOSTPATH}/gnupg"
+LIBPATH="${HOSTPATH}/lib"
 LOGPATH="${HOSTPATH}/log"
-PKGBUILDPATH="${HOSTPATH}/pkgbuild"
+MAKEPKGCONF="${HOSTPATH}/config/makepkg.conf"
 PKGCACHEPATH="${HOSTPATH}/pkgcache"
-PKGPATH="${HOSTPATH}/pkg"
-SRCPATH="${HOSTPATH}/src"
+PKGBUILDPATH="${HOSTPATH}/pkgbuild"
+TMPPATH="${HOSTPATH}/tmp"

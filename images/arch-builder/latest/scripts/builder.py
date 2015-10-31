@@ -8,12 +8,10 @@ import argparse
 import requests
 import signal
 
-PRIMPATH = os.environ['PRIMPATH']
-PKGBUILD = os.path.join(PRIMPATH, 'pkgbuild')
-BUILDDIR = os.path.join(PRIMPATH, 'build')
-MAKEPKGCFG = os.path.join(PRIMPATH, 'config/makepkg.conf')
-PKGDEST = os.path.join(PRIMPATH, 'pkg')
-HOSTPKGBUILD = os.path.join(PRIMPATH, 'host')
+PKGBUILD = '/tmp/pkgbuild'
+BUILDDIR = '/tmp/build'
+PKGDEST = '/var/lib/builder/pkg'
+HOSTPKGBUILD = '/mnt/pkgbuild'
 GPGPATH = os.environ['GNUPGHOME']
 
 def signal_handle_sigchld(signum, frame):
@@ -389,8 +387,7 @@ def prepare_remote(url, path):
 def pkg_make(args):
     ''' Make package '''
     cmd = [
-        '/usr/bin/makepkg', '--config', MAKEPKGCFG,
-        '--noconfirm', '--log', '--syncdeps'
+        '/usr/bin/makepkg', '--noconfirm', '--log', '--syncdeps'
     ]
 
     if not args.noforce:
