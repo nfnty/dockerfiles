@@ -39,6 +39,8 @@ def scrape(url, xpath, attribute, regex):
     for node in nodes:
         if attribute:
             string = node.get(attribute)
+        elif isinstance(node, str):
+            string = node
         else:
             string = node.text
 
