@@ -11,11 +11,11 @@ source "${SCRIPTDIR}/var.sh"
 docker create \
     --read-only \
     --volume="${LIBPATH}:/var/lib/emby:rw" \
+    --volume="${TMPPATH}:/tmp:rw" \
     --volume="${SHARE1}/Anime:/mnt/Anime:ro" \
     --volume="${SHARE1}/Home:/mnt/Home:ro" \
     --volume="${SHARE1}/Movies:/mnt/Movies:ro" \
     --volume="${SHARE1}/Series:/mnt/Series:ro" \
-    --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

@@ -364,3 +364,15 @@ meta:
                     url: 'http://www.avahi.org/wiki/DownloadAvahi'
                     xpath: '//p[contains(text(), "latest version")]/a'
                     regex: *VER_3NUM
+
+'arch-plex:latest':
+    build: False
+    packages:
+        plexmediaserver:
+            variable: 'PLEX_VERSION'
+            download: 'upstream'
+            sources:
+                upstream:
+                    url: 'https://plex.tv/downloads'
+                    xpath: '//span[@class="linux fedora"]/..//text()[contains(., "Version")]'
+                    regex: '(\d+\.\d+\.\d+\.\d+\.\d+-\d+)'

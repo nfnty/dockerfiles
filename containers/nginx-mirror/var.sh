@@ -9,4 +9,4 @@ LIBPATH="${HOSTPATH}/lib"
 LOGPATH="${HOSTPATH}/log"
 RUNPATH="${HOSTPATH}/run"
 
-PKGPATH="${SRVPATH}/builder/pkg"
+PKGPATH="${SRVPATH}/builder/lib/pkg"

@@ -9,7 +9,7 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_user_rw "${CACHEPATH}" '' "-and -not -path ${CACHEPATH}/lck* -and -not -path ${CACHEPATH}/msg*"
+perm_user_rw "${CACHEPATH}" "( -path ${CACHEPATH}/lck -or -path ${CACHEPATH}/msg ) -prune -or"
 perm_custom "${CACHEPATH}/lck" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
 perm_custom "${CACHEPATH}/msg" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
 perm_user_ro "${CONFIGPATH}"

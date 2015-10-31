@@ -2,29 +2,27 @@ FROM nfnty/arch-mini:latest
 
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="280000" UGNAME="plex" PRIMPATH="/plex"
-
-ENV PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="${PRIMPATH}/appsupport"
-ENV PLEX_MEDIA_SERVER_HOME="${PRIMPATH}/bin"
-ENV LD_LIBRARY_PATH="${PLEX_MEDIA_SERVER_HOME}"
-ENV PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
-ENV PLEX_MEDIA_SERVER_TMPDIR="${PRIMPATH}/tmp"
-
+ENV UGID="320000" UGNAME="plex" UGID2="140000" UGNAME2="media"
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --home-dir "${PRIMPATH}/lib" --shell /usr/bin/false "${UGNAME}"
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false \
+        --home-dir /var/lib/plexmediaserver/home "${UGNAME}" && \
+    groupadd --gid "${UGID2}" "${UGNAME2}" && \
+    gpasswd --add "${UGNAME}" "${UGNAME2}"
 
-RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 \
-        "${PRIMPATH}/"{,bin} && \
+ENV PLEX_VERSION="0.9.12.18.1520-6833552" \
+    PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/var/lib/plexmediaserver/appsupport" \
+    PLEX_MEDIA_SERVER_HOME="/opt/plexmediaserver" \
+    LD_LIBRARY_PATH="/opt/plexmediaserver" \
+    PLEX_MEDIA_SERVER_TMPDIR="/tmp" \
+    PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
+RUN mkdir /opt/plexmediaserver && \
+    curl "https://downloads.plex.tv/plex-media-server/${PLEX_VERSION}/plexmediaserver-${PLEX_VERSION}.x86_64.rpm" | \
+        bsdtar --directory /opt/plexmediaserver --include='usr/lib/plexmediaserver' --strip-components 4 --extract --file - && \
+    chmod --recursive 'u=rwX,g=rX,o=rX' /opt/plexmediaserver && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        "${PRIMPATH}/"{appsupport,lib,tmp}
-VOLUME ["${PRIMPATH}/appsupport", "${PRIMPATH}/lib", "${PRIMPATH}/tmp"]
+        /var/lib/plexmediaserver{,home,appsupport}
 
-ENV PLEX_VERSION="0.9.12.1.1079-b655370"
-RUN curl "https://downloads.plex.tv/plex-media-server/${PLEX_VERSION}/plexmediaserver-${PLEX_VERSION}.x86_64.rpm" | \
-        bsdtar --directory "${PRIMPATH}/bin" --include='usr/lib/plexmediaserver' --strip-components 4 --extract --file - && \
-    chown --recursive "${UGNAME}:${UGNAME}" "${PRIMPATH}/bin" && \
-    chmod --recursive 'u=rX,g=,o=' "${PRIMPATH}/bin"
-
+VOLUME ["/var/lib/plexmediaserver"]
 USER ${UGNAME}
 EXPOSE 32400
-ENTRYPOINT ["/plex/bin/Plex Media Server"]
+ENTRYPOINT ["/opt/plexmediaserver/Plex Media Server"]
