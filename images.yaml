@@ -376,3 +376,15 @@ meta:
                     url: 'https://plex.tv/downloads'
                     xpath: '//span[@class="linux fedora"]/..//text()[contains(., "Version")]'
                     regex: '(\d+\.\d+\.\d+\.\d+\.\d+-\d+)'
+
+'arch-nodejs:latest':
+    build: False
+    packages:
+        nodejs:
+            variable: 'NODEJS_VERSION'
+            download: 'community'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/community/x86_64/nodejs'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
