@@ -9,8 +9,7 @@ ENV LOGSTASH_VERSION="2.0.0" JAVA_HOME="/usr/lib/jvm/default-runtime" SINCEDB_DI
 RUN mkdir /opt/logstash && \
     curl "https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \
         tar --extract --gzip --strip-components=1 --file=- --directory=/opt/logstash && \
-    chown --recursive "${UGNAME}:${UGNAME}" /opt/logstash && \
-    chmod --recursive 'u=rX,g=,o=' /opt/logstash && \
+    chmod --recursive 'u=rwX,g=rX,o=rX' /opt/logstash && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/logstash /var/log/logstash
 

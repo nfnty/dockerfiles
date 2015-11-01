@@ -28,4 +28,4 @@ docker create \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
-    nfnty/arch-openhab:latest
+    nfnty/arch-openhab-telldus:latest

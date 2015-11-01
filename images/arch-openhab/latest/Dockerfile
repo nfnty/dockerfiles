@@ -7,27 +7,28 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV OPENHAB_VERSION="1.7.1" JAVA_HOME="/usr/lib/jvm/default-runtime"
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm unzip telldus-core-git ttf-dejavu && \
+    pacman --sync --noconfirm ttf-dejavu && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
 
     mkdir /opt/openhab && \
-    curl --location --output /tmp/openhab-runtime.zip \
-    "https://bintray.com/artifact/download/openhab/bin/distribution-${OPENHAB_VERSION}-runtime.zip" && \
-    unzip /tmp/openhab-runtime.zip -d /opt/openhab && \
-    rm /tmp/openhab-runtime.zip && \
-    chown --recursive "${UGNAME}:${UGNAME}" /opt/openhab && \
-    chmod --recursive 'u=rX,g=,o=' /opt/openhab  && \
-    sed --in-place \
-        --expression='s|^java|exec java|' \
-        --expression='s|-console|-configuration /var/lib/openhab/work \\\n\t-data /var/lib/openhab/work \\\n\t-console|' \
-        --expression='s|-Djetty\.port=|-Dsmarthome.userdata=/var/lib/openhab \\\n\t-Dopenhab.logdir=/var/log/openhab \\\n\t-Djetty\.port=|' \
-        --expression='s|-Djetty\.port=|-Djetty.logs=/var/log/openhab \\\n\t-Djetty\.port=|' \
-        /opt/openhab/{start.sh,start_debug.sh} && \
+    curl --location "https://bintray.com/artifact/download/openhab/bin/distribution-${OPENHAB_VERSION}-runtime.zip" | \
+        bsdtar --directory /opt/openhab --extract --file - && \
+    chmod --recursive 'u=rwX,g=rX,o=rX' /opt/openhab && \
+    chmod --recursive 755 /opt/openhab/{start.sh,start_debug.sh} && \
+    chown --recursive "${UGNAME}:${UGNAME}" /opt/openhab/webapps/static && \
 
+    sed --in-place --regexp-extended \
+        --expression='s|^(java \\)|exec \1|' \
+        --expression='s|(-console)|-configuration /var/lib/openhab/work \\\n\t\1|' \
+        --expression='s|(-console)|-data /var/lib/openhab/work \\\n\t\1|' \
+        --expression='s|(-Djetty\.port=)|-Dsmarthome.userdata=/var/lib/openhab \\\n\t\1|' \
+        --expression='s|(-Djetty\.port=)|-Dopenhab.logdir=/var/log/openhab \\\n\t\1|' \
+        --expression='s|(-Djetty\.port=)|-Djetty.logs=/var/log/openhab \\\n\t\1|' \
+        /opt/openhab/{start.sh,start_debug.sh} && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/openhab /var/log/openhab
 
 USER ${UGNAME}
 VOLUME ["/var/lib/openhab", "/var/log/openhab"]
 EXPOSE 8080/tcp 8443/tcp
-ENTRYPOINT ["/usr/bin/bash", "-c", "/usr/bin/telldusd --nodaemon & exec /opt/openhab/start.sh"]
+ENTRYPOINT ["/opt/openhab/start.sh"]

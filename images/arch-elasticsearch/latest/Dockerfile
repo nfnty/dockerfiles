@@ -9,8 +9,7 @@ ENV ELASTICSEARCH_VERSION="2.0.0" JAVA_HOME="/usr/lib/jvm/default-runtime"
 RUN mkdir /opt/elasticsearch && \
     curl "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${ELASTICSEARCH_VERSION}/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz" | \
         tar --extract --gzip --strip-components=1 --file=- --directory=/opt/elasticsearch && \
-    chown --recursive "${UGNAME}:${UGNAME}" /opt/elasticsearch && \
-    chmod --recursive 'u=rX,g=,o=' /opt/elasticsearch  && \
+    chmod --recursive 'u=rwX,g=rX,o=rX' /opt/elasticsearch && \
     perl -p -i -e 's/^args=.*/args="--"/' /opt/elasticsearch/bin/elasticsearch && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/elasticsearch /var/log/elasticsearch

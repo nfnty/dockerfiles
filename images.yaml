@@ -140,8 +140,8 @@ meta:
                     attribute: *ARCH_ATTRIBUTE
 
 'arch-heka:latest':
-    disabled: True
     build: False
+    check: False
     packages:
         heka:
             variable: 'HEKA_VERSION'
@@ -256,6 +256,10 @@ meta:
                     url: 'https://github.com/openhab/openhab/tags'
                     xpath: '//span[@class="tag-name"]'
                     regex: *VER_3NUM_VTAG
+
+'arch-openhab-telldus:latest':
+    build: True
+    check: False
 
 'arch-openvpn:latest':
     build: True

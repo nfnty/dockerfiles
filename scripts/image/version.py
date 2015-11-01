@@ -105,8 +105,8 @@ def main():
 
     for image, image_dict in IMAGES.items():
         print('\n{0:s}'.format(image))
-        if 'disabled' in image_dict and image_dict['disabled']:
-            print('Disabled')
+        if 'check' in image_dict and not image_dict['check']:
+            print('Not checked!')
             continue
 
         if 'packages' in image_dict:
