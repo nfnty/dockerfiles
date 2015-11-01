@@ -26,7 +26,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
         --expression='s|(-Djetty\.port=)|-Djetty.logs=/var/log/openhab \\\n\t\1|' \
         /opt/openhab/{start.sh,start_debug.sh} && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        /var/lib/openhab /var/log/openhab
+        /var/lib/openhab{,/work} /var/log/openhab
 
 USER ${UGNAME}
 VOLUME ["/var/lib/openhab", "/var/log/openhab"]
