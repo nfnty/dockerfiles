@@ -1,7 +1,7 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="0" UGNAME="root" GNUPGHOME="/var/lib/bootstrap/gnupg"
+ENV UGID='0' UGNAME='root' GNUPGHOME='/var/lib/bootstrap/gnupg'
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/bootstrap/{,archive,gnupg}
 

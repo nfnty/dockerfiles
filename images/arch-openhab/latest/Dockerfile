@@ -1,11 +1,11 @@
 FROM nfnty/arch-jre8:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="170000" UGNAME="openhab"
+ENV UGID='170000' UGNAME='openhab'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV OPENHAB_VERSION="1.7.1" JAVA_HOME="/usr/lib/jvm/default-runtime"
+ENV OPENHAB_VERSION='1.7.1' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm ttf-dejavu && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

@@ -447,7 +447,7 @@ def main():
     elif args.git:
         prepare_git(args.git, PKGBUILD)
     elif args.aur:
-        prepare_git('https://aur.archlinux.org/{:1s}.git'.format(args.aur), PKGBUILD)
+        prepare_git('https://aur.archlinux.org/{0:s}.git'.format(args.aur), PKGBUILD)
     elif args.remote:
         prepare_remote(args.remote, PKGBUILD)
 

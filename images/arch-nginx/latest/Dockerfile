@@ -1,11 +1,11 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="160000" UGNAME="nginx"
+ENV UGID='160000' UGNAME='nginx'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV NGINX_VERSION="1.8.0-2"
+ENV NGINX_VERSION='1.8.0-2'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx=${NGINX_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

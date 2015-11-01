@@ -1,11 +1,11 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="250000" UGNAME="exim"
+ENV UGID='250000' UGNAME='exim'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV EXIM_VERSION="4.86-1"
+ENV EXIM_VERSION='4.86-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "exim=${EXIM_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

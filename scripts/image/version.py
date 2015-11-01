@@ -71,7 +71,7 @@ def pacman(package):
             ]
         ).decode('UTF-8').splitlines()
     except subprocess.CalledProcessError:
-        raise RuntimeError('{:1s} not in any repository'.format(package))
+        raise RuntimeError('{0:s} not in any repository'.format(package))
 
     versions = {}
     for line in output:
@@ -84,15 +84,15 @@ def dockerfile_update(path, variable, version):
     ''' Update Dockerfiles with current version '''
     with open(path, 'r') as filed:
         newfile, found = re.subn(
-            variable + r'=\S+',
-            '{:1s}="{:2s}"'.format(variable, version),
+            r"{0:s}='\S*'".format(variable),
+            "{0:s}='{1:s}'".format(variable, version),
             filed.read(),
         )
 
     if not found:
         raise ValueError('Did not find ENV variable')
     elif found > 1:
-        raise ValueError('More than 1: {:1s}'.format(variable))
+        raise ValueError('More than 1: {0:s}'.format(variable))
 
     with open(path, 'w') as filed:
         filed.write(newfile)
@@ -111,7 +111,7 @@ def main():
 
         if 'packages' in image_dict:
             for package, package_dict in image_dict['packages'].items():
-                print('\033[32m{:s}\033[0m:'.format(package))
+                print('\033[32m{0:s}\033[0m:'.format(package))
 
                 for source, source_dict in package_dict['sources'].items():
                     source_dict['version'] = scrape(

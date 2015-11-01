@@ -1,7 +1,7 @@
 FROM nfnty/arch-devel:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID="99999" UGNAME="builder" GNUPGHOME="/var/lib/builder/gnupg"
+ENV UGID='99999' UGNAME='builder' GNUPGHOME='/var/lib/builder/gnupg'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}" && \
 
