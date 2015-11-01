@@ -13,8 +13,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_net_bind_service=ep' /usr/bin/exim && \
     chown --recursive "${UGNAME}:${UGNAME}" /etc/mail /var/log/exim /var/spool/exim && \
     chmod --recursive 700 /var/log/exim /var/spool/exim
-VOLUME ["/var/log/exim", "/var/spool/exim"]
 
 USER ${UGNAME}
+VOLUME ["/var/log/exim", "/var/spool/exim"]
 EXPOSE 25/tcp 587/tcp
 ENTRYPOINT ["/usr/bin/exim", "-bdf", "-q30m"]

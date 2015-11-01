@@ -15,6 +15,6 @@ RUN chmod --recursive 'u=rX,g=,o=' /opt/bootstrap && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     perl -p -i -e 's/^chroot_setup\ /#chroot_setup\ /g' /usr/bin/pacstrap
 
-VOLUME ["/var/lib/bootstrap"]
 USER ${UGNAME}
+VOLUME ["/var/lib/bootstrap"]
 ENTRYPOINT ["/opt/bootstrap/build.sh"]

@@ -22,7 +22,7 @@ RUN mkdir /opt/plexmediaserver && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/plexmediaserver{,home,appsupport}
 
-VOLUME ["/var/lib/plexmediaserver"]
 USER ${UGNAME}
+VOLUME ["/var/lib/plexmediaserver"]
 EXPOSE 32400
 ENTRYPOINT ["/opt/plexmediaserver/Plex Media Server"]

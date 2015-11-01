@@ -23,6 +23,6 @@ RUN chmod 'u=rw,g=r,o=r' /etc/makepkg.conf && \
     pacman --sync --noconfirm python-requests && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
-VOLUME ["/var/lib/builder", "/var/log/builder"]
 USER ${UGNAME}
+VOLUME ["/var/lib/builder", "/var/log/builder"]
 ENTRYPOINT ["/opt/builder/builder.py"]

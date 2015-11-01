@@ -13,7 +13,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp6 && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/kea /var/log/kea && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/kea
-VOLUME ["/var/lib/kea", "/var/log/kea"]
 
 USER ${UGNAME}
+VOLUME ["/var/lib/kea", "/var/log/kea"]
 ENTRYPOINT ["/usr/bin/kea-dhcp4", "-c", "/etc/kea/kea.conf"]

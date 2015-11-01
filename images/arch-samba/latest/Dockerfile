@@ -12,8 +12,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_net_bind_service=ep' /usr/bin/smbd && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/cache/samba /var/lib/samba /var/log/samba && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/samba
-VOLUME ["/var/cache/samba", "/var/lib/samba", "/var/log/samba"]
 
 USER ${UGNAME}
+VOLUME ["/var/cache/samba", "/var/lib/samba", "/var/log/samba"]
 EXPOSE 139/tcp 445/tcp
 ENTRYPOINT ["/usr/bin/smbd", "--foreground", "--option=pid directory=/run/samba"]

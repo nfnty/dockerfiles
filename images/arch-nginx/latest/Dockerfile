@@ -12,8 +12,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_net_bind_service=ep' /usr/bin/nginx && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/nginx /var/log/nginx && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/nginx
-VOLUME ["/var/lib/nginx", "/var/log/nginx"]
 
 USER ${UGNAME}
+VOLUME ["/var/lib/nginx", "/var/log/nginx"]
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/usr/bin/nginx", "-g", "daemon off;"]

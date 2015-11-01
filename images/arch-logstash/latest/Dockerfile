@@ -13,7 +13,7 @@ RUN mkdir /opt/logstash && \
     chmod --recursive 'u=rX,g=,o=' /opt/logstash && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/logstash /var/log/logstash
-VOLUME ["/var/lib/logstash", "/var/log/logstash"]
 
 USER ${UGNAME}
+VOLUME ["/var/lib/logstash", "/var/log/logstash"]
 ENTRYPOINT ["/opt/logstash/bin/logstash", "--config", "/etc/logstash/conf.d", "--log", "/var/log/logstash/log"]

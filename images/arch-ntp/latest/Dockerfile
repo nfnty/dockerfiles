@@ -13,5 +13,6 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/ntp
 
 USER ${UGNAME}
+VOLUME ["/var/lib/ntp"]
 EXPOSE 123/udp
 ENTRYPOINT ["/usr/bin/ntpd", "--nofork", "--panicgate"]

@@ -14,8 +14,8 @@ RUN mkdir /opt/elasticsearch && \
     perl -p -i -e 's/^args=.*/args="--"/' /opt/elasticsearch/bin/elasticsearch && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/elasticsearch /var/log/elasticsearch
-VOLUME ["/var/lib/elasticsearch", "/var/log/elasticsearch"]
 
 USER ${UGNAME}
+VOLUME ["/var/lib/elasticsearch", "/var/log/elasticsearch"]
 EXPOSE 9200/tcp 9300/tcp
 ENTRYPOINT ["/opt/elasticsearch/bin/elasticsearch"]

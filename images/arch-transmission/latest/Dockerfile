@@ -11,9 +11,9 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/transmission /var/log/transmission
-VOLUME ["/var/lib/transmission", "/var/log/transmission"]
 
 USER ${UGNAME}
+VOLUME ["/var/lib/transmission", "/var/log/transmission"]
 EXPOSE 9091/tcp 51413/tcp 51413/udp
 ENTRYPOINT [ \
     "/usr/bin/transmission-daemon", "--foreground", \

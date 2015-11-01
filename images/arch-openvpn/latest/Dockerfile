@@ -11,9 +11,9 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     install --directory --owner="${UGNAME}" --group=root --mode=770 \
         /var/lib/openvpn /var/log/openvpn
-VOLUME ["/var/lib/openvpn", "/var/log/openvpn"]
 
 USER root
+VOLUME ["/var/lib/openvpn", "/var/log/openvpn"]
 EXPOSE 1194/tcp 1194/udp
 ENTRYPOINT [ \
     "/usr/bin/bash", "-c", \

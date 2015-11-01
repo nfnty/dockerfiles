@@ -11,8 +11,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /run/postgresql /var/lib/postgres
-VOLUME ["/var/lib/postgres"]
 
 USER ${UGNAME}
+VOLUME ["/var/lib/postgres"]
 EXPOSE 5432/tcp
 ENTRYPOINT ["/usr/bin/postgres"]

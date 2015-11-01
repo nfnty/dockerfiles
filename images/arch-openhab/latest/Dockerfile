@@ -26,8 +26,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
 
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/openhab /var/log/openhab
-VOLUME ["/var/lib/openhab", "/var/lib/telldus", "/var/log/openhab"]
 
 USER ${UGNAME}
+VOLUME ["/var/lib/openhab", "/var/log/openhab"]
 EXPOSE 8080/tcp 8443/tcp
 ENTRYPOINT ["/usr/bin/bash", "-c", "/usr/bin/telldusd --nodaemon & exec /opt/openhab/start.sh"]
