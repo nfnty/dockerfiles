@@ -316,7 +316,7 @@ def db_update(args):
 
 def extract_tar(content, extension):
     ''' Extract tar '''
-    cmd = ['/usr/bin/tar', '--extract', '--strip-components=1', '--file=-']
+    cmd = ['/usr/bin/tar', '--extract', '--file=-', '--strip-components=1']
 
     # Check extension
     if extension == '.tar.gz':

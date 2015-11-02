@@ -12,7 +12,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
 
     mkdir /opt/openhab && \
     curl --location "https://bintray.com/artifact/download/openhab/bin/distribution-${OPENHAB_VERSION}-runtime.zip" | \
-        bsdtar --directory /opt/openhab --extract --file - && \
+        bsdtar --extract --file=- --directory='/opt/openhab' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/openhab && \
     chmod --recursive 755 /opt/openhab/{start.sh,start_debug.sh} && \
     chown --recursive "${UGNAME}:${UGNAME}" /opt/openhab/webapps/static && \

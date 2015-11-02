@@ -12,7 +12,7 @@ mkdir "${ROOTFS}"
 pacstrap -c -d -G -M "${ROOTFS}" $( cat "${SCRIPTDIR}/packages" )
 
 cd "${ARCHIVEPATH}"
-tar --create --xz --numeric-owner --xattrs --acls --directory="${ROOTFS}" --file="arch-mini-bootstrap.tar.xz" .
-sha512sum "arch-mini-bootstrap.tar.xz" >| "arch-mini-bootstrap.tar.xz.sha512"
+tar --create --file='arch-mini-bootstrap.tar.xz' --xz --numeric-owner --xattrs --acls --directory="${ROOTFS}" .
+sha512sum arch-mini-bootstrap.tar.xz >| arch-mini-bootstrap.tar.xz.sha512
 
 rm --recursive "${ROOTFS}"
