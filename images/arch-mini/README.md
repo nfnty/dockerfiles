@@ -20,4 +20,4 @@ Arch Linux: Minimal Base Image
 
 Bootstrap archive is built by `nfnty/arch-bootstrap`
 
-High entropy is needed during the image building process. [haveged](https://wiki.archlinux.org/index.php/Haveged) is recommended to speed up the build process.
+High entropy is needed during build. [Haveged](https://wiki.archlinux.org/index.php/Haveged) is recommended.
