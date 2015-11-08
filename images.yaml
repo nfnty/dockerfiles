@@ -379,7 +379,7 @@ meta:
                 upstream:
                     url: 'https://plex.tv/downloads'
                     xpath: '//span[@class="linux fedora"]/..//text()[contains(., "Version")]'
-                    regex: '(\d+\.\d+\.\d+\.\d+\.\d+-\d+)'
+                    regex: '(\d+\.\d+\.\d+\.\d+\.\d+-[0-9a-f]+)'
 
 'arch-nodejs:latest':
     build: False

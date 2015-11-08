@@ -1,5 +1,4 @@
 FROM nfnty/arch-mini:latest
-
 MAINTAINER nfnty <docker@nfnty.se>
 
 ENV NODEJS_VERSION='5.0.0-2'
