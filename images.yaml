@@ -392,3 +392,15 @@ meta:
                     url: 'https://www.archlinux.org/packages/community/x86_64/nodejs'
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
+
+'arch-npm:latest':
+    build: False
+    packages:
+        npm:
+            variable: 'NPM_VERSION'
+            download: 'community'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/community/x86_64/npm'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
