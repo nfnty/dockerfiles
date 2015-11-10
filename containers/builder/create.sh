@@ -19,6 +19,7 @@ docker create \
     --cap-add 'SETGID' \
     --cap-add 'SETUID' \
     --cap-add 'SYS_CHROOT' \
+    --cap-add 'SYS_RESOURCE' \
     --net='bridge' \
     --name="${CNAME}" \
     --hostname="${CNAME}" \
