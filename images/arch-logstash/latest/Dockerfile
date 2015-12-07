@@ -5,7 +5,7 @@ ENV UGID='130000' UGNAME='logstash'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV LOGSTASH_VERSION='2.0.0' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
+ENV LOGSTASH_VERSION='2.1.0' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
 RUN mkdir /opt/logstash && \
     curl "https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/logstash' && \
