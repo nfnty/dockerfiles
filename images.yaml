@@ -346,7 +346,7 @@ meta:
                     attribute: *ARCH_ATTRIBUTE
 
 'arch-pimd:latest':
-    build: True
+    build: False
     packages:
         pimd:
             variable: 'PIMD_VERSION'

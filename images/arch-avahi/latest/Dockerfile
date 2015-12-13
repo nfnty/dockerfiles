@@ -11,4 +11,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
-ENTRYPOINT ["/usr/bin/avahi-daemon"]
+ENTRYPOINT ["/usr/bin/avahi-daemon", "--no-drop-root"]
