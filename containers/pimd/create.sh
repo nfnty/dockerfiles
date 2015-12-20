@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/pimd:ro" \
+    --volume="${CONFIGPATH}/pimd.conf:/etc/pimd.conf:ro" \
     --volume="${RUNPATH}:/var/run:rw" \
     --cap-drop 'ALL' \
     --cap-add 'NET_ADMIN' \
@@ -20,6 +20,4 @@ docker create \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
-    --entrypoint='/usr/bin/pimd' \
-    nfnty/arch-pimd:latest \
-    '--foreground' '--disable-vifs' '--debug'
+    nfnty/arch-pimd:latest
