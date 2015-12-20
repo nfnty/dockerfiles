@@ -31,6 +31,8 @@ systemctl start docker_kea-dhcp4
 "${UPD}"       'powerdns-recursor'
 "${UPD}"       'dovecot'
 "${UPD}"       'exim'
+"${UPD}"       'avahi'
+"${UPD}"       'pimd'
 
 "${UPD}" --name 'openvpn-home-tcp' 'openvpn'
 "${UPD}" --name 'openvpn-home-udp' 'openvpn'
