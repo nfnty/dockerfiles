@@ -11,7 +11,7 @@ ENV EMBY_VERSION='3.0.5781.8-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "emby-server=${EMBY_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/emby
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/emby
 
 USER ${UGNAME}
 VOLUME ["/var/lib/emby"]
