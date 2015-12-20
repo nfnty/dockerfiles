@@ -7,7 +7,8 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV ELASTICSEARCH_VERSION='2.1.1' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN mkdir /opt/elasticsearch && \
-    curl "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${ELASTICSEARCH_VERSION}/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz" | \
+    curl --speed-limit 256000 \
+        "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${ELASTICSEARCH_VERSION}/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/elasticsearch' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/elasticsearch && \
     sed --in-place --expression='s|^args=.*|args="--"|' /opt/elasticsearch/bin/elasticsearch && \

@@ -15,7 +15,8 @@ ENV PLEX_VERSION='0.9.12.19.1537-f38ac80' \
     PLEX_MEDIA_SERVER_TMPDIR='/tmp' \
     PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
 RUN mkdir /opt/plexmediaserver && \
-    curl "https://downloads.plex.tv/plex-media-server/${PLEX_VERSION}/plexmediaserver-${PLEX_VERSION}.x86_64.rpm" | \
+    curl --speed-limit 256000 \
+        "https://downloads.plex.tv/plex-media-server/${PLEX_VERSION}/plexmediaserver-${PLEX_VERSION}.x86_64.rpm" | \
         bsdtar --extract --file=- --include='usr/lib/plexmediaserver' --strip-components=4 --directory='/opt/plexmediaserver' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/plexmediaserver && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \

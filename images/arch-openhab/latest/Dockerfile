@@ -11,7 +11,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
 
     mkdir /opt/openhab && \
-    curl --location "https://bintray.com/artifact/download/openhab/bin/distribution-${OPENHAB_VERSION}-runtime.zip" | \
+    curl --speed-limit 256000 --location \
+        "https://bintray.com/artifact/download/openhab/bin/distribution-${OPENHAB_VERSION}-runtime.zip" | \
         bsdtar --extract --file=- --directory='/opt/openhab' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/openhab && \
     chmod --recursive 755 /opt/openhab/{start.sh,start_debug.sh} && \
