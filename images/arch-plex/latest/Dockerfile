@@ -8,7 +8,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     groupadd --gid "${UGID2}" "${UGNAME2}" && \
     gpasswd --add "${UGNAME}" "${UGNAME2}"
 
-ENV PLEX_VERSION='0.9.12.19.1537-f38ac80' \
+ENV PLEX_VERSION='0.9.14.6.1620-e0b7243' \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR='/var/lib/plexmediaserver/appsupport' \
     PLEX_MEDIA_SERVER_HOME='/opt/plexmediaserver' \
     LD_LIBRARY_PATH='/opt/plexmediaserver' \
