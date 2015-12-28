@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     groupadd --gid "${UGID2}" "${UGNAME2}" && \
     gpasswd --add "${UGNAME}" "${UGNAME2}"
 
-ENV EMBY_VERSION='3.0.5781.8-2'
+ENV EMBY_VERSION='3.0.5782.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "emby-server=${EMBY_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

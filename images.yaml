@@ -121,7 +121,7 @@ meta:
                 github:
                     url: 'https://github.com/MediaBrowser/Emby/releases'
                     xpath: '//h1[@class="release-title"]/a'
-                    regex: '^(\d+\.\d+\.\d+\.\d+) Stable$'
+                    regex: *VER_4NUM
 
 'arch-exim:latest':
     build: True
