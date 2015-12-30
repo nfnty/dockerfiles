@@ -15,7 +15,7 @@ docker create \
     --volume="${LOGPATH}:/var/log/logstash:rw" \
     --volume="${TMPPATH}:/tmp:rw" \
     --volume="${ULOGDPATH}:/mnt/ulogd:ro" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --add-host="${CNAME}:127.0.0.1" \

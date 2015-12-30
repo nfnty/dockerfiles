@@ -15,11 +15,11 @@ docker create \
     --volume="${LOGPATH}:/var/log/openvpn:rw" \
     --volume="${TMPPATH}:/tmp:rw" \
     --device="${TUNPATH}:/dev/net/tun:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'NET_ADMIN' \
-    --cap-add 'NET_RAW' \
-    --cap-add 'SETGID' \
-    --cap-add 'SETUID' \
+    --cap-drop='ALL' \
+    --cap-add='NET_ADMIN' \
+    --cap-add='NET_RAW' \
+    --cap-add='SETGID' \
+    --cap-add='SETUID' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

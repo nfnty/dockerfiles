@@ -15,7 +15,7 @@ docker run \
     --volume="${LIBPATH}:/var/lib/samba:rw" \
     --volume="${LOGPATH}:/var/log/samba:rw" \
     --volume="${RUNPATH}:/run/samba:rw" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

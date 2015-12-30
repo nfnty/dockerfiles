@@ -14,12 +14,12 @@ docker create \
     --volume="${LOGPATH}:/var/log/builder:rw" \
     --volume="${PKGBUILDPATH}:/mnt/pkgbuild:rw" \
     --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'FOWNER' \
-    --cap-add 'SETGID' \
-    --cap-add 'SETUID' \
-    --cap-add 'SYS_CHROOT' \
-    --cap-add 'SYS_RESOURCE' \
+    --cap-drop='ALL' \
+    --cap-add='FOWNER' \
+    --cap-add='SETGID' \
+    --cap-add='SETUID' \
+    --cap-add='SYS_CHROOT' \
+    --cap-add='SYS_RESOURCE' \
     --net='bridge' \
     --name="${CNAME}" \
     --hostname="${CNAME}" \

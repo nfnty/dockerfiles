@@ -16,8 +16,8 @@ docker create \
     --volume="${LOGPATH}:/var/log/samba:rw" \
     --volume="${RUNPATH}:/run/samba:rw" \
     --volume="${SHARE1}:/mnt/1:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'NET_BIND_SERVICE' \
+    --cap-drop='ALL' \
+    --cap-add='NET_BIND_SERVICE' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

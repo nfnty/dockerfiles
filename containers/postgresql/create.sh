@@ -13,7 +13,7 @@ docker create \
     --volume="${CONFIGPATH}:/etc/postgres:ro" \
     --volume="${LIBPATH}:/var/lib/postgres:rw" \
     --volume="${RUNPATH}:/run/postgresql:rw" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

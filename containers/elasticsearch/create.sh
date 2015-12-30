@@ -15,7 +15,7 @@ docker create \
     --volume="${LOGPATH}:/var/log/elasticsearch:rw" \
     --volume="${PLUGINPATH}:/opt/elasticsearch/plugins:ro" \
     --volume="${TMPPATH}:/tmp:rw" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --add-host="${CNAME}:127.0.0.1" \

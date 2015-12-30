@@ -13,7 +13,7 @@ docker create \
     --volume="${CONFIGPATH}:/opt/kibana/config:ro" \
     --volume="${LOGPATH}:/var/log/kibana:rw" \
     --volume="${TMPPATH}:/tmp:rw" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

@@ -13,7 +13,7 @@ docker create \
     --volume="${BASEPATH}:/var/cache/hekad:rw" \
     --volume="${CONFIGPATH}:/etc/heka:ro" \
     --volume="${ULOGDPATH}:/mnt/ulogd:ro" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

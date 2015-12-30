@@ -15,8 +15,8 @@ docker create \
     --volume="${LOGPATH}:/var/log/nginx:rw" \
     --volume="${RUNPATH}:/run/nginx:rw" \
     --volume="${PKGPATH}:/mnt/mirror/archlinux/nfnty/os/x86_64:ro" \
-    --cap-drop 'ALL' \
-    --cap-add 'NET_BIND_SERVICE' \
+    --cap-drop='ALL' \
+    --cap-add='NET_BIND_SERVICE' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

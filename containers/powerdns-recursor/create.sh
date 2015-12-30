@@ -12,8 +12,8 @@ docker create \
     --read-only \
     --volume="${CONFIGPATH}:/etc/powerdns:ro" \
     --volume="${RUNPATH}:/run:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'NET_BIND_SERVICE' \
+    --cap-drop='ALL' \
+    --cap-add='NET_BIND_SERVICE' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

@@ -14,7 +14,7 @@ docker create \
     --volume="${LOGPATH}:/var/log/exim:rw" \
     --volume="${SPOOLPATH}:/var/spool/exim:rw" \
     --cap-drop='ALL' \
-    --cap-add 'NET_BIND_SERVICE' \
+    --cap-add='NET_BIND_SERVICE' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

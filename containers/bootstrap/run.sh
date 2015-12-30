@@ -14,10 +14,10 @@ docker run \
     --volume="${GNUPGPATH}:/var/lib/bootstrap/gnupg:rw" \
     --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
     --volume="${TMPPATH}:/tmp:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'CHOWN' \
-    --cap-add 'SYS_CHROOT' \
-    --cap-add 'DAC_OVERRIDE' \
+    --cap-drop='ALL' \
+    --cap-add='CHOWN' \
+    --cap-add='SYS_CHROOT' \
+    --cap-add='DAC_OVERRIDE' \
     --net='bridge' \
     --name="${CNAME}" \
     --hostname="${CNAME}" \

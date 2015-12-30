@@ -14,9 +14,9 @@ docker create \
     --volume="${LIBPATH}:/var/lib/kea:rw" \
     --volume="${LOGPATH}:/var/log/kea:rw" \
     --volume="${RUNPATH}:/run/kea:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'NET_RAW' \
+    --cap-drop='ALL' \
+    --cap-add='NET_BIND_SERVICE' \
+    --cap-add='NET_RAW' \
     --net='host' \
     --name="${CNAME}" \
     --memory="${MEMORY}" \

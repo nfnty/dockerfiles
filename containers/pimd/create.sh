@@ -12,9 +12,9 @@ docker create \
     --read-only \
     --volume="${CONFIGPATH}/pimd.conf:/etc/pimd.conf:ro" \
     --volume="${RUNPATH}:/var/run:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'NET_ADMIN' \
-    --cap-add 'NET_RAW' \
+    --cap-drop='ALL' \
+    --cap-add='NET_ADMIN' \
+    --cap-add='NET_RAW' \
     --net='host' \
     --name="${CNAME}" \
     --memory="${MEMORY}" \

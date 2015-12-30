@@ -14,7 +14,7 @@ docker create \
     --volume="${LOGPATH}:/var/log/transmission:rw" \
     --volume="${OPTPATH}:/opt/transmission:ro" \
     --volume="${TORRENTPATH}:/mnt/torrent:rw" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

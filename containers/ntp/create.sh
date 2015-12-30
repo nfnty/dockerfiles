@@ -12,10 +12,10 @@ docker create \
     --read-only \
     --volume="${CONFIGPATH}:/etc/ntp:ro" \
     --volume="${LIBPATH}:/var/lib/ntp:rw" \
-    --cap-drop 'ALL' \
-    --cap-add 'IPC_LOCK' \
-    --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'SYS_TIME' \
+    --cap-drop='ALL' \
+    --cap-add='IPC_LOCK' \
+    --cap-add='NET_BIND_SERVICE' \
+    --cap-add='SYS_TIME' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

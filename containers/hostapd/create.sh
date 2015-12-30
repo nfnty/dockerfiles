@@ -11,9 +11,9 @@ source "${SCRIPTDIR}/var.sh"
 docker create \
     --read-only \
     --volume="${CONFIGPATH}:/etc/hostapd:ro" \
-    --cap-drop 'ALL' \
-    --cap-add 'NET_ADMIN' \
-    --cap-add 'NET_RAW' \
+    --cap-drop='ALL' \
+    --cap-add='NET_ADMIN' \
+    --cap-add='NET_RAW' \
     --net='host' \
     --name="${CNAME}" \
     --memory="${MEMORY}" \

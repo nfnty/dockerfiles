@@ -16,8 +16,8 @@ docker create \
     --volume="${RUNPATH}:/run/dovecot:rw" \
     --volume="${TMPPATH}:/tmp:rw" \
     --cap-drop='ALL' \
-    --cap-add 'NET_BIND_SERVICE' \
-    --cap-add 'SYS_CHROOT' \
+    --cap-add='NET_BIND_SERVICE' \
+    --cap-add='SYS_CHROOT' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

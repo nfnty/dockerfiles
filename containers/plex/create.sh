@@ -16,7 +16,7 @@ docker create \
     --volume="${SHARE1}/Home:/mnt/Home:ro" \
     --volume="${SHARE1}/Movies:/mnt/Movies:ro" \
     --volume="${SHARE1}/Series:/mnt/Series:ro" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

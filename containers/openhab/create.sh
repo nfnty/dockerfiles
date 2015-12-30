@@ -20,7 +20,7 @@ docker create \
     --volume="${TMPPATH}:/tmp:rw" \
     --volume="${WEBAPPSPATH}:/opt/openhab/webapps/static:rw" \
     --device="${TELLSTICKPATH}" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \

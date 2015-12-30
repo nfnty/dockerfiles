@@ -11,7 +11,7 @@ source "${SCRIPTDIR}/var.sh"
 docker run \
     --read-only \
     --volume="${CONFIGPATH}:/etc/openvpn:rw" \
-    --cap-drop 'ALL' \
+    --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \
     --name="${CNAME}" \
