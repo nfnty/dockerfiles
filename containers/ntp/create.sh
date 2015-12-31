@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/ntp:ro" \
+    --volume="${PATH_ETC}:/etc/ntp:ro" \
     --volume="${PATH_LIB}:/var/lib/ntp:rw" \
     --cap-drop='ALL' \
     --cap-add='IPC_LOCK' \

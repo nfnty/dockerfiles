@@ -9,7 +9,7 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 
 docker create \
-    --volume="${PATH_CONFIG}/makepkg.conf:/etc/makepkg.conf:ro" \
+    --volume="${PATH_ETC}/makepkg.conf:/etc/makepkg.conf:ro" \
     --volume="${PATH_LIB}:/var/lib/builder:rw" \
     --volume="${PATH_LOG}:/var/log/builder:rw" \
     --volume="${PATH_PKGBUILD}:/mnt/pkgbuild:rw" \

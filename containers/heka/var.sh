@@ -5,6 +5,6 @@ CPU_SHARES='1024'
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
 PATH_CACHE="${PATH_HOST}/cache"
-PATH_CONFIG="${PATH_HOST}/config"
+PATH_ETC="${PATH_HOST}/etc"
 
 PATH_ULOGD='/var/log/ulogd'

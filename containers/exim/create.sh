@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/mail:ro" \
+    --volume="${PATH_ETC}:/etc/mail:ro" \
     --volume="${PATH_LOG}:/var/log/exim:rw" \
     --volume="${PATH_SPOOL}:/var/spool/exim:rw" \
     --cap-drop='ALL' \

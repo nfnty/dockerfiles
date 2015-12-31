@@ -9,7 +9,7 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_ur_ro "${PATH_CONFIG}"
+perm_ur_ro "${PATH_ETC}"
 perm_ur_rw "${PATH_LIB}"
 perm_ur_rw "${PATH_LOG}"
 perm_ur_rw "${PATH_TMP}"

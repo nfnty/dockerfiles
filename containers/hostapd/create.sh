@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/hostapd:ro" \
+    --volume="${PATH_ETC}:/etc/hostapd:ro" \
     --cap-drop='ALL' \
     --cap-add='NET_ADMIN' \
     --cap-add='NET_RAW' \

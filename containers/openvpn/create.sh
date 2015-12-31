@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/openvpn:ro" \
+    --volume="${PATH_ETC}:/etc/openvpn:ro" \
     --volume="${PATH_LIB}:/var/lib/openvpn:rw" \
     --volume="${PATH_LOG}:/var/log/openvpn:rw" \
     --volume="${PATH_TMP}:/tmp:rw" \

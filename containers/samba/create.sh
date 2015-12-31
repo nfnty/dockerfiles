@@ -11,7 +11,7 @@ source "${SCRIPTDIR}/var.sh"
 docker create \
     --read-only \
     --volume="${PATH_CACHE}:/var/cache/samba:rw" \
-    --volume="${PATH_CONFIG}:/etc/samba:ro" \
+    --volume="${PATH_ETC}:/etc/samba:ro" \
     --volume="${PATH_LIB}:/var/lib/samba:rw" \
     --volume="${PATH_LOG}:/var/log/samba:rw" \
     --volume="${PATH_RUN}:/run/samba:rw" \

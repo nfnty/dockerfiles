@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/kea:ro" \
+    --volume="${PATH_ETC}:/etc/kea:ro" \
     --volume="${PATH_LIB}:/var/lib/kea:rw" \
     --volume="${PATH_LOG}:/var/log/kea:rw" \
     --volume="${PATH_RUN}:/run/kea:rw" \

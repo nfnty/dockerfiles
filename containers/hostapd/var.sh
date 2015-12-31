@@ -4,4 +4,4 @@ CPU_SHARES='2048'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-PATH_CONFIG="${PATH_HOST}/config"
+PATH_ETC="${PATH_HOST}/etc"

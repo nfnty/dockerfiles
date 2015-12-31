@@ -11,9 +11,9 @@ source "${SCRIPTDIR}/var.sh"
 docker create \
     --read-only \
     --volume="${PATH_ADDONS}:/opt/openhab/addons:ro" \
-    --volume="${PATH_CONFIG_JETTY}:/opt/openhab/etc:ro" \
-    --volume="${PATH_CONFIG_OPENHAB}:/opt/openhab/configurations:ro" \
-    --volume="${PATH_CONFIG_TELLDUS}:/etc/tellstick.conf:ro" \
+    --volume="${PATH_CONFIG}:/opt/openhab/configurations:ro" \
+    --volume="${PATH_ETC_OPENHAB}:/opt/openhab/etc:ro" \
+    --volume="${PATH_ETC_TELLDUS}/tellstick.conf:/etc/tellstick.conf:ro" \
     --volume="${PATH_LIB_OPENHAB}:/var/lib/openhab:rw" \
     --volume="${PATH_LIB_TELLDUS}:/var/lib/telldus:rw" \
     --volume="${PATH_LOG}:/var/log/openhab:rw" \

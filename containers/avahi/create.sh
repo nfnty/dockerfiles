@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/avahi:ro" \
+    --volume="${PATH_ETC}:/etc/avahi:ro" \
     --volume="${PATH_RUN}:/run/avahi-daemon:rw" \
     --cap-drop='ALL' \
     --net='host' \

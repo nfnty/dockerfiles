@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker run \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/letsencrypt:rw" \
+    --volume="${PATH_ETC}:/etc/letsencrypt:rw" \
     --volume="${PATH_LIB}:/var/lib/letsencrypt:rw" \
     --volume="${PATH_LOG}:/var/log/letsencrypt:rw" \
     --volume="${PATH_WEBROOT}:/mnt/webroot:rw" \

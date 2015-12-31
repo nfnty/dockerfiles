@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/logstash:ro" \
+    --volume="${PATH_ETC}:/etc/logstash:ro" \
     --volume="${PATH_LIB}:/var/lib/logstash:rw" \
     --volume="${PATH_LOG}:/var/log/logstash:rw" \
     --volume="${PATH_TMP}:/tmp:rw" \

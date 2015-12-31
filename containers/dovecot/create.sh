@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${PATH_CONFIG}:/etc/dovecot:ro" \
+    --volume="${PATH_ETC}:/etc/dovecot:ro" \
     --volume="${PATH_LIB}:/var/lib/dovecot:rw" \
     --volume="${PATH_LOG}:/var/log/dovecot:rw" \
     --volume="${PATH_RUN}:/run/dovecot:rw" \

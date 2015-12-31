@@ -11,7 +11,7 @@ source "${SCRIPTDIR}/var.sh"
 docker create \
     --read-only \
     --volume="${PATH_CACHE}:/var/cache/hekad:rw" \
-    --volume="${PATH_CONFIG}:/etc/heka:ro" \
+    --volume="${PATH_ETC}:/etc/heka:ro" \
     --volume="${PATH_ULOGD}:/mnt/ulogd:ro" \
     --cap-drop='ALL' \
     --net='none' \
