@@ -162,8 +162,7 @@ meta:
                     attribute: *ARCH_ATTRIBUTE
 
 'arch-heka:latest':
-    build: False
-    check: False
+    build: True
     packages:
         'heka':
             variable: 'HEKA_VERSION'
