@@ -10,9 +10,9 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/postgres:ro" \
-    --volume="${LIBPATH}:/var/lib/postgres:rw" \
-    --volume="${RUNPATH}:/run/postgresql:rw" \
+    --volume="${PATH_CONFIG}:/etc/postgres:ro" \
+    --volume="${PATH_LIB}:/var/lib/postgres:rw" \
+    --volume="${PATH_RUN}:/run/postgresql:rw" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

@@ -10,11 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/opt/elasticsearch/config:ro" \
-    --volume="${LIBPATH}:/var/lib/elasticsearch:rw" \
-    --volume="${LOGPATH}:/var/log/elasticsearch:rw" \
-    --volume="${PLUGINPATH}:/opt/elasticsearch/plugins:ro" \
-    --volume="${TMPPATH}:/tmp:rw" \
+    --volume="${PATH_CONFIG}:/opt/elasticsearch/config:ro" \
+    --volume="${PATH_LIB}:/var/lib/elasticsearch:rw" \
+    --volume="${PATH_LOG}:/var/log/elasticsearch:rw" \
+    --volume="${PATH_PLUGIN}:/opt/elasticsearch/plugins:ro" \
+    --volume="${PATH_TMP}:/tmp:rw" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

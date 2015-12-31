@@ -9,9 +9,9 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_user_rw "${LIBPATH}"
-perm_user_rw "${LOGPATH}"
-perm_user_ro "${OPTPATH}"
+perm_user_rw "${PATH_LIB}"
+perm_user_rw "${PATH_LOG}"
+perm_user_ro "${PATH_OPT}"
 
-perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwXs,o=' '-type d'
-perm_custom "${TORRENTPATH}" "${UGID}" '140000' 'u=rwX,g=rwX,o=' '-type f'
+perm_custom "${PATH_TORRENT}" "${UGID}" '140000' 'u=rwX,g=rwXs,o=' '-type d'
+perm_custom "${PATH_TORRENT}" "${UGID}" '140000' 'u=rwX,g=rwX,o=' '-type f'

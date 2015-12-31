@@ -4,8 +4,8 @@ CPU_SHARES='1024'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-CONFIGPATH="${HOSTPATH}/config"
-LIBPATH="${HOSTPATH}/lib"
-LOGPATH="${HOSTPATH}/log"
-PLUGINPATH="${HOSTPATH}/plugins"
-TMPPATH="${HOSTPATH}/tmp"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_LIB="${PATH_HOST}/lib"
+PATH_LOG="${PATH_HOST}/log"
+PATH_PLUGIN="${PATH_HOST}/plugins"
+PATH_TMP="${PATH_HOST}/tmp"

@@ -4,5 +4,5 @@ CPU_SHARES='2048'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-CONFIGPATH="${HOSTPATH}/config"
-RUNPATH="${HOSTPATH}/run"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_RUN="${PATH_HOST}/run"

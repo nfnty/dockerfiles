@@ -4,16 +4,16 @@ set -o errexit -o noclobber -o noglob -o nounset -o pipefail
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CLONEPATH="${TMPDIR}/pkgbuilds"
+PATH_CLONE="${TMPDIR}/pkgbuilds"
 GITURL='https://github.com/nfnty/pkgbuilds.git'
 DB='nfnty'
 PKGNAME="${1}"
 CNAME="builder_${PKGNAME}"
 
-git clone "${GITURL}" "${CLONEPATH}"
-cd "${CLONEPATH}"
+git clone "${GITURL}" "${PATH_CLONE}"
+cd "${PATH_CLONE}"
 directories=$( find . -name 'PKGBUILD' -printf '%h\n' )
-rm --recursive --force "${CLONEPATH}"
+rm --recursive --force "${PATH_CLONE}"
 cd "${SCRIPTDIR}"
 
 for directory in ${directories[@]}; do

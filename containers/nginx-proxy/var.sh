@@ -4,8 +4,8 @@ CPU_SHARES='512'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-CONFIGPATH="${HOSTPATH}/config"
-LIBPATH="${HOSTPATH}/lib"
-LOGPATH="${HOSTPATH}/log"
-RUNPATH="${HOSTPATH}/run"
-WEBROOTPATH="${HOSTPATH}/webroot"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_LIB="${PATH_HOST}/lib"
+PATH_LOG="${PATH_HOST}/log"
+PATH_RUN="${PATH_HOST}/run"
+PATH_WEBROOT="${PATH_HOST}/webroot"

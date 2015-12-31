@@ -10,12 +10,12 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${LIBPATH}:/var/lib/plexmediaserver:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
-    --volume="${SHARE1}/Anime:/mnt/Anime:ro" \
-    --volume="${SHARE1}/Home:/mnt/Home:ro" \
-    --volume="${SHARE1}/Movies:/mnt/Movies:ro" \
-    --volume="${SHARE1}/Series:/mnt/Series:ro" \
+    --volume="${PATH_LIB}:/var/lib/plexmediaserver:rw" \
+    --volume="${PATH_TMP}:/tmp:rw" \
+    --volume="${PATH_SHARE1}/Anime:/mnt/Anime:ro" \
+    --volume="${PATH_SHARE1}/Home:/mnt/Home:ro" \
+    --volume="${PATH_SHARE1}/Movies:/mnt/Movies:ro" \
+    --volume="${PATH_SHARE1}/Series:/mnt/Series:ro" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

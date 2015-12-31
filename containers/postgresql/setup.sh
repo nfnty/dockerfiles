@@ -10,7 +10,7 @@ source "${SCRIPTDIR}/var.sh"
 
 docker run \
     --read-only \
-    --volume="${LIBPATH}:/var/lib/postgres:rw" \
+    --volume="${PATH_LIB}:/var/lib/postgres:rw" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

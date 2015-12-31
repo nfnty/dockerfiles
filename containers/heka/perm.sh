@@ -9,7 +9,7 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_user_rw "${CACHEPATH}"
-perm_user_ro "${CONFIGPATH}"
+perm_user_rw "${PATH_CACHE}"
+perm_user_ro "${PATH_CONFIG}"
 
-perm_custom "${ULOGDPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
+perm_custom "${PATH_ULOGD}" '0' '0' 'u=rwX,g=rX,o=rX'

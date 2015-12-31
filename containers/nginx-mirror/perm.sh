@@ -9,9 +9,9 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_user_ro "${CONFIGPATH}"
-perm_user_rw "${LIBPATH}"
-perm_user_rw "${LOGPATH}"
-perm_user_rw "${RUNPATH}"
+perm_user_ro "${PATH_CONFIG}"
+perm_user_rw "${PATH_LIB}"
+perm_user_rw "${PATH_LOG}"
+perm_user_rw "${PATH_RUN}"
 
-perm_custom "${PKGPATH}" '99999' '99999' 'u=rwX,g=rX,o=rX'
+perm_custom "${PATH_PKG}" '99999' '99999' 'u=rwX,g=rX,o=rX'

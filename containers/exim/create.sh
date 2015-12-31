@@ -10,9 +10,9 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/mail:ro" \
-    --volume="${LOGPATH}:/var/log/exim:rw" \
-    --volume="${SPOOLPATH}:/var/spool/exim:rw" \
+    --volume="${PATH_CONFIG}:/etc/mail:ro" \
+    --volume="${PATH_LOG}:/var/log/exim:rw" \
+    --volume="${PATH_SPOOL}:/var/spool/exim:rw" \
     --cap-drop='ALL' \
     --cap-add='NET_BIND_SERVICE' \
     --net='none' \

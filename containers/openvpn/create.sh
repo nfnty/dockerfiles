@@ -10,11 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/openvpn:ro" \
-    --volume="${LIBPATH}:/var/lib/openvpn:rw" \
-    --volume="${LOGPATH}:/var/log/openvpn:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
-    --device="${TUNPATH}:/dev/net/tun:rw" \
+    --volume="${PATH_CONFIG}:/etc/openvpn:ro" \
+    --volume="${PATH_LIB}:/var/lib/openvpn:rw" \
+    --volume="${PATH_LOG}:/var/log/openvpn:rw" \
+    --volume="${PATH_TMP}:/tmp:rw" \
+    --device="${PATH_TUN}:/dev/net/tun:rw" \
     --cap-drop='ALL' \
     --cap-add='NET_ADMIN' \
     --cap-add='NET_RAW' \

@@ -9,9 +9,9 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 source "${SCRIPTDIR}/../_misc/permissions.sh"
 
-perm_user_ro "${MAKEPKGCONF}"
-perm_user_rw "${LIBPATH}" "-path ${LIBPATH}/pkg -prune -or"
-perm_custom "${LIBPATH}/pkg" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
-perm_user_rw "${LOGPATH}"
-perm_custom "${PKGCACHEPATH}" '0' '0' 'u=rwX,g=rX,o=rX'
-perm_user_rw "${PKGBUILDPATH}"
+perm_user_ro "${PATH_CONFIG}"
+perm_user_rw "${PATH_LIB}" "-path ${PATH_LIB}/pkg -prune -or"
+perm_custom "${PATH_LIB}/pkg" "${UGID}" "${UGID}" 'u=rwX,g=rX,o=rX'
+perm_user_rw "${PATH_LOG}"
+perm_custom "${PATH_PKGCACHE}" '0' '0' 'u=rwX,g=rX,o=rX'
+perm_user_rw "${PATH_PKGBUILD}"

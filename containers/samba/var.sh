@@ -4,9 +4,9 @@ CPU_SHARES='512'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-CACHEPATH="${HOSTPATH}/cache"
-CONFIGPATH="${HOSTPATH}/config"
-LIBPATH="${HOSTPATH}/lib"
-LOGPATH="${HOSTPATH}/log"
-RUNPATH="${HOSTPATH}/run"
-SHARE1='/mnt/1/share'
+PATH_CACHE="${PATH_HOST}/cache"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_LIB="${PATH_HOST}/lib"
+PATH_LOG="${PATH_HOST}/log"
+PATH_RUN="${PATH_HOST}/run"
+PATH_SHARE1='/mnt/1/share'

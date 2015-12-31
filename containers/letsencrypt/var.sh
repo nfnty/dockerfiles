@@ -4,10 +4,10 @@ MEMORY='1G'
 CPU_SHARES='1024'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
-HOSTPATH="${SRVPATH}/${BNAME}"
+PATH_HOST="${PATH_SRV}/${BNAME}"
 
-CONFIGPATH="${HOSTPATH}/config"
-LIBPATH="${HOSTPATH}/lib"
-LOGPATH="${HOSTPATH}/log"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_LIB="${PATH_HOST}/lib"
+PATH_LOG="${PATH_HOST}/log"
 
-WEBROOTPATH="${SRVPATH}/nginx-proxy-wan/webroot/letsencrypt"
+PATH_WEBROOT="${PATH_SRV}/nginx-proxy-wan/webroot/letsencrypt"

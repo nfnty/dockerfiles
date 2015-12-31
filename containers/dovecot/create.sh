@@ -10,11 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/dovecot:ro" \
-    --volume="${LIBPATH}:/var/lib/dovecot:rw" \
-    --volume="${LOGPATH}:/var/log/dovecot:rw" \
-    --volume="${RUNPATH}:/run/dovecot:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
+    --volume="${PATH_CONFIG}:/etc/dovecot:ro" \
+    --volume="${PATH_LIB}:/var/lib/dovecot:rw" \
+    --volume="${PATH_LOG}:/var/log/dovecot:rw" \
+    --volume="${PATH_RUN}:/run/dovecot:rw" \
+    --volume="${PATH_TMP}:/tmp:rw" \
     --cap-drop='ALL' \
     --cap-add='NET_BIND_SERVICE' \
     --cap-add='SYS_CHROOT' \

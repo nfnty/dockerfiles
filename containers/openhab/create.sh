@@ -10,16 +10,16 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${ADDONPATH}:/opt/openhab/addons:ro" \
-    --volume="${CONFIGPATH_JETTY}:/opt/openhab/etc:ro" \
-    --volume="${CONFIGPATH_OPENHAB}:/opt/openhab/configurations:ro" \
-    --volume="${CONFIGPATH_TELLDUS}:/etc/tellstick.conf:ro" \
-    --volume="${LIBPATH_OPENHAB}:/var/lib/openhab:rw" \
-    --volume="${LIBPATH_TELLDUS}:/var/lib/telldus:rw" \
-    --volume="${LOGPATH}:/var/log/openhab:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
-    --volume="${WEBAPPSPATH}:/opt/openhab/webapps/static:rw" \
-    --device="${TELLSTICKPATH}" \
+    --volume="${PATH_ADDONS}:/opt/openhab/addons:ro" \
+    --volume="${PATH_CONFIG_JETTY}:/opt/openhab/etc:ro" \
+    --volume="${PATH_CONFIG_OPENHAB}:/opt/openhab/configurations:ro" \
+    --volume="${PATH_CONFIG_TELLDUS}:/etc/tellstick.conf:ro" \
+    --volume="${PATH_LIB_OPENHAB}:/var/lib/openhab:rw" \
+    --volume="${PATH_LIB_TELLDUS}:/var/lib/telldus:rw" \
+    --volume="${PATH_LOG}:/var/log/openhab:rw" \
+    --volume="${PATH_TMP}:/tmp:rw" \
+    --volume="${PATH_WEBAPPS}:/opt/openhab/webapps/static:rw" \
+    --device="${PATH_TELLSTICK}" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

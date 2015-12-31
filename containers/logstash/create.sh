@@ -10,11 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/logstash:ro" \
-    --volume="${LIBPATH}:/var/lib/logstash:rw" \
-    --volume="${LOGPATH}:/var/log/logstash:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
-    --volume="${ULOGDPATH}:/mnt/ulogd:ro" \
+    --volume="${PATH_CONFIG}:/etc/logstash:ro" \
+    --volume="${PATH_LIB}:/var/lib/logstash:rw" \
+    --volume="${PATH_LOG}:/var/log/logstash:rw" \
+    --volume="${PATH_TMP}:/tmp:rw" \
+    --volume="${PATH_ULOGD}:/mnt/ulogd:ro" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

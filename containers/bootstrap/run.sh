@@ -10,10 +10,10 @@ source "${SCRIPTDIR}/var.sh"
 
 docker run \
     --read-only \
-    --volume="${ARCHIVEPATH}:/var/lib/bootstrap/archive:rw" \
-    --volume="${GNUPGPATH}:/var/lib/bootstrap/gnupg:rw" \
-    --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
+    --volume="${PATH_ARCHIVE}:/var/lib/bootstrap/archive:rw" \
+    --volume="${PATH_GNUPG}:/var/lib/bootstrap/gnupg:rw" \
+    --volume="${PATH_PKGCACHE}:/var/cache/pacman/pkg:rw" \
+    --volume="${PATH_TMP}:/tmp:rw" \
     --cap-drop='ALL' \
     --cap-add='CHOWN' \
     --cap-add='SYS_CHROOT' \

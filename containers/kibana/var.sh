@@ -4,6 +4,6 @@ CPU_SHARES='512'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-CONFIGPATH="${HOSTPATH}/config"
-LOGPATH="${HOSTPATH}/log"
-TMPPATH="${HOSTPATH}/tmp"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_LOG="${PATH_HOST}/log"
+PATH_TMP="${PATH_HOST}/tmp"

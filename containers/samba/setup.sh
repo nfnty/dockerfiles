@@ -10,11 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker run \
     --read-only \
-    --volume="${CACHEPATH}:/var/cache/samba:rw" \
-    --volume="${CONFIGPATH}:/etc/samba:ro" \
-    --volume="${LIBPATH}:/var/lib/samba:rw" \
-    --volume="${LOGPATH}:/var/log/samba:rw" \
-    --volume="${RUNPATH}:/run/samba:rw" \
+    --volume="${PATH_CACHE}:/var/cache/samba:rw" \
+    --volume="${PATH_CONFIG}:/etc/samba:ro" \
+    --volume="${PATH_LIB}:/var/lib/samba:rw" \
+    --volume="${PATH_LOG}:/var/log/samba:rw" \
+    --volume="${PATH_RUN}:/run/samba:rw" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

@@ -10,9 +10,9 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/opt/kibana/config:ro" \
-    --volume="${LOGPATH}:/var/log/kibana:rw" \
-    --volume="${TMPPATH}:/tmp:rw" \
+    --volume="${PATH_CONFIG}:/opt/kibana/config:ro" \
+    --volume="${PATH_LOG}:/var/log/kibana:rw" \
+    --volume="${PATH_TMP}:/tmp:rw" \
     --cap-drop='ALL' \
     --net='none' \
     --dns="${DNSSERVER}" \

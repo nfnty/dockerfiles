@@ -10,11 +10,11 @@ source "${SCRIPTDIR}/var.sh"
 
 docker create \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/nginx:ro" \
-    --volume="${LIBPATH}:/var/lib/nginx:rw" \
-    --volume="${LOGPATH}:/var/log/nginx:rw" \
-    --volume="${RUNPATH}:/run/nginx:rw" \
-    --volume="${WEBROOTPATH}:/srv/http:ro" \
+    --volume="${PATH_CONFIG}:/etc/nginx:ro" \
+    --volume="${PATH_LIB}:/var/lib/nginx:rw" \
+    --volume="${PATH_LOG}:/var/log/nginx:rw" \
+    --volume="${PATH_RUN}:/run/nginx:rw" \
+    --volume="${PATH_WEBROOT}:/srv/http:ro" \
     --cap-drop='ALL' \
     --cap-add='NET_BIND_SERVICE' \
     --net='none' \

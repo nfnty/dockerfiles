@@ -4,10 +4,10 @@ MEMORY='4G'
 CPU_SHARES='256'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
-HOSTPATH="${SRVPATH}/${BNAME}"
+PATH_HOST="${PATH_SRV}/${BNAME}"
 
-LIBPATH="${HOSTPATH}/lib"
-LOGPATH="${HOSTPATH}/log"
-MAKEPKGCONF="${HOSTPATH}/config/makepkg.conf"
-PKGCACHEPATH="${HOSTPATH}/pkgcache"
-PKGBUILDPATH="${HOSTPATH}/pkgbuild"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_LIB="${PATH_HOST}/lib"
+PATH_LOG="${PATH_HOST}/log"
+PATH_PKGCACHE="${PATH_HOST}/pkgcache"
+PATH_PKGBUILD="${PATH_HOST}/pkgbuild"

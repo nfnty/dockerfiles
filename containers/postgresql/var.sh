@@ -4,6 +4,6 @@ CPU_SHARES='1024'
 
 source "${SCRIPTDIR}/../_misc/variables.sh"
 
-CONFIGPATH="${HOSTPATH}/config"
-LIBPATH="${HOSTPATH}/lib"
-RUNPATH="${HOSTPATH}/run"
+PATH_CONFIG="${PATH_HOST}/config"
+PATH_LIB="${PATH_HOST}/lib"
+PATH_RUN="${PATH_HOST}/run"

@@ -9,11 +9,11 @@ CNAME="${1}"
 source "${SCRIPTDIR}/var.sh"
 
 docker create \
-    --volume="${MAKEPKGCONF}:/etc/makepkg.conf:ro" \
-    --volume="${LIBPATH}:/var/lib/builder:rw" \
-    --volume="${LOGPATH}:/var/log/builder:rw" \
-    --volume="${PKGBUILDPATH}:/mnt/pkgbuild:rw" \
-    --volume="${PKGCACHEPATH}:/var/cache/pacman/pkg:rw" \
+    --volume="${PATH_CONFIG}/makepkg.conf:/etc/makepkg.conf:ro" \
+    --volume="${PATH_LIB}:/var/lib/builder:rw" \
+    --volume="${PATH_LOG}:/var/log/builder:rw" \
+    --volume="${PATH_PKGBUILD}:/mnt/pkgbuild:rw" \
+    --volume="${PATH_PKGCACHE}:/var/cache/pacman/pkg:rw" \
     --cap-drop='ALL' \
     --cap-add='FOWNER' \
     --cap-add='SETGID' \

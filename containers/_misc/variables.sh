@@ -1,5 +1,5 @@
-BTRFSPATH='/var/lib/docker/btrfs/subvolumes'
-SRVPATH='/srv/docker'
-HOSTPATH="${SRVPATH}/${CNAME}"
+PATH_BTRFS='/var/lib/docker/btrfs/subvolumes'
+PATH_SRV='/srv/docker'
+PATH_HOST="${PATH_SRV}/${CNAME}"
 
 DNSSERVER='172.17.42.1'
