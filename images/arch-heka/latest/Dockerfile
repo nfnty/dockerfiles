@@ -5,7 +5,7 @@ ENV UGID='290000' UGNAME='heka'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV HEKA_VERSION='0.10.0b0-1'
+ENV HEKA_VERSION='0.10.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "heka=${HEKA_VERSION}" geoip-citydata && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
