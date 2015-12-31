@@ -8,20 +8,21 @@ CNAME="${1}"
 
 source "${SCRIPTDIR}/var.sh"
 
-docker create \
+docker run \
     --read-only \
-    --volume="${CONFIGPATH}:/etc/nginx:ro" \
-    --volume="${LIBPATH}:/var/lib/nginx:rw" \
-    --volume="${LOGPATH}:/var/log/nginx:rw" \
-    --volume="${RUNPATH}:/run/nginx:rw" \
-    --volume="${WEBROOTPATH}:/srv/http:ro" \
+    --volume="${CONFIGPATH}:/etc/letsencrypt:rw" \
+    --volume="${LIBPATH}:/var/lib/letsencrypt:rw" \
+    --volume="${LOGPATH}:/var/log/letsencrypt:rw" \
+    --volume="${WEBROOTPATH}:/mnt/webroot:rw" \
     --cap-drop='ALL' \
-    --cap-add='NET_BIND_SERVICE' \
-    --net='none' \
-    --dns="${DNSSERVER}" \
+    --net='bridge' \
     --name="${CNAME}" \
     --hostname="${CNAME}" \
     --memory="${MEMORY}" \
     --memory-swap='-1' \
     --cpu-shares="${CPU_SHARES}" \
-    nfnty/arch-nginx:latest
+    --attach='STDOUT' \
+    --attach='STDERR' \
+    --rm \
+    nfnty/arch-letsencrypt:latest \
+    ${@:2}

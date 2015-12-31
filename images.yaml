@@ -44,7 +44,7 @@ meta:
 'arch-jre8:latest':
     build: False
     packages:
-        jre8-openjdk-headless:
+        'jre8-openjdk-headless':
             variable: 'JAVA_VERSION'
             download: 'extra'
             sources:
@@ -60,12 +60,34 @@ meta:
 'arch-mono:latest':
     build: False
     packages:
-        mono:
+        'mono':
             variable: 'MONO_VERSION'
             download: 'extra'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/mono'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+'arch-python:latest':
+    build: False
+    packages:
+        'python':
+            variable: 'PYTHON_VERSION'
+            download: 'extra'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/python'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+'arch-python2:latest':
+    build: False
+    packages:
+        'python2':
+            variable: 'PYTHON2_VERSION'
+            download: 'extra'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/python2'
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
 
@@ -82,7 +104,7 @@ meta:
 'arch-dovecot:latest':
     build: True
     packages:
-        dovecot:
+        'dovecot':
             variable: 'DOVECOT_VERSION'
             download: 'extra'
             sources:
@@ -98,7 +120,7 @@ meta:
 'arch-elasticsearch:latest':
     build: True
     packages:
-        elasticsearch:
+        'elasticsearch':
             variable: 'ELASTICSEARCH_VERSION'
             download: 'upstream'
             sources:
@@ -114,7 +136,7 @@ meta:
 'arch-emby:latest':
     build: True
     packages:
-        emby-server:
+        'emby-server':
             variable: 'EMBY_VERSION'
             download: 'community'
             sources:
@@ -126,7 +148,7 @@ meta:
 'arch-exim:latest':
     build: True
     packages:
-        exim:
+        'exim':
             variable: 'EXIM_VERSION'
             download: 'nfnty'
             sources:
@@ -143,7 +165,7 @@ meta:
     build: False
     check: False
     packages:
-        heka:
+        'heka':
             variable: 'HEKA_VERSION'
             download: 'nfnty'
             sources:
@@ -156,7 +178,7 @@ meta:
 'arch-hostapd:latest':
     build: True
     packages:
-        hostapd:
+        'hostapd':
             variable: 'HOSTAPD_VERSION'
             download: 'nfnty'
             sources:
@@ -172,7 +194,7 @@ meta:
 'arch-kea:latest':
     build: True
     packages:
-        kea:
+        'kea':
             variable: 'KEA_VERSION'
             download: 'nfnty'
             sources:
@@ -184,7 +206,7 @@ meta:
 'arch-kibana:latest':
     build: True
     packages:
-        kibana:
+        'kibana':
             variable: 'KIBANA_VERSION'
             download: 'upstream'
             sources:
@@ -200,7 +222,7 @@ meta:
 'arch-logstash:latest':
     build: True
     packages:
-        logstash:
+        'logstash':
             variable: 'LOGSTASH_VERSION'
             download: 'upstream'
             sources:
@@ -216,7 +238,7 @@ meta:
 'arch-nginx:latest':
     build: True
     packages:
-        nginx:
+        'nginx':
             variable: 'NGINX_VERSION'
             download: 'extra'
             sources:
@@ -232,7 +254,7 @@ meta:
 'arch-ntp:latest':
     build: True
     packages:
-        ntp:
+        'ntp':
             variable: 'NTP_VERSION'
             download: 'nfnty'
             sources:
@@ -248,7 +270,7 @@ meta:
 'arch-openhab:latest':
     build: True
     packages:
-        openhab:
+        'openhab':
             variable: 'OPENHAB_VERSION'
             download: 'github'
             sources:
@@ -264,7 +286,7 @@ meta:
 'arch-openvpn:latest':
     build: True
     packages:
-        openvpn:
+        'openvpn':
             variable: 'OPENVPN_VERSION'
             download: 'core'
             sources:
@@ -280,7 +302,7 @@ meta:
 'arch-postgresql:latest':
     build: True
     packages:
-        postgresql:
+        'postgresql':
             variable: 'POSTGRESQL_VERSION'
             download: 'extra'
             sources:
@@ -296,7 +318,7 @@ meta:
 'arch-powerdns-recursor:latest':
     build: True
     packages:
-        powerdns-recursor:
+        'powerdns-recursor':
             variable: 'POWERDNS_RECURSOR_VERSION'
             download: 'community'
             sources:
@@ -316,7 +338,7 @@ meta:
 'arch-samba:latest':
     build: True
     packages:
-        samba:
+        'samba':
             variable: 'SAMBA_VERSION'
             download: 'extra'
             sources:
@@ -332,7 +354,7 @@ meta:
 'arch-transmission:latest':
     build: True
     packages:
-        transmission-cli:
+        'transmission-cli':
             variable: 'TRANSMISSION_VERSION'
             download: 'extra'
             sources:
@@ -348,7 +370,7 @@ meta:
 'arch-pimd:latest':
     build: True
     packages:
-        pimd:
+        'pimd':
             variable: 'PIMD_VERSION'
             download: 'nfnty'
             sources:
@@ -360,7 +382,7 @@ meta:
 'arch-avahi:latest':
     build: True
     packages:
-        avahi:
+        'avahi':
             variable: 'AVAHI_VERSION'
             download: 'extra'
             sources:
@@ -372,7 +394,7 @@ meta:
 'arch-plex:latest':
     build: False
     packages:
-        plexmediaserver:
+        'plexmediaserver':
             variable: 'PLEX_VERSION'
             download: 'upstream'
             sources:
@@ -384,7 +406,7 @@ meta:
 'arch-nodejs:latest':
     build: False
     packages:
-        nodejs:
+        'nodejs':
             variable: 'NODEJS_VERSION'
             download: 'community'
             sources:
@@ -396,11 +418,23 @@ meta:
 'arch-npm:latest':
     build: False
     packages:
-        npm:
+        'npm':
             variable: 'NPM_VERSION'
             download: 'community'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/x86_64/npm'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-letsencrypt:latest':
+    build: True
+    packages:
+        'letsencrypt':
+            variable: 'LETSENCRYPT_VERSION'
+            download: 'community'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/community/any/letsencrypt'
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
