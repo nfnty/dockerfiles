@@ -5,7 +5,7 @@ ENV UGID='260000' UGNAME='kea'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV KEA_VERSION='1.0.0-1' KEA_PIDFILE_DIR='/run/kea'
+ENV KEA_VERSION='1.0.0-1' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='/var/log/kea/kea.log'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "kea=${KEA_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
