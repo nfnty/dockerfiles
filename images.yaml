@@ -69,7 +69,7 @@ meta:
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
 'arch-python:latest':
-    build: False
+    build: True
     packages:
         'python':
             variable: 'PYTHON_VERSION'
@@ -80,7 +80,7 @@ meta:
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
 'arch-python2:latest':
-    build: False
+    build: True
     packages:
         'python2':
             variable: 'PYTHON2_VERSION'
