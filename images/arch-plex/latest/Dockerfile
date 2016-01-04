@@ -1,12 +1,10 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='320000' UGNAME='plex' UGID2='140000' UGNAME2='media'
+ENV UGID='320000' UGNAME='plex'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false \
-        --home-dir /var/lib/plexmediaserver/home "${UGNAME}" && \
-    groupadd --gid "${UGID2}" "${UGNAME2}" && \
-    gpasswd --add "${UGNAME}" "${UGNAME2}"
+        --home-dir /var/lib/plexmediaserver/home "${UGNAME}"
 
 ENV PLEX_VERSION='0.9.14.6.1620-e0b7243' \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR='/var/lib/plexmediaserver/appsupport' \

@@ -1,11 +1,9 @@
 FROM nfnty/arch-mono:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='280000' UGNAME='emby' UGID2='140000' UGNAME2='media'
+ENV UGID='280000' UGNAME='emby'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}" && \
-    groupadd --gid "${UGID2}" "${UGNAME2}" && \
-    gpasswd --add "${UGNAME}" "${UGNAME2}"
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
 ENV EMBY_VERSION='3.0.5782.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
