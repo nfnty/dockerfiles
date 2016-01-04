@@ -250,6 +250,18 @@ meta:
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE
 
+'arch-nginx-php:latest':
+    build: True
+    packages:
+        'php':
+            variable: 'PHP_VERSION'
+            download: 'extra'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/extra/x86_64/php'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
 'arch-ntp:latest':
     build: True
     packages:
@@ -435,5 +447,17 @@ meta:
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/any/letsencrypt'
+                    xpath: *ARCH_XPATH
+                    attribute: *ARCH_ATTRIBUTE
+
+'arch-owncloud:latest':
+    build: True
+    packages:
+        'owncloud':
+            variable: 'OWNCLOUD_VERSION'
+            download: 'community'
+            sources:
+                archlinux:
+                    url: 'https://www.archlinux.org/packages/community/any/owncloud'
                     xpath: *ARCH_XPATH
                     attribute: *ARCH_ATTRIBUTE

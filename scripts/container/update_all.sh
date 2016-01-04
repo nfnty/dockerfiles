@@ -20,7 +20,7 @@ systemctl start docker_logstash
 systemctl start docker_kibana
 
 systemctl stop docker_openhab
-"${UPD}" --name 'psql-openhab' 'postgresql'
+"${UPD}" 'postgresql'
 systemctl start docker_openhab
 
 "${UPD}" --off 'kea-dhcp4'
