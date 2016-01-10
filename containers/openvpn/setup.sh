@@ -13,16 +13,10 @@ docker run \
     --volume="${PATH_ETC}:/etc/openvpn:rw" \
     --cap-drop='ALL' \
     --net='none' \
-    --dns="${DNSSERVER}" \
-    --name="${CNAME}" \
-    --hostname="${CNAME}" \
-    --memory="${MEMORY}" \
-    --memory-swap='-1' \
-    --cpu-shares="${CPU_SHARES}" \
     --rm \
     --attach='STDOUT' \
     --attach='STDERR' \
     --user="${UGID}" \
     --entrypoint='/usr/bin/openvpn' \
     nfnty/arch-openvpn:latest \
-    --genkey --secret /etc/openvpn/crypto/ta.key
+    --genkey --secret /etc/openvpn/ssl/ta.key
