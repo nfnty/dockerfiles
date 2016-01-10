@@ -5,7 +5,7 @@ ENV UGID='280000' UGNAME='emby'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV EMBY_VERSION='3.0.5783.0-1'
+ENV EMBY_VERSION='3.0.5785-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "emby-server=${EMBY_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

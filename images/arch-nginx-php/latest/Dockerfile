@@ -3,7 +3,7 @@ MAINTAINER nfnty <docker@nfnty.se>
 
 USER root
 
-ENV PHP_VERSION='7.0.1-5'
+ENV PHP_VERSION='7.0.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "php=${PHP_VERSION}" "php-fpm=${PHP_VERSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
