@@ -7,12 +7,16 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOTFS="/tmp/rootfs"
 ARCHIVEPATH="/var/lib/bootstrap/archive"
 
-umask 022
+umask 0022
+
+cleanup() {
+    rm --recursive "${ROOTFS}"
+}
+trap cleanup EXIT
+
 mkdir "${ROOTFS}"
 pacstrap -c -d -G -M "${ROOTFS}" $( cat "${SCRIPTDIR}/packages" )
 
 cd "${ARCHIVEPATH}"
 tar --create --file='arch-mini-bootstrap.tar.xz' --xz --numeric-owner --xattrs --acls --directory="${ROOTFS}" .
 sha512sum arch-mini-bootstrap.tar.xz >| arch-mini-bootstrap.tar.xz.sha512
-
-rm --recursive "${ROOTFS}"
