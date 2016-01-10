@@ -39,6 +39,10 @@ def args_parse():
         '--no-scratch', action='store_true',
         help='Do not build scratch'
     )
+    parser.add_argument(
+        '--no-successors', action='store_true',
+        help='Do not build successors'
+    )
 
     # Positional
     parser.add_argument(
@@ -147,6 +151,10 @@ class FromTree:
         ))
     def prune(self, images):
         ''' Prune not in images '''
+        if ARGS.no_successors:
+            self.graph.remove_nodes_from(set(self.graph.nodes()) - set(ARGS.images))
+            return
+
         nodes = {}
         for image in images:
             nodes[image] = []
