@@ -143,7 +143,7 @@ meta:
                 github:
                     url: 'https://github.com/MediaBrowser/Emby/releases'
                     xpath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    regex: *VER_4NUM
+                    regex: '(\d+\.\d+\.\d+(?:\.\d+)?)'
 
 'arch-exim:latest':
     build: True
