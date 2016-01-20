@@ -38,29 +38,15 @@ DOCKERCONN.mount(
 
 def args_parse(args=None):
     ''' Parse arguments '''
-    parser = argparse.ArgumentParser(
-        description='Docker container updater'
-    )
+    parser = argparse.ArgumentParser(description='Docker container updater')
 
     # Optional
-    parser.add_argument(
-        '--no-cache', action='store_true',
-        help='Force image update'
-    )
-    parser.add_argument(
-        '--no-scratch', action='store_true',
-        help='Do not build scratch'
-    )
-    parser.add_argument(
-        '--no-successors', action='store_true',
-        help='Do not build successors'
-    )
+    parser.add_argument('--no-cache', action='store_true', help='Force image update')
+    parser.add_argument('--no-scratch', action='store_true', help='Do not build scratch')
+    parser.add_argument('--no-successors', action='store_true', help='Do not build successors')
 
     # Positional
-    parser.add_argument(
-        'images', metavar='IMAGE', action='store', nargs='*',
-        help='Name of image',
-    )
+    parser.add_argument('images', metavar='IMAGE', action='store', nargs='*', help='Name of image')
 
     args = parser.parse_args() if not args else parser.parse_args(args)
 
@@ -80,7 +66,7 @@ ARGS = args_parse()
 
 def dockerfile_from(path):
     ''' return FROM '''
-    with open(path, 'r') as filedesc:
+    with open(path) as filedesc:
         for line in filedesc:
             if line.startswith('FROM'):
                 return line.split()[-1]
