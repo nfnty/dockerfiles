@@ -20,12 +20,16 @@ IMAGES = CONFIG.copy()
 del IMAGES['meta']
 del CONFIG
 
+
 def print_spacer():
     ''' Print spacer '''
     print('\n######################################\n')
+
+
 def print_version(source, version):
     ''' Print version '''
     print(format('{0:15s}{1:s}'.format(source, version)))
+
 
 def scrape(url, xpath, attribute, regex):
     ''' Scrape latest version from url '''
@@ -61,6 +65,7 @@ def scrape(url, xpath, attribute, regex):
 
     return versions[0]
 
+
 def pacman(package):
     ''' Return dict with repository versions of package '''
     try:
@@ -80,6 +85,7 @@ def pacman(package):
 
     return versions
 
+
 def dockerfile_update(path, variable, version):
     ''' Update Dockerfiles with current version '''
     with open(path, 'r') as filed:
@@ -96,6 +102,7 @@ def dockerfile_update(path, variable, version):
 
     with open(path, 'w') as filed:
         filed.write(newfile)
+
 
 def main():
     ''' Main '''

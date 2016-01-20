@@ -11,6 +11,7 @@ import requests
 SCRIPTDIR = os.path.dirname(os.path.realpath(__file__))
 CLIENT = docker.Client(base_url='unix://run/docker.sock', version='auto')
 
+
 def args_parse():
     ''' Parse arguments '''
     parser = argparse.ArgumentParser(
@@ -47,19 +48,24 @@ def args_parse():
 
     return parser.parse_args()
 
+
 def error_print_exit(error):
     ''' Print error and exit '''
     print(error)
     sys.exit(1)
+
+
 def print_separator():
     ''' Prints a separator for readability '''
     print('\n##################################################\n')
+
 
 class Container:
     ''' Container class '''
     def __init__(self, name):
         self.name = name
         self.exists = False
+
     def doesexist(self):
         ''' Exists? '''
         try:
@@ -67,6 +73,7 @@ class Container:
             self.exists = True
         except (requests.exceptions.HTTPError, docker.errors.APIError):
             self.exists = False
+
     def create(self, basename):
         ''' Create '''
         try:
@@ -81,6 +88,7 @@ class Container:
             print('Created ' + self.name)
         except subprocess.CalledProcessError as error:
             error_print_exit(error)
+
     def remove(self):
         ''' Remove '''
         try:
@@ -90,6 +98,7 @@ class Container:
         except (requests.exceptions.HTTPError, docker.errors.APIError) as error:
             print('Failed to remove ' + self.name)
             error_print_exit(error)
+
     def rename(self, name_to):
         ''' Rename '''
         try:
@@ -99,6 +108,7 @@ class Container:
         except (requests.exceptions.HTTPError, docker.errors.APIError) as error:
             print('Failed to rename ' + self.name + ' to ' + name_to)
             error_print_exit(error)
+
     def running(self):
         ''' Running? '''
         try:
@@ -106,6 +116,7 @@ class Container:
         except (requests.exceptions.HTTPError, docker.errors.APIError) as error:
             print('Failed to gauge running state of ' + self.name)
             error_print_exit(error)
+
     def stop(self):
         ''' Stop '''
         try:
@@ -117,6 +128,7 @@ class Container:
         except subprocess.CalledProcessError as error:
             print('Failed to stop ' + self.name)
             error_print_exit(error)
+
     def start(self):
         ''' Start '''
         try:
@@ -129,6 +141,7 @@ class Container:
             print('Failed to start ' + self.name)
             error_print_exit(error)
 
+
 def rename(containers, name, prefix):
     ''' Rename containers '''
     for index, container in reversed(list(enumerate(containers))):
@@ -136,6 +149,7 @@ def rename(containers, name, prefix):
             container.rename(name)
         else:
             container.rename(prefix + str(index) + '_' + name)
+
 
 def main():
     ''' Main '''
