@@ -6,6 +6,7 @@ import itertools
 import json
 import os
 import queue
+import re
 import subprocess
 import sys
 import threading
@@ -20,7 +21,6 @@ PATH_REPO = subprocess.run([
     '/usr/bin/git', '-C', os.path.dirname(os.path.realpath(__file__)),
     'rev-parse', '--show-toplevel'
 ], stdout=subprocess.PIPE, check=True).stdout.decode('UTF-8').rstrip('\n')
-PATH_IMAGES = os.path.join(PATH_REPO, 'images')
 
 IMAGES = yaml.load(open(os.path.join(PATH_REPO, 'images.yaml')), Loader=yaml.CLoader)
 META = IMAGES['meta']
@@ -72,7 +72,8 @@ def dockerfile_from(path):
 
 def path_image(image):
     ''' return path to image '''
-    return os.path.join(PATH_IMAGES, image.split('/')[-1].replace(':', '/'))
+    base, name, tag = re.split(r'[/:]', image)
+    return os.path.join(PATH_REPO, META['paths'][base], name, tag)
 
 
 class Build:

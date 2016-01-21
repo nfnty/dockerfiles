@@ -14,7 +14,6 @@ PATH_REPO = subprocess.run([
     '/usr/bin/git', '-C', os.path.dirname(os.path.realpath(__file__)),
     'rev-parse', '--show-toplevel'
 ], stdout=subprocess.PIPE, check=True).stdout.decode('UTF-8').rstrip('\n')
-PATH_IMAGES = os.path.join(PATH_REPO, 'images')
 
 IMAGES = yaml.load(open(os.path.join(PATH_REPO, 'images.yaml')), Loader=yaml.CLoader)
 META = IMAGES['meta']
@@ -33,7 +32,8 @@ def print_version(source, version):
 
 def path_image(image):
     ''' return path to image '''
-    return os.path.join(PATH_IMAGES, image.split('/')[-1].replace(':', '/'))
+    base, name, tag = re.split(r'[/:]', image)
+    return os.path.join(PATH_REPO, META['paths'][base], name, tag)
 
 
 def fetch(url, headers, timeout):
