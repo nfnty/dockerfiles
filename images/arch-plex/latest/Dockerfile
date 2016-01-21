@@ -6,7 +6,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false \
         --home-dir /var/lib/plexmediaserver/home "${UGNAME}"
 
-ENV PLEX_VERSION='0.9.14.6.1620-e0b7243' \
+ENV VERSION_PLEX='0.9.14.6.1620-e0b7243' \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR='/var/lib/plexmediaserver/appsupport' \
     PLEX_MEDIA_SERVER_HOME='/opt/plexmediaserver' \
     LD_LIBRARY_PATH='/opt/plexmediaserver' \
@@ -14,7 +14,7 @@ ENV PLEX_VERSION='0.9.14.6.1620-e0b7243' \
     PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
 RUN mkdir /opt/plexmediaserver && \
     curl --speed-limit 256000 \
-        "https://downloads.plex.tv/plex-media-server/${PLEX_VERSION}/plexmediaserver-${PLEX_VERSION}.x86_64.rpm" | \
+        "https://downloads.plex.tv/plex-media-server/${VERSION_PLEX}/plexmediaserver-${VERSION_PLEX}.x86_64.rpm" | \
         bsdtar --extract --file=- --include='usr/lib/plexmediaserver' --strip-components=4 --directory='/opt/plexmediaserver' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/plexmediaserver && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \

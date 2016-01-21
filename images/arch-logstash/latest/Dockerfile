@@ -5,10 +5,10 @@ ENV UGID='130000' UGNAME='logstash'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV LOGSTASH_VERSION='2.1.1' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
+ENV VERSION_LOGSTASH='2.1.1' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
 RUN mkdir /opt/logstash && \
     curl --speed-limit 256000 \
-        "https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz" | \
+        "https://download.elastic.co/logstash/logstash/logstash-${VERSION_LOGSTASH}.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/logstash' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/logstash && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \

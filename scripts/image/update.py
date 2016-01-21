@@ -25,8 +25,6 @@ PATH_IMAGES = os.path.join(PATH_REPO, 'images')
 IMAGES = yaml.load(open(os.path.join(PATH_REPO, 'images.yaml')), Loader=yaml.CLoader)
 META = IMAGES['meta']
 del IMAGES['meta']
-for IMAGE in IMAGES.copy():
-    IMAGES['{0:s}/{1:s}'.format(META['name'], IMAGE)] = IMAGES.pop(IMAGE)
 
 DOCKERURL = 'http+docker://localunixsocket'
 DOCKERCONN = requests.Session()

@@ -1,6 +1,4 @@
 meta:
-    name: 'nfnty'
-
     repos: [
         'nfnty',
         'core',
@@ -19,21 +17,21 @@ meta:
         timeout: 30
 
     headers:
-        user-agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0'
-    archlinux:
-        xpath: &ARCH_XPATH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
-        attribute: &ARCH_ATTRIBUTE 'content'
-    regex:
-        ver_2num: &VER_2NUM '(\d+\.\d+)'
-        ver_3num: &VER_3NUM '(\d+\.\d+\.\d+)'
-        ver_3num_vtag: &VER_3NUM_VTAG '^v(\d+\.\d+\.\d+)$'
-        ver_4num: &VER_4NUM '(\d+\.\d+\.\d+\.\d+)'
+        user-agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
+
+    globals:
+        'xpath_arch': &XPATH_ARCH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
+        'attribute_arch': &ATTRIBUTE_ARCH 'content'
+        'regex_ver_2num': &REGEX_VER_2NUM '(\d+\.\d+)'
+        'regex_ver_3num': &REGEX_VER_3NUM '(\d+\.\d+\.\d+)'
+        'regex_ver_3num_vtag': &REGEX_VER_3NUM_VTAG '^v(\d+\.\d+\.\d+)$'
+        'regex_ver_4num': &REGEX_VER_4NUM '(\d+\.\d+\.\d+\.\d+)'
 
 #################
 #  BASE IMAGES  #
 #################
 
-'arch-mini:latest':
+'nfnty/arch-mini:latest':
     build: True
     scratch:
         call: 'containers/bootstrap/run.sh'
@@ -41,14 +39,14 @@ meta:
             'bootstrap',
         ]
 
-'arch-devel:latest':
+'nfnty/arch-devel:latest':
     build: False
 
-'arch-jre8:latest':
+'nfnty/arch-jre8:latest':
     build: False
     packages:
         'jre8-openjdk-headless':
-            variable: 'JAVA_VERSION'
+            variable: 'VERSION_JAVA'
             download: 'extra'
             sources:
                 upstream:
@@ -57,90 +55,92 @@ meta:
                     regex: '(\du\d+)'
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/jre8-openjdk-headless'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-mono:latest':
+'nfnty/arch-mono:latest':
     build: False
     packages:
         'mono':
-            variable: 'MONO_VERSION'
+            variable: 'VERSION_MONO'
             download: 'extra'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/mono'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
-'arch-python:latest':
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
+
+'nfnty/arch-python:latest':
     build: True
     packages:
         'python':
-            variable: 'PYTHON_VERSION'
+            variable: 'VERSION_PYTHON'
             download: 'extra'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/python'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
-'arch-python2:latest':
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
+
+'nfnty/arch-python2:latest':
     build: True
     packages:
         'python2':
-            variable: 'PYTHON2_VERSION'
+            variable: 'VERSION_PYTHON2'
             download: 'extra'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/python2'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
 ######################
 #  CONTAINER IMAGES  #
 ######################
 
-'arch-bootstrap:latest':
+'nfnty/arch-bootstrap:latest':
     build: True
 
-'arch-builder:latest':
+'nfnty/arch-builder:latest':
     build: True
 
-'arch-dovecot:latest':
+'nfnty/arch-dovecot:latest':
     build: True
     packages:
         'dovecot':
-            variable: 'DOVECOT_VERSION'
+            variable: 'VERSION_DOVECOT'
             download: 'extra'
             sources:
                 upstream:
                     url: 'http://dovecot.org/download.html'
                     xpath: '(//h3[text()="Stable releases"]/following-sibling::ul/li/a)[1]'
-                    regex: *VER_3NUM
+                    regex: *REGEX_VER_3NUM
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/dovecot'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-elasticsearch:latest':
+'nfnty/arch-elasticsearch:latest':
     build: True
     packages:
         'elasticsearch':
-            variable: 'ELASTICSEARCH_VERSION'
+            variable: 'VERSION_ELASTICSEARCH'
             download: 'upstream'
             sources:
                 upstream:
                     url: 'https://www.elastic.co/downloads/elasticsearch'
                     xpath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
-                    regex: *VER_3NUM
+                    regex: *REGEX_VER_3NUM
                 github:
                     url: 'https://github.com/elastic/elasticsearch/tags'
                     xpath: '//span[@class="tag-name"]'
-                    regex: *VER_3NUM_VTAG
+                    regex: *REGEX_VER_3NUM_VTAG
 
-'arch-emby:latest':
+'nfnty/arch-emby:latest':
     build: True
     packages:
         'emby-server':
-            variable: 'EMBY_VERSION'
+            variable: 'VERSION_EMBY'
             download: 'community'
             sources:
                 github:
@@ -148,56 +148,56 @@ meta:
                     xpath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
                     regex: '(\d+\.\d+\.\d+(?:\.\d+)?)'
 
-'arch-exim:latest':
+'nfnty/arch-exim:latest':
     build: True
     packages:
         'exim':
-            variable: 'EXIM_VERSION'
+            variable: 'VERSION_EXIM'
             download: 'nfnty'
             sources:
                 upstream:
                     url: 'http://exim.org/index.html'
                     xpath: '//div[@id="content"]/h2[contains(text(), "Latest Version")]'
-                    regex: *VER_2NUM
+                    regex: *REGEX_VER_2NUM
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/x86_64/exim'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-heka:latest':
+'nfnty/arch-heka:latest':
     build: True
     packages:
         'heka':
-            variable: 'HEKA_VERSION'
+            variable: 'VERSION_HEKA'
             download: 'nfnty'
             sources:
                 github:
                     url: 'https://github.com/mozilla-services/heka/tags'
                     xpath: '//span[@class="tag-name"]'
-                    regex: *VER_3NUM_VTAG
+                    regex: *REGEX_VER_3NUM_VTAG
 
 
-'arch-hostapd:latest':
+'nfnty/arch-hostapd:latest':
     build: True
     packages:
         'hostapd':
-            variable: 'HOSTAPD_VERSION'
+            variable: 'VERSION_HOSTAPD'
             download: 'nfnty'
             sources:
                 upstream:
                     url: 'https://w1.fi/hostapd'
                     xpath: '//li[contains(text(), "Latest release")]//a'
-                    regex: *VER_2NUM
+                    regex: *REGEX_VER_2NUM
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/x86_64/hostapd'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-kea:latest':
+'nfnty/arch-kea:latest':
     build: True
     packages:
         'kea':
-            variable: 'KEA_VERSION'
+            variable: 'VERSION_KEA'
             download: 'nfnty'
             sources:
                 upstream:
@@ -205,43 +205,43 @@ meta:
                     xpath: '//table[@id="indexlist"]//td[@class="indexcolname"]/a'
                     regex: '^(\d+\.\d+(?:\.\d+)?)/$'
 
-'arch-kibana:latest':
+'nfnty/arch-kibana:latest':
     build: True
     packages:
         'kibana':
-            variable: 'KIBANA_VERSION'
+            variable: 'VERSION_KIBANA'
             download: 'upstream'
             sources:
                 upstream:
                     url: 'https://www.elastic.co/downloads/kibana'
                     xpath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
-                    regex: *VER_3NUM
+                    regex: *REGEX_VER_3NUM
                 github:
                     url: 'https://github.com/elastic/kibana/tags'
                     xpath: '//span[@class="tag-name"]'
-                    regex: *VER_3NUM_VTAG
+                    regex: *REGEX_VER_3NUM_VTAG
 
-'arch-logstash:latest':
+'nfnty/arch-logstash:latest':
     build: True
     packages:
         'logstash':
-            variable: 'LOGSTASH_VERSION'
+            variable: 'VERSION_LOGSTASH'
             download: 'upstream'
             sources:
                 upstream:
                     url: 'https://www.elastic.co/downloads/logstash'
                     xpath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
-                    regex: *VER_3NUM
+                    regex: *REGEX_VER_3NUM
                 github:
                     url: 'https://github.com/elastic/logstash/tags'
                     xpath: '//span[@class="tag-name"]'
-                    regex: *VER_3NUM_VTAG
+                    regex: *REGEX_VER_3NUM_VTAG
 
-'arch-nginx:latest':
+'nfnty/arch-nginx:latest':
     build: True
     packages:
         'nginx':
-            variable: 'NGINX_VERSION'
+            variable: 'VERSION_NGINX'
             download: 'extra'
             sources:
                 upstream:
@@ -250,26 +250,26 @@ meta:
                     regex: '^nginx-(\d+\.\d+\.\d+)$'
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/nginx'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-nginx-php:latest':
+'nfnty/arch-nginx-php:latest':
     build: True
     packages:
         'php':
-            variable: 'PHP_VERSION'
+            variable: 'VERSION_PHP'
             download: 'extra'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/php'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-ntp:latest':
+'nfnty/arch-ntp:latest':
     build: True
     packages:
         'ntp':
-            variable: 'NTP_VERSION'
+            variable: 'VERSION_NTP'
             download: 'nfnty'
             sources:
                 upstream:
@@ -278,30 +278,30 @@ meta:
                     regex: '^(\d+\.\d+\.\d+(?:.+)?)$'
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/ntp'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-openhab:latest':
+'nfnty/arch-openhab:latest':
     build: True
     packages:
         'openhab':
-            variable: 'OPENHAB_VERSION'
+            variable: 'VERSION_OPENHAB'
             download: 'github'
             sources:
                 github:
                     url: 'https://github.com/openhab/openhab/tags'
                     xpath: '//span[@class="tag-name"]'
-                    regex: *VER_3NUM_VTAG
+                    regex: *REGEX_VER_3NUM_VTAG
 
-'arch-openhab-telldus:latest':
+'nfnty/arch-openhab-telldus:latest':
     build: True
     check: False
 
-'arch-openvpn:latest':
+'nfnty/arch-openvpn:latest':
     build: True
     packages:
         'openvpn':
-            variable: 'OPENVPN_VERSION'
+            variable: 'VERSION_OPENVPN'
             download: 'core'
             sources:
                 upstream:
@@ -310,30 +310,30 @@ meta:
                     regex: '^openvpn-(\d+\.\d+\.\d+).tar.gz$'
                 archlinux:
                     url: 'https://www.archlinux.org/packages/core/x86_64/openvpn'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-postgresql:latest':
+'nfnty/arch-postgresql:latest':
     build: True
     packages:
         'postgresql':
-            variable: 'POSTGRESQL_VERSION'
+            variable: 'VERSION_POSTGRESQL'
             download: 'extra'
             sources:
                 upstream:
                     url: 'http://www.postgresql.org/ftp/source'
                     xpath: '//h2[text()="Directories"]/following-sibling::div//tr/td/a[2]'
-                    regex: *VER_3NUM_VTAG
+                    regex: *REGEX_VER_3NUM_VTAG
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/postgresql'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-powerdns-recursor:latest':
+'nfnty/arch-powerdns-recursor:latest':
     build: True
     packages:
         'powerdns-recursor':
-            variable: 'POWERDNS_RECURSOR_VERSION'
+            variable: 'VERSION_POWERDNS_RECURSOR'
             download: 'community'
             sources:
                 upstream:
@@ -346,14 +346,14 @@ meta:
                     regex: '^rec-(\d+\.\d+\.\d+)$'
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/x86_64/powerdns-recursor'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-samba:latest':
+'nfnty/arch-samba:latest':
     build: True
     packages:
         'samba':
-            variable: 'SAMBA_VERSION'
+            variable: 'VERSION_SAMBA'
             download: 'extra'
             sources:
                 upstream:
@@ -362,14 +362,14 @@ meta:
                     regex: '^samba-(\d+\.\d+\.\d+(?:\w+)?).tar.gz$'
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/samba'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-transmission:latest':
+'nfnty/arch-transmission:latest':
     build: True
     packages:
         'transmission-cli':
-            variable: 'TRANSMISSION_VERSION'
+            variable: 'VERSION_TRANSMISSION'
             download: 'extra'
             sources:
                 upstream:
@@ -378,38 +378,38 @@ meta:
                     regex: '^transmission-(\d+\.\d+?).tar.xz$'
                 archlinux:
                     url: 'https://www.archlinux.org/packages/extra/x86_64/transmission-cli'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-pimd:latest':
+'nfnty/arch-pimd:latest':
     build: True
     packages:
         'pimd':
-            variable: 'PIMD_VERSION'
+            variable: 'VERSION_PIMD'
             download: 'nfnty'
             sources:
                 github:
                     url: 'https://github.com/troglobit/pimd/tags'
                     xpath: '//span[@class="tag-name"]'
-                    regex: *VER_3NUM
+                    regex: *REGEX_VER_3NUM
 
-'arch-avahi:latest':
+'nfnty/arch-avahi:latest':
     build: True
     packages:
         'avahi':
-            variable: 'AVAHI_VERSION'
+            variable: 'VERSION_AVAHI'
             download: 'extra'
             sources:
                 upstream:
                     url: 'http://www.avahi.org/wiki/DownloadAvahi'
                     xpath: '//p[contains(text(), "latest version")]/a'
-                    regex: *VER_3NUM
+                    regex: *REGEX_VER_3NUM
 
-'arch-plex:latest':
+'nfnty/arch-plex:latest':
     build: False
     packages:
         'plexmediaserver':
-            variable: 'PLEX_VERSION'
+            variable: 'VERSION_PLEX'
             download: 'upstream'
             sources:
                 upstream:
@@ -417,50 +417,50 @@ meta:
                     xpath: '//span[@class="linux fedora"]/..//text()[contains(., "Version")]'
                     regex: '(\d+\.\d+\.\d+\.\d+\.\d+-[0-9a-f]+)'
 
-'arch-nodejs:latest':
+'nfnty/arch-nodejs:latest':
     build: False
     packages:
         'nodejs':
-            variable: 'NODEJS_VERSION'
+            variable: 'VERSION_NODEJS'
             download: 'community'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/x86_64/nodejs'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-npm:latest':
+'nfnty/arch-npm:latest':
     build: False
     packages:
         'npm':
-            variable: 'NPM_VERSION'
+            variable: 'VERSION_NPM'
             download: 'community'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/x86_64/npm'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-letsencrypt:latest':
+'nfnty/arch-letsencrypt:latest':
     build: True
     packages:
         'letsencrypt':
-            variable: 'LETSENCRYPT_VERSION'
+            variable: 'VERSION_LETSENCRYPT'
             download: 'community'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/any/letsencrypt'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH
 
-'arch-owncloud:latest':
+'nfnty/arch-owncloud:latest':
     build: True
     packages:
         'owncloud':
-            variable: 'OWNCLOUD_VERSION'
+            variable: 'VERSION_OWNCLOUD'
             download: 'community'
             sources:
                 archlinux:
                     url: 'https://www.archlinux.org/packages/community/any/owncloud'
-                    xpath: *ARCH_XPATH
-                    attribute: *ARCH_ATTRIBUTE
+                    xpath: *XPATH_ARCH
+                    attribute: *ATTRIBUTE_ARCH

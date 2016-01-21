@@ -1,24 +1,24 @@
 #!/usr/bin/python3
 ''' Check image package versions '''
+
 import distutils.version
-import lxml.html
 import os
 import re
-import requests
 import subprocess
+
+import lxml.html
+import requests
 import yaml
 
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
-REPODIR = subprocess.check_output([
-    '/usr/bin/git', 'rev-parse', '--show-toplevel'
-]).decode('UTF-8').strip()
-IMAGEDIR = os.path.join(REPODIR, 'images')
+PATH_REPO = subprocess.run([
+    '/usr/bin/git', '-C', os.path.dirname(os.path.realpath(__file__)),
+    'rev-parse', '--show-toplevel'
+], stdout=subprocess.PIPE, check=True).stdout.decode('UTF-8').rstrip('\n')
+PATH_IMAGES = os.path.join(PATH_REPO, 'images')
 
-CONFIG = yaml.load(open(os.path.join(REPODIR, 'images.yaml')), Loader=yaml.CLoader)
-META = CONFIG['meta']
-IMAGES = CONFIG.copy()
+IMAGES = yaml.load(open(os.path.join(PATH_REPO, 'images.yaml')), Loader=yaml.CLoader)
+META = IMAGES['meta']
 del IMAGES['meta']
-del CONFIG
 
 
 def print_spacer():
@@ -31,13 +31,28 @@ def print_version(source, version):
     print(format('{0:15s}{1:s}'.format(source, version)))
 
 
-def scrape(url, xpath, attribute, regex):
-    ''' Scrape latest version from url '''
-    document = lxml.html.document_fromstring(requests.get(url, headers=META['headers']).content)
+def path_image(image):
+    ''' return path to image '''
+    return os.path.join(PATH_IMAGES, image.split('/')[-1].replace(':', '/'))
 
+
+def fetch(url, headers, timeout):
+    ''' Fetch URL '''
+    try:
+        response = requests.get(url, headers=headers, timeout=timeout)
+    except requests.exceptions.Timeout as error:
+        raise RuntimeError('fetch timeout: {0:s}\n'.format(str(error)))
+    if response.status_code != 200:
+        raise RuntimeError('fetch status_code: {0:d}: {1:s}'.format(
+            response.status_code, response.content.decode('UTF-8').rstrip()))
+    return lxml.html.document_fromstring(response.content)
+
+
+def document_parse(document, xpath, attribute, regex):
+    ''' xpath version extractor '''
     nodes = document.xpath(xpath)
     if not nodes:
-        raise ValueError('Incorrect xpath: No nodes')
+        raise RuntimeError('Incorrect xpath: No nodes')
 
     versions = []
     for node in nodes:
@@ -53,46 +68,46 @@ def scrape(url, xpath, attribute, regex):
             if not obj:
                 continue
             elif len(obj.groups()) > 1:
-                raise ValueError('Incorrect regex: More than 1 capture group')
+                raise RuntimeError('Incorrect regex: More than 1 capture group')
             string = obj.group(1)
 
         versions.append(distutils.version.LooseVersion(string))
 
     if not versions:
-        raise ValueError('Incorrect regex: No match')
+        raise RuntimeError('Incorrect regex: No match')
 
-    versions = sorted(versions, reverse=True)
-
-    return versions[0]
+    return sorted(versions, reverse=True)[0]
 
 
-def pacman(package):
+def version_scrape(url, xpath, attribute, regex):
+    ''' Scrape latest version from url '''
+    document = fetch(url, META['headers'], META['limits']['timeout'])
+    return document_parse(document, xpath, attribute, regex)
+
+
+def version_pacman(package):
     ''' Return dict with repository versions of package '''
     try:
-        output = subprocess.check_output(
-            [
-                '/usr/bin/expac', '--sync', '--search',
-                '%r %v', r'^' + package + r'$'
-            ]
-        ).decode('UTF-8').splitlines()
+        output = subprocess.run([
+            '/usr/bin/expac', '--sync', '--search', '%r %v', r'^{0:s}$'.format(re.escape(package))
+        ], check=True, stdout=subprocess.PIPE).stdout.decode('UTF-8')
     except subprocess.CalledProcessError:
         raise RuntimeError('{0:s} not in any repository'.format(package))
 
     versions = {}
-    for line in output:
+    for line in output.splitlines():
         repo, version = line.split()
         versions[repo] = distutils.version.LooseVersion(version)
-
     return versions
 
 
 def dockerfile_update(path, variable, version):
     ''' Update Dockerfiles with current version '''
-    with open(path, 'r') as filed:
+    with open(path, 'r') as filedesc:
         newfile, found = re.subn(
-            r"{0:s}='\S*'".format(variable),
-            "{0:s}='{1:s}'".format(variable, version),
-            filed.read(),
+            r'{0:s}=\'\S*\''.format(variable),
+            '{0:s}=\'{1:s}\''.format(variable, version),
+            filedesc.read(),
         )
 
     if not found:
@@ -100,8 +115,8 @@ def dockerfile_update(path, variable, version):
     elif found > 1:
         raise ValueError('More than 1: {0:s}'.format(variable))
 
-    with open(path, 'w') as filed:
-        filed.write(newfile)
+    with open(path, 'w') as filedesc:
+        filedesc.write(newfile)
 
 
 def main():
@@ -121,7 +136,7 @@ def main():
                 print('\033[32m{0:s}\033[0m:'.format(package))
 
                 for source, source_dict in package_dict['sources'].items():
-                    source_dict['version'] = scrape(
+                    source_dict['version'] = version_scrape(
                         source_dict['url'],
                         source_dict['xpath'],
                         source_dict['attribute'] if 'attribute' in source_dict else None,
@@ -129,7 +144,7 @@ def main():
                     )
 
                 try:
-                    for repo, version in pacman(package).items():
+                    for repo, version in version_pacman(package).items():
                         package_dict['sources'][repo] = {'version': version}
                 except RuntimeError as error:
                     print(error)
@@ -138,7 +153,7 @@ def main():
                     print_version(source, source_dict['version'].vstring)
 
                 dockerfile_update(
-                    os.path.join(IMAGEDIR, image.replace(':', '/'), 'Dockerfile'),
+                    os.path.join(path_image(image), 'Dockerfile'),
                     package_dict['variable'],
                     package_dict['sources'][package_dict['download']]['version'].vstring,
                 )

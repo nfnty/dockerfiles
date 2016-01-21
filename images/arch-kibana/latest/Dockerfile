@@ -5,10 +5,10 @@ ENV UGID='120000' UGNAME='kibana'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV KIBANA_VERSION='4.3.1' BABEL_CACHE_PATH='/tmp/babel.json'
+ENV VERSION_KIBANA='4.3.1' BABEL_CACHE_PATH='/tmp/babel.json'
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 /opt/kibana && \
     curl --speed-limit 256000 \
-        "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" | \
+        "https://download.elastic.co/kibana/kibana/kibana-${VERSION_KIBANA}-linux-x64.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/kibana' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/kibana && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/log/kibana

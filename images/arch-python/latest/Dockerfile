@@ -1,7 +1,7 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV PYTHON_VERSION='3.5.1-1'
+ENV VERSION_PYTHON='3.5.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "python=${PYTHON_VERSION}" && \
+    pacman --sync --noconfirm "python=${VERSION_PYTHON}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete

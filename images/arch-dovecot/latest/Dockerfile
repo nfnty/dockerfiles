@@ -5,9 +5,9 @@ ENV UGID='220000' UGNAME='dovecot'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV DOVECOT_VERSION='2.2.21-1'
+ENV VERSION_DOVECOT='2.2.21-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "dovecot=${DOVECOT_VERSION}" && \
+    pacman --sync --noconfirm "dovecot=${VERSION_DOVECOT}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_bind_service=ep' /usr/bin/dovecot && \
     setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/anvil && \

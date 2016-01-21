@@ -5,9 +5,9 @@ ENV UGID='250000' UGNAME='exim'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV EXIM_VERSION='4.86-1'
+ENV VERSION_EXIM='4.86-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "exim=${EXIM_VERSION}" && \
+    pacman --sync --noconfirm "exim=${VERSION_EXIM}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     chmod -s /usr/bin/exim && \
     setcap 'cap_net_bind_service=ep' /usr/bin/exim && \

@@ -5,9 +5,9 @@ ENV UGID='140000' UGNAME='samba'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV SAMBA_VERSION='4.3.4-1'
+ENV VERSION_SAMBA='4.3.4-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "samba=${SAMBA_VERSION}" && \
+    pacman --sync --noconfirm "samba=${VERSION_SAMBA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_bind_service=ep' /usr/bin/smbd && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/cache/samba /var/lib/samba /var/log/samba && \

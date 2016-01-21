@@ -3,9 +3,9 @@ MAINTAINER nfnty <docker@nfnty.se>
 
 USER root
 
-ENV OWNCLOUD_VERSION='8.2.2-1'
+ENV VERSION_OWNCLOUD='8.2.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "owncloud=${OWNCLOUD_VERSION}" php-apcu php-pgsql && \
+    pacman --sync --noconfirm "owncloud=${VERSION_OWNCLOUD}" php-apcu php-pgsql && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     rm /usr/share/webapps/owncloud/config && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /usr/share/webapps/owncloud/{config,data} && \
