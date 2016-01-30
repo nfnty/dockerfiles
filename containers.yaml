@@ -1,0 +1,833 @@
+Meta:
+    Aliases:
+        MIB_384: &MIB_384 402653184
+        MIB_512: &MIB_512 536870912
+        GIB_0_75: &GIB_0_75 805306368
+        GIB_1: &GIB_1 1073741824
+        GIB_1_5: &GIB_1_5 1610612736
+        GIB_2: &GIB_2 2147483648
+        GIB_3_5: &GIB_3_5 3758096384
+        GIB_4: &GIB_4 4294967296
+
+    # tmpfs: 'size=128M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
+
+    Default:
+        StopSignal: 'SIGTERM'
+        HostConfig:
+            Memory: *GIB_1
+            MemorySwap: *GIB_1 # MemorySwap - Memory = 0
+            MemoryReservation: *GIB_0_75
+            KernelMemory: 4194304 # 4MiB (min set in docker)
+            CpuShares: 1024 # Kernel default
+            CapDrop:
+                - 'ALL'
+            PublishAllPorts: False
+            Dns:
+                - '10.7.1.1'
+            NetworkMode: 'none'
+            ReadonlyRootfs: True
+
+################
+#  CONTAINERS  #
+################
+
+'avahi':
+    Image: 'nfnty/arch-avahi:latest'
+    UGID: 310000
+
+    Names:
+        'avahi': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            CpuShares: 2048
+            Binds:
+                - 'etc:/etc/avahi:ro'
+                - 'run:/run/avahi-daemon:rw'
+
+'bootstrap':
+    Image: 'nfnty/arch-bootstrap:latest'
+    UGID: 0
+
+    Names: {}
+
+    Paths:
+        'gnupg':
+            Mode: 'u=rwX,g=,o='
+        'pkgcache':
+            Mode: 'u=rwX,g=rX,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+        '/opt/docker/images/arch-mini/latest/bootstrap':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            CpuShares: 512
+            CapAdd:
+                - 'CHOWN'
+                - 'DAC_OVERRIDE'
+                - 'SYS_CHROOT'
+            NetworkMode: 'bridge'
+            Dns:
+                - '10.7.2.1'
+            Binds:
+                - 'gnupg:/var/lib/bootstrap/gnupg:rw'
+                - 'pkgcache:/var/cache/pacman/pkg:rw'
+                - 'tmp:/tmp:rw'
+                - '/opt/docker/images/arch-mini/latest/bootstrap:/var/lib/bootstrap/archive:rw'
+
+'builder':
+    Image: 'nfnty/arch-builder:latest'
+    UGID: 99999
+
+    Names: {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+            Exclude:
+                - 'pkg'
+        'lib/pkg':
+            Mode: 'u=rwX,g=rX,o='
+            ACL: 'default:user:160000:rX,user:160000:rX'
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'pkgcache':
+            Mode: 'u=rwX,g=rX,o='
+            User: 'root'
+            Group: 'root'
+        'pkgbuild':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            CpuShares: 512
+            CapAdd:
+                - 'FOWNER'
+                - 'SETGID'
+                - 'SETUID'
+                - 'SYS_CHROOT'
+                - 'SYS_RESOURCE'
+            NetworkMode: 'bridge'
+            Dns:
+                - '10.7.2.1'
+            ReadonlyRootfs: False
+            Binds:
+                - 'etc/makepkg.conf:/etc/makepkg.conf:ro'
+                - 'lib:/var/lib/builder:rw'
+                - 'log:/var/log/builder:rw'
+                - 'pkgbuild:/mnt/pkgbuild:rw'
+                - 'pkgcache:/var/cache/pacman/pkg:rw'
+
+'dovecot':
+    Image: 'nfnty/arch-dovecot:latest'
+    UGID: 220000
+
+    Names:
+        'dovecot': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            CapAdd:
+                - 'NET_BIND_SERVICE'
+                - 'SYS_CHROOT'
+            Binds:
+                - 'etc:/etc/dovecot:ro'
+                - 'lib:/var/lib/dovecot:rw'
+                - 'log:/var/log/dovecot:rw'
+                - 'run:/run/dovecot:rw'
+                - 'tmp:/tmp:rw'
+
+'elasticsearch':
+    Image: 'nfnty/arch-elasticsearch:latest'
+    UGID: 110000
+
+    Names:
+        'elasticsearch': {}
+
+    Paths:
+        'config':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'plugins':
+            Mode: 'u=rX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            ExtraHosts:
+                - 'elasticsearch:127.0.0.1'
+            Binds:
+                - 'config:/opt/elasticsearch/config:ro'
+                - 'lib:/var/lib/elasticsearch:rw'
+                - 'log:/var/log/elasticsearch:rw'
+                - 'plugins:/opt/elasticsearch/plugins:ro'
+                - 'tmp:/tmp:rw'
+
+'emby':
+    Image: 'nfnty/arch-emby:latest'
+    UGID: 280000
+
+    Names:
+        'emby': {}
+
+    Paths:
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            Binds:
+                - 'lib:/var/lib/emby:rw'
+                - 'tmp:/tmp:rw'
+                - '/mnt/1/share/Anime:/mnt/Anime:ro'
+                - '/mnt/1/share/Home:/mnt/Home:ro'
+                - '/mnt/1/share/Movies:/mnt/Movies:ro'
+                - '/mnt/1/share/Series:/mnt/Series:ro'
+
+'exim':
+    Image: 'nfnty/arch-exim:latest'
+    UGID: 250000
+
+    Names:
+        'exim': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=rX,o='
+            User: 'root'
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'spool':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        StopSignal: 'SIGKILL'
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            CapAdd:
+                - 'NET_BIND_SERVICE'
+            Binds:
+                - 'etc:/etc/mail:ro'
+                - 'log:/var/log/exim:rw'
+                - 'spool:/var/spool/exim:rw'
+
+'heka':
+    Image: 'nfnty/arch-heka:latest'
+    UGID: 290000
+
+    Names: {}
+
+    Paths:
+        'cache':
+            Mode: 'u=rwX,g=,o='
+        'etc':
+            Mode: 'u=rX,g=,o='
+        '/var/log/ulogd':
+            Mode: 'u=rwX,g=rX,o='
+            User: 'root'
+            Group: 'root'
+            ACL: 'default:user:290000:rX,user:290000:rX,default:user:130000:rX,user:130000:rX'
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            Binds:
+                - 'cache:/var/cache/hekad:rw'
+                - 'etc:/etc/heka:ro'
+                - '/var/log/ulogd:/mnt/ulogd:ro'
+
+'hostapd':
+    Image: 'nfnty/arch-hostapd:latest'
+    UGID: 270000
+
+    Names:
+        'hostapd':
+            Create:
+                Entrypoint:
+                    - '/usr/bin/hostapd'
+                    - '/etc/hostapd/wlan_24n0/hostapd.conf'
+                    - '/etc/hostapd/wlan_50n0/hostapd.conf'
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+
+    Create:
+        Hostname: Null
+        HostConfig:
+            CpuShares: 2048
+            CapAdd:
+                - 'NET_ADMIN'
+                - 'NET_RAW'
+            NetworkMode: 'host'
+            Dns: Null
+            Binds:
+                - 'etc:/etc/hostapd:ro'
+
+'kea-dhcp4':
+    Image: 'nfnty/arch-kea:latest'
+    UGID: 260000
+
+    Names:
+        'kea-dhcp4':
+            Depends:
+                - 'hostapd'
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        Hostname: Null
+        HostConfig:
+            CpuShares: 2048
+            CapAdd:
+                - 'NET_BIND_SERVICE'
+                - 'NET_RAW'
+            NetworkMode: 'host'
+            Dns: Null
+            Binds:
+                - 'etc:/etc/kea:ro'
+                - 'lib:/var/lib/kea:rw'
+                - 'log:/var/log/kea:rw'
+                - 'run:/run/kea:rw'
+
+'kibana':
+    Image: 'nfnty/arch-kibana:latest'
+    UGID: 120000
+
+    Names:
+        'kibana':
+            Depends:
+                - 'elasticsearch'
+
+    Paths:
+        'config':
+            Mode: 'u=rX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        Env:
+            - 'NODE_OPTIONS=--max-old-space-size=250'
+        HostConfig:
+            CpuShares: 512
+            Binds:
+                - 'config:/opt/kibana/config:ro'
+                - 'log:/var/log/kibana:rw'
+                - 'tmp:/tmp:rw'
+
+'letsencrypt':
+    Image: 'nfnty/arch-letsencrypt:latest'
+    UGID: 99998
+
+    Names: {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rwX,g=,o='
+            Exclude:
+                - 'cli.ini'
+        'etc/cli.ini':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        '/srv/docker/nginx-proxy-wan/webroot/letsencrypt':
+            Mode: 'u=rwX,g=rwX,o='
+            User: 'root'
+            Group: 'root'
+            ACL: 'default:user:160000:rX,user:160000:rX,default:user:99998:rwX,user:99998:rwX'
+
+    Create:
+        HostConfig:
+            NetworkMode: 'bridge'
+            Dns:
+                - '10.7.2.1'
+            Binds:
+                - 'etc:/etc/letsencrypt:rw'
+                - 'lib:/var/lib/letsencrypt:rw'
+                - 'log:/var/log/letsencrypt:rw'
+                - '/srv/docker/nginx-proxy-wan/webroot/letsencrypt:/mnt/webroot:rw'
+
+'logstash':
+    Image: 'nfnty/arch-logstash:latest'
+    UGID: 130000
+
+    Names:
+        'logstash':
+            Depends:
+                - 'elasticsearch'
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+        '/var/log/ulogd':
+            Mode: 'u=rwX,g=rX,o='
+            User: 'root'
+            Group: 'root'
+            ACL: 'default:user:290000:rX,user:290000:rX,default:user:130000:rX,user:130000:rX'
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            ExtraHosts:
+                - 'logstash:127.0.0.1'
+            Binds:
+                - 'etc:/etc/logstash:ro'
+                - 'lib:/var/lib/logstash:rw'
+                - 'log:/var/log/logstash:rw'
+                - '/var/log/ulogd:/mnt/ulogd:ro'
+
+'nginx':
+    Image: 'nfnty/arch-nginx:latest'
+    UGID: 160000
+
+    Names:
+        'nginx-proxy-wan': {}
+        'nginx-proxy': {}
+        'nginx-mirror':
+            Create:
+                HostConfig:
+                    Binds:
+                        - 'etc:/etc/nginx:ro'
+                        - 'lib:/var/lib/nginx:rw'
+                        - 'log:/var/log/nginx:rw'
+                        - 'run:/run/nginx:rw'
+                        - 'webroot:/srv/http:ro'
+                        - '/srv/docker/builder/lib/pkg:/mnt/mirror/archlinux/nfnty/os/x86_64:ro'
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+        'webroot':
+            Mode: 'u=rX,g=,o='
+            Exclude:
+                - 'letsencrypt'
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            CapAdd:
+                - 'NET_BIND_SERVICE'
+            Binds:
+                - 'etc:/etc/nginx:ro'
+                - 'lib:/var/lib/nginx:rw'
+                - 'log:/var/log/nginx:rw'
+                - 'run:/run/nginx:rw'
+                - 'webroot:/srv/http:ro'
+
+'ntp':
+    Image: 'nfnty/arch-ntp:latest'
+    UGID: 230000
+
+    Names:
+        'ntp': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *MIB_512
+            MemorySwap: *MIB_512
+            MemoryReservation: *MIB_384
+            CpuShares: 2048
+            CapAdd:
+                - 'IPC_LOCK'
+                - 'NET_BIND_SERVICE'
+                - 'SYS_TIME'
+            Binds:
+                - 'etc:/etc/ntp:ro'
+                - 'lib:/var/lib/ntp:rw'
+
+'openhab':
+    Image: 'nfnty/arch-openhab-telldus:latest'
+    UGID: 170000
+
+    Names:
+        'openhab':
+            Depends:
+                - 'postgresql'
+
+    Paths:
+        'addons':
+            Mode: 'u=rX,g=,o='
+        'config':
+            Mode: 'u=rX,g=,o='
+        'etc_openhab':
+            Mode: 'u=rX,g=,o='
+        'etc_telldus':
+            Mode: 'u=rX,g=,o='
+        'lib_openhab':
+            Mode: 'u=rwX,g=,o='
+        'lib_telldus':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+        'webapps':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            Binds:
+                - 'addons:/opt/openhab/addons:ro'
+                - 'config:/opt/openhab/configurations:ro'
+                - 'etc_openhab:/opt/openhab/etc:ro'
+                - 'etc_telldus/tellstick.conf:/etc/tellstick.conf:ro'
+                - 'lib_openhab:/var/lib/openhab:rw'
+                - 'lib_telldus:/var/lib/telldus:rw'
+                - 'log:/var/log/openhab:rw'
+                - 'tmp:/tmp:rw'
+                - 'webapps:/opt/openhab/webapps/static:rw'
+            Devices:
+                - {PathOnHost: '/dev/tellstickduo0', PathInContainer: '', CgroupPermissions: 'rw'}
+
+'openvpn':
+    Image: 'nfnty/arch-openvpn:latest'
+    UGID: 190000
+
+    Names:
+        'openvpn-admin-tcp': {}
+        'openvpn-admin-udp': {}
+        'openvpn-home-tcp': {}
+        'openvpn-home-udp': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=rX,o='
+            Group: 'root'
+        'lib':
+            Mode: 'u=rwX,g=rwX,o='
+            Group: 'root'
+        'log':
+            Mode: 'u=rwX,g=rwX,o='
+            Group: 'root'
+        'tmp':
+            Mode: 'u=rwX,g=rwX,o='
+            Group: 'root'
+        'tun':
+            Mode: 'u=rw,g=rw,o=rw'
+            User: 'root'
+            Group: 'root'
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            CapAdd:
+                - 'NET_ADMIN'
+                - 'NET_RAW'
+                - 'SETGID'
+                - 'SETUID'
+            Binds:
+                - 'etc:/etc/openvpn:ro'
+                - 'lib:/var/lib/openvpn:rw'
+                - 'log:/var/log/openvpn:rw'
+                - 'tmp:/tmp:rw'
+            Devices:
+                - {PathOnHost: 'tun', PathInContainer: '/dev/net/tun', CgroupPermissions: 'rw'}
+
+    Setup:
+        Entrypoint:
+            - '/usr/bin/openvpn'
+            - '--genkey'
+            - '--secret'
+            - '/etc/openvpn/ssl/ta.key'
+        HostConfig:
+            Binds:
+                - 'etc:/etc/openvpn:rw'
+
+'owncloud':
+    Image: 'nfnty/arch-owncloud:latest'
+    UGID: 160000
+
+    Names: {}
+
+    Paths:
+        'apps':
+            Mode: 'u=rwX,g=,o='
+        'data':
+            Mode: 'u=rwX,g=,o='
+        'config':
+            Mode: 'u=rwX,g=,o='
+        'etc_nginx':
+            Mode: 'u=rX,g=,o='
+        'etc_php':
+            Mode: 'u=rX,g=,o='
+        'lib_nginx':
+            Mode: 'u=rwX,g=,o='
+        'log_nginx':
+            Mode: 'u=rwX,g=,o='
+        'run_nginx':
+            Mode: 'u=rwX,g=,o='
+        'run_php':
+            Mode: 'u=rwX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            CapAdd:
+                - 'NET_BIND_SERVICE'
+            Binds:
+                - 'apps:/usr/share/webapps/owncloud/apps:rw'
+                - 'config:/usrshare/webapps/owncloud/config:rw'
+                - 'data:/usr/share/webapps/owncloud/data:rw'
+                - 'etc_nginx:/etc/nginx:ro'
+                - 'etc_php:/etc/php:ro'
+                - 'lib_nginx:/var/lib/nginx:rw'
+                - 'log_nginx:/var/log/nginx:rw'
+                - 'run_nginx:/run/nginx/:rw'
+                - 'run_php:/run/php-fpm:rw'
+                - 'tmp:/tmp:rw'
+                - '/mnt/1/share:/mnt/1:rw'
+
+'pimd':
+    Image: 'nfnty/arch-pimd:latest'
+    UGID: 300000
+
+    Names: {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            CpuShares: 2048
+            CapAdd:
+                - 'NET_ADMIN'
+                - 'NET_RAW'
+            NetworkMode: 'host'
+            Binds:
+                - 'etc/pimd.conf:/etc/pimd.conf:ro'
+                - 'run:/var/run:rw'
+
+'plex':
+    Image: 'nfnty/arch-plex:latest'
+    UGID: 320000
+
+    Names: {}
+
+    Paths:
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'tmp':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            Binds:
+                - 'lib:/var/lib/plexmediaserver:rw'
+                - 'tmp:/tmp:rw'
+                - '/mnt/1/share/Anime:/mnt/Anime:ro'
+                - '/mnt/1/share/Home:/mnt/Home:ro'
+                - '/mnt/1/share/Movies:/mnt/Movies:ro'
+                - '/mnt/1/share/Series:/mnt/Series:ro'
+
+'postgresql':
+    Image: 'nfnty/arch-postgresql:latest'
+    UGID: 180000
+
+    Names:
+        'postgresql': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            Binds:
+                - 'etc:/etc/postgres:ro'
+                - 'lib:/var/lib/postgres:rw'
+                - 'run:/run/postgresql:rw'
+
+    Setup:
+        Entrypoint:
+            - '/usr/bin/initdb'
+        HostConfig:
+            Binds:
+                - 'lib:/var/lib/postgres:rw'
+
+'powerdns-recursor':
+    Image: 'nfnty/arch-powerdns-recursor:latest'
+    UGID: 240000
+
+    Names:
+        'powerdns-recursor': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            CpuShares: 2048
+            CapAdd:
+                - 'NET_BIND_SERVICE'
+            Binds:
+                - 'etc:/etc/powerdns:ro'
+                - 'run:/run:rw'
+
+'samba':
+    Image: 'nfnty/arch-samba:latest'
+    UGID: 140000
+
+    Names: {}
+
+    Paths:
+        'cache':
+            Mode: 'u=rwX,g=rX,o=rX'
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            CapAdd:
+                - 'NET_BIND_SERVICE'
+            Binds:
+                - 'cache:/var/cache/samba:rw'
+                - 'etc:/etc/samba:ro'
+                - 'lib:/var/lib/samba:rw'
+                - 'log:/var/log/samba:rw'
+                - 'run:/run/samba:rw'
+                - '/mnt/1/share:/mnt/1:rw'
+
+'transmission':
+    Image: 'nfnty/arch-transmission:latest'
+    UGID: 100000
+
+    Names:
+        'transmission': {}
+
+    Paths:
+        'lib':
+            Mode: 'u=rwX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=,o='
+        'opt':
+            Mode: 'u=rX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            CpuShares: 512
+            Binds:
+                - 'lib:/var/lib/transmission:rw'
+                - 'log:/var/log/transmission:ro'
+                - 'opt:/opt/transmission:ro'
+                - '/mnt/1/share/torrent:/mnt/torrent:rw'

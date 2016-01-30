@@ -1,0 +1,17 @@
+Socket: '/run/docker.sock'
+BindRoot: '/srv/docker'
+
+Backups: 1
+
+BackupPrefix: 'bak_'
+SystemdPrefix: 'docker_'
+TmpPrefix: 'tmp_'
+
+Limits:
+    Threads: 8
+    # slightly larger than a multiple of 3, which is the default TCP packet retransmission window
+    TimeoutConnect: 31
+    TimeoutRead: 181
+
+Headers:
+    user-agent: 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
