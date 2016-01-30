@@ -17,16 +17,16 @@ ENV PATH='/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl' \
     LC_ADDRESS='en_US.UTF-8' \
     LC_TELEPHONE='en_US.UTF-8' \
     LC_MEASUREMENT='en_DK.UTF-8' \
-    LC_IDENTIFICATION='en_US.UTF-8'
+    LC_IDENTIFICATION='en_US.UTF-8' \
+    TZ='UTC'
 
 COPY ["etc/", "/etc/"]
 COPY ["crypto/", "/tmp/crypto/"]
-RUN localedef --inputfile=en_US --charmap=UTF-8 en_US.UTF-8 && \
-    localedef --inputfile=en_DK --charmap=UTF-8 en_DK.UTF-8 && \
+RUN locale-gen && \
 
     chmod 'u=rwX,g=rX,o=rX' /etc/{locale.conf,locale.gen,pacman.conf,pacman.d,pacman.d/mirrorlist} && \
 
-    ln --symbolic /usr/share/zoneinfo/UTC /etc/localtime && \
+    ln --symbolic "/usr/share/zoneinfo/${TZ}" /etc/localtime && \
 
     pacman-key --init && \
     pacman-key --populate archlinux && \
