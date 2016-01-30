@@ -1,6 +1,5 @@
 ''' Image '''
 
-
 import os
 import re
 
