@@ -2,7 +2,6 @@
 
 import json
 import os
-from uuid import uuid4
 
 import yaml
 
@@ -28,7 +27,7 @@ class Container:
     def __init__(self, basename, name=None, config=None,
                  identity=None, path_basename=False, command=None):
         self.basename = basename
-        self.name = name if name else '{0:s}-{1:s}'.format(self.basename, uuid4().hex)
+        self.name = name if name else string.add_uuid(self.basename)
         self.config = config
         self.identity = identity
         self.path = os.path.join(META['BindRoot'], self.basename if path_basename else self.name)
@@ -93,6 +92,12 @@ class Container:
         return api.request(api.post, '/containers/{0:s}/attach'.format(self.identity),
                            {'logs': True, 'stream': True, 'stdout': True, 'stderr': True},
                            stream=True)
+
+    def create_setup(self):
+        ''' Setup '''
+        response = api.request(api.post, '/containers/create', {'name': self.name},
+                               json.dumps(self.config['Setup']))
+        self.identity = response.json()['Id']
 
     def create(self):
         ''' Create '''

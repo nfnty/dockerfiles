@@ -83,7 +83,8 @@ def decode_attach(filedesc):
         else:
             raise RuntimeError('Unknown stream_type {0:s}'.format(str(chunk[0])))
 
-        yield stream_type, filedesc.read(int.from_bytes(chunk[4:], byteorder='big'))
+        yield stream_type, \
+            filedesc.read(int.from_bytes(chunk[4:], byteorder='big')).decode('UTF-8')
 
 
 def decode_build(response):

@@ -9,6 +9,7 @@ import threading
 
 from termcolor import cprint
 
+from utils.meta import failed
 from utils.api import request, delete, get, decode_build
 from utils.image import IMAGES, META, Image, dockerfile_from
 from utils.network import DiGraph
@@ -90,12 +91,12 @@ class ThreadBuild(threading.Thread):
                 self._return(False, log)
                 continue
 
-            failed = False
+            fail = False
             for status, decoded in decode_build(response):
                 log += decoded
                 if not status:
-                    failed = True
-            if failed:
+                    fail = True
+            if fail:
                 self._return(False, log)
                 continue
 
@@ -104,15 +105,14 @@ class ThreadBuild(threading.Thread):
 
 class Network(DiGraph):
     ''' Network of images '''
-    def __init__(self, images_dict):
+    def __init__(self, config_images):
         super(Network, self).__init__()
-        self.failed = set()
 
-        for image, image_dict in images_dict.items():
-            image_dict['From'] = dockerfile_from(image)
-            self.add_node(image, {'Object': Image(image, image_dict)})
-            if not image_dict['From'] == 'scratch':
-                self.add_edge(image_dict['From'], image)
+        for image, config_image in config_images.items():
+            config_image['From'] = dockerfile_from(image)
+            self.add_node(image, {'Object': Image(image, config_image)})
+            if not config_image['From'] == 'scratch':
+                self.add_edge(config_image['From'], image)
 
     def prune_disabled(self, images_dict, saveset):
         ''' Prune disabled images '''
@@ -131,9 +131,9 @@ class Network(DiGraph):
 
     def attr_successors(self):
         ''' Add successors attributes to nodes '''
-        for node in self.nodes_iter():
-            self.node[node]['Successors'] = self.successors_all(node)
-            self.node[node]['SuccessorsLen'] = len(self.node[node]['Successors'])
+        for node, values in self.node.items():
+            values['Successors'] = self.successors_all(node)
+            values['SuccessorsLen'] = len(values['Successors'])
 
     def build(self, threads_max):
         ''' Build '''
@@ -194,10 +194,9 @@ def main():
         cprint('\nCleaning up dangling images', 'magenta')
         try:
             response = request(get, '/images/json',
-                               params={'filters': json.dumps({'dangling': ['true']})})
+                               {'filters': json.dumps({'dangling': ['true']})})
         except RuntimeError as error:
-            cprint('list dangling: {0:s}'.format(str(error)), 'red')
-            sys.exit(1)
+            failed('list dangling: {0:s}'.format(str(error)))
 
         for image in response.json():
             try:

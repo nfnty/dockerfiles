@@ -8,7 +8,7 @@ import queue
 import sys
 import threading
 
-from termcolor import cprint
+from termcolor import cprint, colored
 
 from utils.network import DiGraph
 from utils import string
@@ -95,7 +95,7 @@ class ThreadBuild(threading.Thread):
 
     def _mode_create(self, container):
         ''' Create container '''
-        container.name = string.tmp_add(container.name)
+        container.name = string.add_tmp(container.name)
         try:
             container.create()
         except RuntimeError as error:
@@ -116,7 +116,7 @@ class ThreadBuild(threading.Thread):
         self._return(True, 'No backup to stop\n')
 
     def _mode_rename(self, container, backups):
-        ''' Rename '''
+        ''' Rename backups and container'''
         log = ''
         try:
             renamed = backups_rename(self.name, backups)
@@ -129,7 +129,7 @@ class ThreadBuild(threading.Thread):
 
         old = container.name
         try:
-            container.rename(string.tmp_rm(container.name))
+            container.rename(string.rm_tmp(container.name))
         except RuntimeError as error:
             log += 'Rename container: {0:s}\n'.format(str(error))
             self._return(False, log)
@@ -163,7 +163,7 @@ class ThreadBuild(threading.Thread):
         self._return(True, log)
 
     def _mode_cleanup(self, backups):
-        ''' Cleanup '''
+        ''' Cleanup backups '''
         try:
             removed = backups_cleanup(self.name, backups)
         except RuntimeError as error:
@@ -171,6 +171,36 @@ class ThreadBuild(threading.Thread):
             return
         self._return(True, '{0:s}\nCleanup done\n'.format(
             '\n'.join(('Removed: ' + name for name in removed))))
+
+    def _mode_setup(self, container):
+        ''' Setup container '''
+        log = 'Starting setup\n'
+
+        container.name = string.add_uuid(container.name)
+        try:
+            container.create_setup()
+            log += 'Created: {0:s}\n'.format(container.name)
+
+            container.start()
+            log += 'Started\n'
+
+            response = container.attach()
+            log += 'Attached\n'
+            for stream_type, output in decode_attach(response.raw):
+                if stream_type == 'stdout':
+                    log += output
+                elif stream_type == 'stderr':
+                    log += colored(output, 'yellow')
+
+            container.remove()
+            log += 'Removed\n'
+        except RuntimeError as error:
+            log += 'Error: {1:s}\n'.format(str(error))
+            self._return(False, log)
+            return
+
+        log += 'Setup done\n'
+        self._return(True, log)
 
     def run(self):
         while True:
@@ -194,6 +224,8 @@ class ThreadBuild(threading.Thread):
                 self._mode_start(container)
             elif self.mode == 'cleanup':
                 self._mode_cleanup(backups)
+            elif self.mode == 'setup':
+                self._mode_setup(container)
             else:
                 raise RuntimeError('Incorrect mode: {0:s}'.format(self.mode))
 
@@ -202,7 +234,6 @@ class Network(DiGraph):
     ''' Network of containers '''
     def __init__(self, config_containers):
         super(Network, self).__init__()
-        self.failed = set()
 
         for container, config_container in config_containers.items():
             for name, config_name in config_container['Names'].items():
@@ -215,18 +246,18 @@ class Network(DiGraph):
     def attr_backups(self):
         ''' Add Backups attributes to nodes '''
         existing = get_existing()
-        for node in self.nodes_iter():
-            self.node[node]['Backups'] = []
+        for node, values in self.node.items():
+            values['Backups'] = []
             regex = string.re_backup(node)
 
             backups = []
             for name, identity in existing:
                 if name == node:
-                    self.node[node]['Backups'].append(
-                        Container(self.node[node]['Object'].basename, name, identity=identity))
+                    values['Backups'].append(
+                        Container(values['Object'].basename, name, identity=identity))
                 elif regex.match(name):
                     backups.append(
-                        Container(self.node[node]['Object'].basename, name, identity=identity))
+                        Container(values['Object'].basename, name, identity=identity))
 
             self.node[node]['Backups'] += sorted(
                 backups, key=lambda container, node=node: string.backup_num(node, container.name))
@@ -331,15 +362,18 @@ class Network(DiGraph):
             threads.append(thread)
             thread.start()
 
-        for name in self.nodes_iter():
-            self.node[name]['Log'] = ''
+        for values in self.node.values():
+            values['Log'] = ''
 
-        self._build_all('create', queue_out, queue_in)
-        if ARGS.create:
-            self._build_all('rename', queue_out, queue_in)
+        if ARGS.setup:
+            self._build_all('setup', queue_out, queue_in)
         else:
-            self._build_restart(queue_out, queue_in)
-        self._build_all('cleanup', queue_out, queue_in)
+            self._build_all('create', queue_out, queue_in)
+            if ARGS.create:
+                self._build_all('rename', queue_out, queue_in)
+            else:
+                self._build_restart(queue_out, queue_in)
+            self._build_all('cleanup', queue_out, queue_in)
 
         for name in sorted(self.node.keys()):
             cprint('Build log: {0:s}'.format(name), 'white')
@@ -365,11 +399,11 @@ def config_args_validate(network):
                 's' if len(missing) >= 2 else '', str(missing)))
 
     error = ''
-    for node in network.nodes_iter():
-        if 'Create' not in network.node[node]['Object'].config:
+    for node, values in network.node.items():
+        if 'Create' not in values['Object'].config:
             error += '\'Create\' missing from config: {0:s}\n'.format(node)
         if ARGS.setup:
-            if 'Setup' not in network.node[node]['Object'].config:
+            if 'Setup' not in values['Object'].config:
                 error += '\'Setup\' missing from config: {0:s}\n'.format(node)
     if error:
         failed(error)
@@ -379,10 +413,10 @@ def main():
     ''' Main '''
     if ARGS.mode == 'manage':
         network = Network(CONTAINERS)
-        config_args_validate(network)
-        network.attr_backups()
         if ARGS.containers:
             network.remove_nodes_from_except(ARGS.containers, False)
+        config_args_validate(network)
+        network.attr_backups()
         network.build(META['Limits']['Threads'])
 
     elif ARGS.mode == 'run':
@@ -404,12 +438,11 @@ def main():
             container.start()
             cprint('Container started', 'green')
 
-            for stream_type, line in decode_attach(container.attach().raw):
-                line = line.decode('UTF-8')
+            for stream_type, output in decode_attach(container.attach().raw):
                 if stream_type == 'stdout':
-                    print(line, end='')
+                    print(output, end='')
                 elif stream_type == 'stderr':
-                    cprint(line, 'yellow', end='')
+                    cprint(output, 'yellow', end='')
 
         inspect = container.inspect()
         if 'State' in inspect and 'ExitCode' in inspect['State']:

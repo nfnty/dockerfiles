@@ -1,6 +1,7 @@
 ''' String manipulation '''
 
 import re
+import uuid
 
 from utils.meta import META
 
@@ -11,12 +12,17 @@ def re_backup(string):
         re.escape(META['BackupPrefix']), re.escape(string)))
 
 
-def tmp_add(string):
+def add_uuid(string):
+    ''' Add uuid to string '''
+    return '{0:s}-{1:s}'.format(string, uuid.uuid4().hex)
+
+
+def add_tmp(string):
     ''' Remove TmpPrefix from string '''
     return META['TmpPrefix'] + string
 
 
-def tmp_rm(string):
+def rm_tmp(string):
     ''' Remove TmpPrefix from string '''
     return string[META['TmpPrefixLen']:] if string.startswith(META['TmpPrefix']) else string
 

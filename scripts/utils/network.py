@@ -13,6 +13,7 @@ class DiGraph(networkx.DiGraph):
     ''' Network with generic methods '''
     def __init__(self):
         super(DiGraph, self).__init__()
+        self.failed = set()
 
     def successors_all(self, source):
         ''' Successors of source '''
