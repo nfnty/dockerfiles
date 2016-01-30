@@ -161,7 +161,7 @@ class Network(DiGraph):
                 cprint('Build finished: {0:s}\n'.format(name), 'green')
             else:
                 cprint('Build failed: {0:s}\n'.format(name), 'red')
-                self.failed |= set((name,)) + self.node[name]['Successors']
+                self.failed |= set((name,)) | self.node[name]['Successors']
                 network.remove_nodes_from(self.node[name]['Successors'])
 
             network.remove_node(name)
