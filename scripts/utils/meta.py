@@ -40,7 +40,6 @@ def yaml_meta():
     meta = yaml.load(open(os.path.join(PATH_REPO, 'meta.yaml')), Loader=yaml.CLoader)
     meta['BackupPrefixLen'] = len(meta['BackupPrefix'])
     meta['SystemdPrefixLen'] = len(meta['SystemdPrefix'])
-    meta['TmpPrefixLen'] = len(meta['TmpPrefix'])
     return meta
 
 META = yaml_meta()

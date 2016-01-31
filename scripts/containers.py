@@ -95,7 +95,7 @@ class ThreadBuild(threading.Thread):
 
     def _mode_create(self, container):
         ''' Create container '''
-        container.name = string.add_tmp(container.name)
+        container.name = string.add_uuid(container.name)
         try:
             container.create()
         except RuntimeError as error:
@@ -129,7 +129,7 @@ class ThreadBuild(threading.Thread):
 
         old = container.name
         try:
-            container.rename(string.rm_tmp(container.name))
+            container.rename(string.rm_uuid(container.name))
         except RuntimeError as error:
             log += 'Rename container: {0:s}\n'.format(str(error))
             self._return(False, log)

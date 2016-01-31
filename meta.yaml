@@ -5,7 +5,6 @@ Backups: 1
 
 BackupPrefix: 'bak_'
 SystemdPrefix: 'docker_'
-TmpPrefix: 'tmp_'
 
 Limits:
     Threads: 8

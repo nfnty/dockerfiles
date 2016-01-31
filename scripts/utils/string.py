@@ -13,18 +13,13 @@ def re_backup(string):
 
 
 def add_uuid(string):
-    ''' Add uuid to string '''
+    ''' Add UUID to string '''
     return '{0:s}-{1:s}'.format(string, uuid.uuid4().hex)
 
 
-def add_tmp(string):
-    ''' Remove TmpPrefix from string '''
-    return META['TmpPrefix'] + string
-
-
-def rm_tmp(string):
-    ''' Remove TmpPrefix from string '''
-    return string[META['TmpPrefixLen']:] if string.startswith(META['TmpPrefix']) else string
+def rm_uuid(string):
+    ''' Remove UUID from string '''
+    return re.sub(r'-[0-9a-f]{32}$', '', string)
 
 
 def backup_num(name, string):
