@@ -290,10 +290,11 @@ Meta:
     Names:
         'hostapd':
             Create:
-                Entrypoint:
-                    - '/usr/bin/hostapd'
-                    - '/etc/hostapd/wlan_24n0/hostapd.conf'
-                    - '/etc/hostapd/wlan_50n0/hostapd.conf'
+                Entrypoint: [
+                    '/usr/bin/hostapd',
+                    '/etc/hostapd/wlan_24n0/hostapd.conf',
+                    '/etc/hostapd/wlan_50n0/hostapd.conf',
+                ]
 
     Paths:
         'etc':
@@ -610,11 +611,7 @@ Meta:
                 - {PathOnHost: 'tun', PathInContainer: '/dev/net/tun', CgroupPermissions: 'rw'}
 
     Setup:
-        Entrypoint:
-            - '/usr/bin/openvpn'
-            - '--genkey'
-            - '--secret'
-            - '/etc/openvpn/ssl/ta.key'
+        Entrypoint: ['/usr/bin/openvpn', '--genkey', '--secret', '/etc/openvpn/ssl/ta.key']
         HostConfig:
             Binds:
                 - 'etc:/etc/openvpn:rw'
@@ -741,8 +738,7 @@ Meta:
                 - 'run:/run/postgresql:rw'
 
     Setup:
-        Entrypoint:
-            - '/usr/bin/initdb'
+        Entrypoint: ['/usr/bin/initdb']
         HostConfig:
             Binds:
                 - 'lib:/var/lib/postgres:rw'

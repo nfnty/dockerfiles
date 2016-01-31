@@ -2,7 +2,6 @@
 ''' Check image package versions '''
 
 import distutils.version
-import os
 import re
 import subprocess
 
@@ -10,7 +9,7 @@ import lxml.html
 import requests
 from termcolor import cprint
 
-from utils.image import IMAGES, META, path_image
+from utils.image import IMAGES, META, path_dockerfile
 
 
 def fetch(url, headers, timeout):
@@ -127,7 +126,7 @@ def main():
                     print('{0:15s}{1:s}'.format(source, source_dict['Version'].vstring))
 
                 dockerfile_update(
-                    os.path.join(path_image(image), 'Dockerfile'),
+                    path_dockerfile(image),
                     package_dict['Variable'],
                     package_dict['Sources'][package_dict['Download']]['Version'].vstring,
                 )

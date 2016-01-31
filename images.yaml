@@ -11,12 +11,11 @@ Meta:
     Paths:
         'nfnty': 'images'
 
-    Repos: [
-        'nfnty',
-        'core',
-        'extra',
-        'community',
-    ]
+    Repos:
+        - 'nfnty'
+        - 'core'
+        - 'extra'
+        - 'community'
 
     Params:
         memory: *GIB_1

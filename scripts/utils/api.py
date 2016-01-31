@@ -9,9 +9,9 @@ from utils.meta import META
 __all__ = ['request', 'get', 'post', 'delete', 'decode_attach', 'decode_build']
 
 
-DOCKERURL = 'http+docker://localunixsocket'
-DOCKERCONN = requests.Session()
-DOCKERCONN.mount(
+URL = 'http+docker://localunixsocket'
+SESSION = requests.Session()
+SESSION.mount(
     'http+docker://',
     UnixAdapter('http+unix://{0:s}'.format(META['Socket']),
                 (META['Limits']['TimeoutConnect'], META['Limits']['TimeoutRead'])),
@@ -30,8 +30,8 @@ def request(function, *args, **kwargs):
 
 def get(url_rel, params=None, stream=False):
     ''' get socket request '''
-    response = DOCKERCONN.get(
-        '{0:s}{1:s}'.format(DOCKERURL, url_rel),
+    response = SESSION.get(
+        '{0:s}{1:s}'.format(URL, url_rel),
         headers={'Content-Type': 'application/json'},
         params=params,
         stream=stream,
@@ -45,8 +45,8 @@ def post(url_rel, params=None, data=None, stream=False, headers=None):
     if not headers:
         headers = {'Content-Type': 'application/json'}
 
-    response = DOCKERCONN.post(
-        '{0:s}{1:s}'.format(DOCKERURL, url_rel),
+    response = SESSION.post(
+        '{0:s}{1:s}'.format(URL, url_rel),
         headers=headers,
         params=params,
         data=data,
@@ -59,8 +59,8 @@ def post(url_rel, params=None, data=None, stream=False, headers=None):
 
 def delete(url_rel, params=None):
     ''' post socket request '''
-    response = DOCKERCONN.delete(
-        '{0:s}{1:s}'.format(DOCKERURL, url_rel),
+    response = SESSION.delete(
+        '{0:s}{1:s}'.format(URL, url_rel),
         headers={'Content-Type': 'application/json'},
         params=params,
         timeout=(META['Limits']['TimeoutConnect'], META['Limits']['TimeoutRead']),
