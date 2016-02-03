@@ -222,10 +222,10 @@ Meta:
             Binds:
                 - 'lib:/var/lib/emby:rw'
                 - 'tmp:/tmp:rw'
-                - '/mnt/1/share/Anime:/mnt/Anime:ro'
-                - '/mnt/1/share/Home:/mnt/Home:ro'
-                - '/mnt/1/share/Movies:/mnt/Movies:ro'
-                - '/mnt/1/share/Series:/mnt/Series:ro'
+                - '/mnt/1/share/Anime:/mnt/Anime:rw'
+                - '/mnt/1/share/Home:/mnt/Home:rw'
+                - '/mnt/1/share/Movies:/mnt/Movies:rw'
+                - '/mnt/1/share/Series:/mnt/Series:rw'
 
 'exim':
     Image: 'nfnty/arch-exim:latest'

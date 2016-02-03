@@ -14,4 +14,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
 USER ${UGNAME}
 VOLUME ["/var/cache/hekad"]
 EXPOSE 4352/tcp
-ENTRYPOINT ["/usr/bin/hekad", "-config", "/etc/heka/conf.d"]
+ENTRYPOINT ["/usr/bin/hekad", "-config=/etc/heka/conf.d/"]
