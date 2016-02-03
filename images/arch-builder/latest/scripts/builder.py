@@ -272,7 +272,7 @@ def prepare_remote(url, path):
 def path_find(base_path, name):
     ''' Find PATH_PKGBUILD path for name '''
     for root, dirnames, _ in os.walk(base_path):
-        if name in dirnames:
+        if name in dirnames and os.path.exists(os.path.join(root, name, 'PKGBUILD')):
             return os.path.join(root, name)
     return None
 
@@ -298,7 +298,7 @@ def package_make():
         failed('Failed to make package!\n{0:s}'.format(str(error)))
 
 
-def main():  # pylint: disable=too-many-branches
+def main():  # pylint: disable=too-many-branches,too-many-statements
     ''' Main '''
     print_separator()
 
@@ -357,6 +357,10 @@ def main():  # pylint: disable=too-many-branches
 
     # Clean builddir
     if not ARGS.noclean:
+        try:
+            subprocess.run(['/usr/bin/chmod', '--recursive', 'u+rwX', PATH_BUILDDIR], check=True)
+        except subprocess.CalledProcessError as error:
+            failed(str(error))
         shutil.rmtree(PATH_BUILDDIR)
         os.mkdir(PATH_BUILDDIR)
 
