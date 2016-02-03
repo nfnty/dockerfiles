@@ -36,7 +36,9 @@ Meta:
     UGID: 310000
 
     Names:
-        'avahi': {}
+        'avahi':
+            Depends:
+                - 'hostapd'
 
     Paths:
         'etc':
