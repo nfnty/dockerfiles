@@ -27,12 +27,12 @@ def container_pid(name):
             continue
 
         pid = process.stdout.decode('UTF-8').rstrip('\n')
-        if pid.isdigit():
+        if pid.isdigit() and int(pid) >= 1:
             break
 
         time.sleep(0.1)
     else:
-        print('PID is not a digit: {0:s}'.format(pid), file=sys.stderr)
+        print('PID is invalid: {0:s}'.format(pid), file=sys.stderr)
         return None
 
     return pid
