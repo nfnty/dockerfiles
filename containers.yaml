@@ -826,6 +826,6 @@ Meta:
             CpuShares: 512
             Binds:
                 - 'lib:/var/lib/transmission:rw'
-                - 'log:/var/log/transmission:ro'
+                - 'log:/var/log/transmission:rw'
                 - 'opt:/opt/transmission:ro'
                 - '/mnt/1/share/torrent:/mnt/torrent:rw'
