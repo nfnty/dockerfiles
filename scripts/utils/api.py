@@ -112,3 +112,8 @@ def decode_build(response):
             continue
 
         yield True, decoded
+
+
+def image_inspect(identity):
+    ''' Inspect image '''
+    return request(get, '/images/{0:s}/json'.format(identity)).json()

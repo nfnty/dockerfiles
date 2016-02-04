@@ -45,6 +45,7 @@ def args_parse(arguments=None):
 
         # Optional
         par1.add_argument('--perms', action='store_true', help='Enforce permissions')
+        par1.add_argument('--orphans', action='store_true', help='Orphans only')
 
         # Positional
         par1.add_argument('containers', metavar='CONTAINER', action=ActionSet, nargs='*',
@@ -262,6 +263,16 @@ class Network(DiGraph):
             self.node[node]['Backups'] += sorted(
                 backups, key=lambda container, node=node: string.backup_num(node, container.name))
 
+    def orphans(self):
+        ''' container is an orphan if using an unnamed image '''
+        return set(
+            node
+            for node, values in self.node.items()
+            if len(values['Backups']) >= 1 and
+            values['Backups'][0].name == values['Object'].name and
+            values['Backups'][0].orphan()
+        )
+
     def _nodes(self):
         ''' nodes not failed '''
         if ARGS.containers:
@@ -409,14 +420,19 @@ def config_args_validate(network):
         failed(error)
 
 
-def main():
+def main():  # pylint: disable=too-many-branches
     ''' Main '''
     if ARGS.mode == 'manage':
         network = Network(CONTAINERS)
+        network.attr_backups()
+        if ARGS.orphans:
+            orphans = network.orphans()
+            if not orphans:
+                failed('Found no orphans')
+            ARGS.containers |= orphans
         if ARGS.containers:
             network.remove_nodes_from_except(ARGS.containers, False)
         config_args_validate(network)
-        network.attr_backups()
         network.build(META['Limits']['Threads'])
 
     elif ARGS.mode == 'run':

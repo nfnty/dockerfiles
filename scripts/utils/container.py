@@ -109,6 +109,11 @@ class Container:
         ''' Inspect '''
         return api.request(api.get, '/containers/{0:s}/json'.format(self.identity)).json()
 
+    def orphan(self):
+        ''' Orphan? '''
+        inspect = self.inspect()
+        return inspect['Config']['Image'] not in api.image_inspect(inspect['Image'])['RepoTags']
+
     def permissions(self):
         ''' Enforce permissions '''
         log = ''
