@@ -17,7 +17,6 @@ Meta:
             Memory: *GIB_1
             MemorySwap: *GIB_1 # MemorySwap - Memory = 0
             MemoryReservation: *GIB_0_75
-            KernelMemory: 4194304 # 4MiB (min set in docker)
             CpuShares: 1024 # Kernel default
             CapDrop:
                 - 'ALL'
