@@ -1,5 +1,6 @@
 ''' Container '''
 
+from collections import OrderedDict
 import json
 import os
 
@@ -39,9 +40,10 @@ class Container:
 
     def _config(self):
         ''' Finalize config '''
+        if 'UGID' not in self.config:
+            raise RuntimeError('UGID not in config: {0:s}'.format(self.name))
         if 'Names' in self.config:
             del self.config['Names']
-
         if 'Paths' in self.config:
             self._config_paths(self.config['Paths'])
 
@@ -61,6 +63,8 @@ class Container:
                     self._config_binds(host_config['Binds'])
                 if 'Devices' in host_config:
                     self._config_devices(host_config['Devices'])
+                if 'Tmpfs' in host_config:
+                    self._config_tmpfs(host_config['Tmpfs'])
 
     def _config_paths(self, paths):
         ''' Convert relative paths into absolute '''
@@ -86,6 +90,35 @@ class Container:
 
             if not dictionary['PathInContainer']:
                 dictionary['PathInContainer'] = dictionary['PathOnHost']
+
+    def _config_tmpfs(self, tmpfs_dict):
+        ''' Add Tmpfs options '''
+        for path, options in tmpfs_dict.items():
+            option_dict = OrderedDict()
+            for option in options.split(','):
+                option = option.split('=')
+                length = len(option)
+                if length == 1:
+                    option_dict[option[0]] = None
+                elif length == 2:
+                    option_dict[option[0]] = option[1]
+                else:
+                    raise RuntimeError(
+                        'tmpfs option has more than one equal sign: {0:s}'.format(str(option)))
+
+            if 'uid' not in option_dict:
+                option_dict['uid'] = str(self.config['UGID'])
+            if 'gid' not in option_dict:
+                option_dict['gid'] = str(self.config['UGID'])
+
+            options = []
+            for option, value in option_dict.items():
+                if value is None:
+                    options.append(option)
+                else:
+                    options.append('{0:s}={1:s}'.format(option, value))
+            tmpfs_dict[path] = ','.join(options)
+
 
     def attach(self):
         ''' Attach '''

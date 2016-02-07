@@ -10,7 +10,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "openvpn=${VERSION_OPENVPN}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     install --directory --owner="${UGNAME}" --group=root --mode=770 \
-        /var/lib/openvpn /var/log/openvpn
+        /var/lib/openvpn /var/log/openvpn /tmp
 
 USER root
 VOLUME ["/var/lib/openvpn", "/var/log/openvpn"]

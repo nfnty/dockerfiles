@@ -8,8 +8,9 @@ Meta:
         GIB_2: &GIB_2 2147483648
         GIB_3_5: &GIB_3_5 3758096384
         GIB_4: &GIB_4 4294967296
-
-    # tmpfs: 'size=128M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
+        TMP_MIB_32: &TMP_MIB_32 'size=32M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
+        TMP_MIB_64: &TMP_MIB_64 'size=64M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
+        TMP_MIB_128: &TMP_MIB_128 'size=128M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
 
     Default:
         StopSignal: 'SIGTERM'
@@ -42,15 +43,14 @@ Meta:
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
-        'run':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
             CpuShares: 2048
             Binds:
                 - 'etc:/etc/avahi:ro'
-                - 'run:/run/avahi-daemon:rw'
+            Tmpfs:
+                '/run/avahi-daemon': *TMP_MIB_32
 
 'bootstrap':
     Image: 'nfnty/arch-bootstrap:latest'
@@ -63,8 +63,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'pkgcache':
             Mode: 'u=rwX,g=rX,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
         '/opt/docker/images/arch-mini/latest/bootstrap':
             Mode: 'u=rwX,g=,o='
 
@@ -84,8 +82,9 @@ Meta:
             Binds:
                 - 'gnupg:/var/lib/bootstrap/gnupg:rw'
                 - 'pkgcache:/var/cache/pacman/pkg:rw'
-                - 'tmp:/tmp:rw'
                 - '/opt/docker/images/arch-mini/latest/bootstrap:/var/lib/bootstrap/archive:rw'
+            Tmpfs:
+                '/tmp': 'nr_inodes=10K,mode=700,rw,nosuid,nodev,exec,async,noatime'
 
 'builder':
     Image: 'nfnty/arch-builder:latest'
@@ -149,10 +148,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'log':
             Mode: 'u=rwX,g=,o='
-        'run':
-            Mode: 'u=rwX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -166,8 +161,9 @@ Meta:
                 - 'etc:/etc/dovecot:ro'
                 - 'lib:/var/lib/dovecot:rw'
                 - 'log:/var/log/dovecot:rw'
-                - 'run:/run/dovecot:rw'
-                - 'tmp:/tmp:rw'
+            Tmpfs:
+                '/run/dovecot': *TMP_MIB_32
+                '/tmp': *TMP_MIB_32
 
 'elasticsearch':
     Image: 'nfnty/arch-elasticsearch:latest'
@@ -185,8 +181,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'plugins':
             Mode: 'u=rX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -200,7 +194,8 @@ Meta:
                 - 'lib:/var/lib/elasticsearch:rw'
                 - 'log:/var/log/elasticsearch:rw'
                 - 'plugins:/opt/elasticsearch/plugins:ro'
-                - 'tmp:/tmp:rw'
+            Tmpfs:
+                '/tmp': *TMP_MIB_32
 
 'emby':
     Image: 'nfnty/arch-emby:latest'
@@ -212,8 +207,6 @@ Meta:
     Paths:
         'lib':
             Mode: 'u=rwX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -222,11 +215,12 @@ Meta:
             MemoryReservation: *GIB_3_5
             Binds:
                 - 'lib:/var/lib/emby:rw'
-                - 'tmp:/tmp:rw'
                 - '/mnt/1/share/Anime:/mnt/Anime:rw'
                 - '/mnt/1/share/Home:/mnt/Home:rw'
                 - '/mnt/1/share/Movies:/mnt/Movies:rw'
                 - '/mnt/1/share/Series:/mnt/Series:rw'
+            Tmpfs:
+                '/tmp': *TMP_MIB_32
 
 'exim':
     Image: 'nfnty/arch-exim:latest'
@@ -329,8 +323,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'log':
             Mode: 'u=rwX,g=,o='
-        'run':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         Hostname: Null
@@ -345,7 +337,8 @@ Meta:
                 - 'etc:/etc/kea:ro'
                 - 'lib:/var/lib/kea:rw'
                 - 'log:/var/log/kea:rw'
-                - 'run:/run/kea:rw'
+            Tmpfs:
+                '/run/kea': *TMP_MIB_32
 
 'kibana':
     Image: 'nfnty/arch-kibana:latest'
@@ -361,8 +354,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'log':
             Mode: 'u=rwX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         Env:
@@ -372,7 +363,8 @@ Meta:
             Binds:
                 - 'config:/opt/kibana/config:ro'
                 - 'log:/var/log/kibana:rw'
-                - 'tmp:/tmp:rw'
+            Tmpfs:
+                '/tmp': *TMP_MIB_32
 
 'letsencrypt':
     Image: 'nfnty/arch-letsencrypt:latest'
@@ -424,8 +416,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'log':
             Mode: 'u=rwX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
         '/var/log/ulogd':
             Mode: 'u=rwX,g=rX,o='
             User: 'root'
@@ -459,7 +449,6 @@ Meta:
                         - 'etc:/etc/nginx:ro'
                         - 'lib:/var/lib/nginx:rw'
                         - 'log:/var/log/nginx:rw'
-                        - 'run:/run/nginx:rw'
                         - 'webroot:/srv/http:ro'
                         - '/srv/docker/builder/lib/pkg:/mnt/mirror/archlinux/nfnty/os/x86_64:ro'
 
@@ -469,8 +458,6 @@ Meta:
         'lib':
             Mode: 'u=rwX,g=,o='
         'log':
-            Mode: 'u=rwX,g=,o='
-        'run':
             Mode: 'u=rwX,g=,o='
         'webroot':
             Mode: 'u=rX,g=,o='
@@ -488,8 +475,9 @@ Meta:
                 - 'etc:/etc/nginx:ro'
                 - 'lib:/var/lib/nginx:rw'
                 - 'log:/var/log/nginx:rw'
-                - 'run:/run/nginx:rw'
                 - 'webroot:/srv/http:ro'
+            Tmpfs:
+                '/run/nginx': *TMP_MIB_32
 
 'ntp':
     Image: 'nfnty/arch-ntp:latest'
@@ -542,8 +530,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'log':
             Mode: 'u=rwX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
         'webapps':
             Mode: 'u=rwX,g=,o='
 
@@ -560,8 +546,9 @@ Meta:
                 - 'lib_openhab:/var/lib/openhab:rw'
                 - 'lib_telldus:/var/lib/telldus:rw'
                 - 'log:/var/log/openhab:rw'
-                - 'tmp:/tmp:rw'
                 - 'webapps:/opt/openhab/webapps/static:rw'
+            Tmpfs:
+                '/tmp': *TMP_MIB_32
             Devices:
                 - {PathOnHost: '/dev/tellstickduo0', PathInContainer: '', CgroupPermissions: 'rw'}
 
@@ -585,9 +572,6 @@ Meta:
         'log':
             Mode: 'u=rwX,g=rwX,o='
             Group: 'root'
-        'tmp':
-            Mode: 'u=rwX,g=rwX,o='
-            Group: 'root'
         'tun':
             Mode: 'u=rw,g=rw,o=rw'
             User: 'root'
@@ -607,7 +591,8 @@ Meta:
                 - 'etc:/etc/openvpn:ro'
                 - 'lib:/var/lib/openvpn:rw'
                 - 'log:/var/log/openvpn:rw'
-                - 'tmp:/tmp:rw'
+            Tmpfs:
+                '/tmp': 'size=32M,nr_inodes=10K,mode=770,rw,nosuid,nodev,noexec,async,noatime,gid=0'
             Devices:
                 - {PathOnHost: 'tun', PathInContainer: '/dev/net/tun', CgroupPermissions: 'rw'}
 
@@ -638,12 +623,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'log_nginx':
             Mode: 'u=rwX,g=,o='
-        'run_nginx':
-            Mode: 'u=rwX,g=,o='
-        'run_php':
-            Mode: 'u=rwX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -660,10 +639,11 @@ Meta:
                 - 'etc_php:/etc/php:ro'
                 - 'lib_nginx:/var/lib/nginx:rw'
                 - 'log_nginx:/var/log/nginx:rw'
-                - 'run_nginx:/run/nginx/:rw'
-                - 'run_php:/run/php-fpm:rw'
-                - 'tmp:/tmp:rw'
                 - '/mnt/1/share:/mnt/1:rw'
+            Tmpfs:
+                '/run/nginx': *TMP_MIB_32
+                '/run/php-fpm': *TMP_MIB_32
+                '/tmp': *TMP_MIB_32
 
 'pimd':
     Image: 'nfnty/arch-pimd:latest'
@@ -674,8 +654,6 @@ Meta:
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
-        'run':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -686,7 +664,8 @@ Meta:
             NetworkMode: 'host'
             Binds:
                 - 'etc/pimd.conf:/etc/pimd.conf:ro'
-                - 'run:/var/run:rw'
+            Tmpfs:
+                '/var/run': *TMP_MIB_32
 
 'plex':
     Image: 'nfnty/arch-plex:latest'
@@ -697,8 +676,6 @@ Meta:
     Paths:
         'lib':
             Mode: 'u=rwX,g=,o='
-        'tmp':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -707,11 +684,12 @@ Meta:
             MemoryReservation: *GIB_3_5
             Binds:
                 - 'lib:/var/lib/plexmediaserver:rw'
-                - 'tmp:/tmp:rw'
                 - '/mnt/1/share/Anime:/mnt/Anime:ro'
                 - '/mnt/1/share/Home:/mnt/Home:ro'
                 - '/mnt/1/share/Movies:/mnt/Movies:ro'
                 - '/mnt/1/share/Series:/mnt/Series:ro'
+            Tmpfs:
+                '/tmp': *TMP_MIB_32
 
 'postgresql':
     Image: 'nfnty/arch-postgresql:latest'
@@ -725,8 +703,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-        'run':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -736,7 +712,8 @@ Meta:
             Binds:
                 - 'etc:/etc/postgres:ro'
                 - 'lib:/var/lib/postgres:rw'
-                - 'run:/run/postgresql:rw'
+            Tmpfs:
+                '/run/postgresql': *TMP_MIB_32
 
     Setup:
         Entrypoint: ['/usr/bin/initdb']
@@ -754,8 +731,6 @@ Meta:
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
-        'run':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -767,7 +742,8 @@ Meta:
                 - 'NET_BIND_SERVICE'
             Binds:
                 - 'etc:/etc/powerdns:ro'
-                - 'run:/run:rw'
+            Tmpfs:
+                '/run': *TMP_MIB_32
 
 'samba':
     Image: 'nfnty/arch-samba:latest'
@@ -784,8 +760,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'log':
             Mode: 'u=rwX,g=,o='
-        'run':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -799,8 +773,9 @@ Meta:
                 - 'etc:/etc/samba:ro'
                 - 'lib:/var/lib/samba:rw'
                 - 'log:/var/log/samba:rw'
-                - 'run:/run/samba:rw'
                 - '/mnt/1/share:/mnt/1:rw'
+            Tmpfs:
+                '/run/samba': *TMP_MIB_32
 
 'transmission':
     Image: 'nfnty/arch-transmission:latest'
