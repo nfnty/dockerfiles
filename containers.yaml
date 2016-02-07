@@ -548,7 +548,7 @@ Meta:
                 - 'log:/var/log/openhab:rw'
                 - 'webapps:/opt/openhab/webapps/static:rw'
             Tmpfs:
-                '/tmp': *TMP_MIB_32
+                '/tmp': 'size=32M,nr_inodes=10K,mode=700,rw,nosuid,nodev,exec,async,noatime'
             Devices:
                 - {PathOnHost: '/dev/tellstickduo0', PathInContainer: '', CgroupPermissions: 'rw'}
 
