@@ -165,6 +165,8 @@ class Container:
                 log += meta.chmod([path], values['Mode'])
                 if 'ACL' in values:
                     log += meta.setfacl([path], values['ACL'])
+                else:
+                    log += meta.setfacl([path])
 
                 paths = meta.paths_include(path, values['Exclude'])
             else:
@@ -176,6 +178,8 @@ class Container:
                 log += meta.chmod(paths, values['Mode'], recursive=True)
                 if 'ACL' in values:
                     log += meta.setfacl(paths, values['ACL'], recursive=True)
+                else:
+                    log += meta.setfacl([path], recursive=True)
         return log
 
     def remove(self):

@@ -105,11 +105,14 @@ def chmod(paths, mode, recursive=False):
     return run(command)
 
 
-def setfacl(paths, acl_spec, recursive=False):
+def setfacl(paths, acl_spec=None, recursive=False):
     ''' Set path access control lists '''
-    command = ['/usr/bin/setfacl', '--remove-all', '--modify', acl_spec] + paths
+    command = ['/usr/bin/setfacl', '--remove-all']
+    if acl_spec:
+        command += ['--modify', acl_spec]
     if recursive:
         command[1:1] = ['--recursive']
+    command += paths
     return run(command)
 
 
