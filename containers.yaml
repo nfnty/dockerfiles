@@ -45,8 +45,11 @@ Meta:
             Mode: 'u=rX,g=,o='
 
     Create:
+        Hostname: Null
         HostConfig:
             CpuShares: 2048
+            NetworkMode: 'host'
+            Dns: Null
             Binds:
                 - 'etc:/etc/avahi:ro'
             Tmpfs:
