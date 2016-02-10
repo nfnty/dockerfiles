@@ -55,6 +55,28 @@ Meta:
             Tmpfs:
                 '/run/avahi-daemon': *TMP_MIB_32
 
+'bitcoin-classic':
+    Image: 'nfnty/arch-bitcoin-classic:latest'
+    UGID: 330000
+
+    Names:
+        'bitcoin-classic': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            Binds:
+                - 'etc:/etc/bitcoin:ro'
+                - 'lib:/var/lib/bitcoin:rw'
+
 'bootstrap':
     Image: 'nfnty/arch-bootstrap:latest'
     UGID: 0

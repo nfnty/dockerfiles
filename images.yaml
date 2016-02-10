@@ -455,3 +455,11 @@ Meta:
                     URL: 'https://www.archlinux.org/packages/community/any/owncloud'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
+
+'nfnty/arch-bitcoin-classic:latest':
+    Build: True
+    Packages:
+        'bitcoin-classic':
+            Variable: 'VERSION_BITCOIN_CLASSIC'
+            Download: 'nfnty'
+            Sources: {}
