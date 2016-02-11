@@ -64,15 +64,18 @@ def version_pacman(package):
     ''' Return dict with repository versions of package '''
     try:
         output = subprocess.run([
-            '/usr/bin/expac', '--sync', '--search', '%r %v', r'^{0:s}$'.format(re.escape(package))
+            '/usr/bin/expac', '--sync', '--search',
+            '%n %r %v',
+            r'^{0:s}$'.format(re.escape(package)),
         ], check=True, stdout=subprocess.PIPE).stdout.decode('UTF-8')
     except subprocess.CalledProcessError:
         raise RuntimeError('{0:s} not in any repository'.format(package))
 
     versions = {}
     for line in output.splitlines():
-        repo, version = line.split()
-        versions[repo] = distutils.version.LooseVersion(version)
+        name, repo, version = line.split()
+        if name == package:
+            versions[repo] = distutils.version.LooseVersion(version)
     return versions
 
 
