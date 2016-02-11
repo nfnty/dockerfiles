@@ -409,10 +409,8 @@ Meta:
         'log':
             Mode: 'u=rwX,g=,o='
         '/srv/docker/nginx-proxy-wan/webroot/letsencrypt':
-            Mode: 'u=rwX,g=rwX,o='
-            User: 'root'
-            Group: 'root'
-            ACL: 'default:user:160000:rX,user:160000:rX,default:user:99998:rwX,user:99998:rwX'
+            Mode: 'u=rwX,g=rX,o='
+            ACL: 'default:user:160000:rX,user:160000:rX'
 
     Create:
         HostConfig:
@@ -465,9 +463,19 @@ Meta:
     UGID: 160000
 
     Names:
-        'nginx-proxy-wan': {}
+        'nginx-proxy-wan':
+            Paths:
+                'webroot':
+                    Exclude:
+                        - 'letsencrypt'
         'nginx-proxy': {}
         'nginx-mirror':
+            Paths:
+                '/srv/mirror':
+                    Mode: 'u=rwX,g=rX,o='
+                    User: 'mirror-sync'
+                    Group: 'mirror-sync'
+                    ACL: 'default:user:160000:rX,user:160000:rX'
             Create:
                 HostConfig:
                     Binds:
@@ -475,7 +483,8 @@ Meta:
                         - 'lib:/var/lib/nginx:rw'
                         - 'log:/var/log/nginx:rw'
                         - 'webroot:/srv/http:ro'
-                        - '/srv/docker/builder/lib/pkg:/mnt/mirror/archlinux/nfnty/os/x86_64:ro'
+                        - '/srv/docker/builder/lib/pkg:/mnt/nfnty:ro'
+                        - '/srv/mirror:/mnt/mirror:ro'
 
     Paths:
         'etc':
@@ -486,8 +495,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'webroot':
             Mode: 'u=rX,g=,o='
-            Exclude:
-                - 'letsencrypt'
 
     Create:
         HostConfig:
