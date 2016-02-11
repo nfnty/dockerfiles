@@ -5,7 +5,7 @@ ENV UGID='160000' UGNAME='nginx'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_NGINX='1.8.1-1'
+ENV VERSION_NGINX='1.9.11-3'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx=${VERSION_NGINX}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
