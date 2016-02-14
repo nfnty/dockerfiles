@@ -180,6 +180,8 @@ class Container:
                     log += meta.setfacl(paths, values['ACL'], recursive=True)
                 else:
                     log += meta.setfacl([path], recursive=True)
+            else:
+                log += 'No paths: {0:s}\n'.format(path)
         return log
 
     def remove(self):

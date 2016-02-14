@@ -40,12 +40,13 @@ def args_parse(arguments=None):
         # Main arguments
         mode = par1.add_mutually_exclusive_group(required=True)
         mode.add_argument('--create', action='store_true', help='Create')
+        mode.add_argument('--modify', action='store_true', help='Modify')
         mode.add_argument('--setup', action='store_true', help='Setup')
         mode.add_argument('--update', action='store_true', help='Update')
 
         # Optional
-        par1.add_argument('--perms', action='store_true', help='Enforce permissions')
         par1.add_argument('--orphans', action='store_true', help='Orphans only')
+        par1.add_argument('--perms', action='store_true', help='Enforce permissions')
 
         # Positional
         par1.add_argument('containers', metavar='CONTAINER', action=ActionSet, nargs='*',
@@ -54,11 +55,15 @@ def args_parse(arguments=None):
     elif args0.mode == 'run':
         par1 = argparse.ArgumentParser(description='Run container')
 
+        # Main arguments
+        mode = par1.add_mutually_exclusive_group()
+        mode.add_argument('--modify', action='store_true', help='Modify')
+
         # Optional
         par1.add_argument('--create', action='store_true', help='Only create')
         par1.add_argument('--name', metavar='NAME', help='Name')
-        par1.add_argument('--rm', action='store_true', help='Remove on exit')
         par1.add_argument('--perms', action='store_true', help='Enforce permissions')
+        par1.add_argument('--rm', action='store_true', help='Remove on exit')
 
         # Positional
         par1.add_argument('container', metavar='CONTAINER', help='Container')
@@ -118,21 +123,21 @@ class ThreadBuild(threading.Thread):
 
     def _mode_rename(self, container, backups):
         ''' Rename backups and container'''
-        log = ''
+        log = 'Renaming\n'
         try:
             renamed = backups_rename(self.name, backups)
         except RuntimeError as error:
-            log += 'Rename backups: {0:s}\n'.format(str(error))
+            log += '{0:s}\n'.format(str(error))
             self._return(False, log)
             return
-        log += 'Renamed:\n{0:s}\n'.format(
+        log += '{0:s}\n'.format(
             '\n'.join(('{0:s} -> {1:s}'.format(old, new) for old, new in renamed)))
 
         old = container.name
         try:
             container.rename(string.rm_uuid(container.name))
         except RuntimeError as error:
-            log += 'Rename container: {0:s}\n'.format(str(error))
+            log += '{0:s}\n'.format(str(error))
             self._return(False, log)
             return
         log += '{0:s} -> {1:s}\n'.format(old, container.name)
@@ -140,28 +145,12 @@ class ThreadBuild(threading.Thread):
 
     def _mode_start(self, container):
         ''' Start container '''
-        log = ''
-
-        if ARGS.perms:
-            log += 'Enforcing permissions\n'
-            try:
-                log += container.permissions()
-            except RuntimeError as error:
-                log += 'Enforce permissions: {0:s}\n'.format(str(error))
-                self._return(False, log)
-                return
-            log += 'Enforced permissions\n'
-
-        if ARGS.update:
-            try:
-                container.start_systemd()
-            except RuntimeError as error:
-                log += 'Start container: {0:s}\n'.format(str(error))
-                self._return(False, log)
-                return
-            log += 'Started container\n'
-
-        self._return(True, log)
+        try:
+            container.start_systemd()
+        except RuntimeError as error:
+            self._return(False, 'Start container: {0:s}\n'.format(str(error)))
+            return
+        self._return(True, 'Started container\n')
 
     def _mode_cleanup(self, backups):
         ''' Cleanup backups '''
@@ -203,6 +192,18 @@ class ThreadBuild(threading.Thread):
         log += 'Setup done\n'
         self._return(True, log)
 
+    def _mode_permissions(self, container):
+        ''' Enforce permissions '''
+        log = 'Enforcing permissions\n'
+        try:
+            log += container.permissions()
+        except RuntimeError as error:
+            log += '{0:s}\n'.format(str(error))
+            self._return(False, log)
+            return
+        log += 'Enforced permissions\n'
+        self._return(True, log)
+
     def run(self):
         while True:
             try:
@@ -227,6 +228,8 @@ class ThreadBuild(threading.Thread):
                 self._mode_cleanup(backups)
             elif self.mode == 'setup':
                 self._mode_setup(container)
+            elif self.mode == 'permissions':
+                self._mode_permissions(container)
             else:
                 raise RuntimeError('Incorrect mode: {0:s}'.format(self.mode))
 
@@ -275,10 +278,7 @@ class Network(DiGraph):
 
     def _nodes(self):
         ''' nodes not failed '''
-        if ARGS.containers:
-            return ARGS.containers - self.failed
-        else:
-            return self.node.keys() - self.failed
+        return self.node.keys() - self.failed
 
     def _copy(self):
         ''' network copy without failed '''
@@ -299,34 +299,30 @@ class Network(DiGraph):
             names.remove(name)
             queue_in.task_done()
 
-    # pylint: disable=too-many-branches,too-many-locals
+    # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     def _build_restart(self, queue_out, queue_in):
         ''' Build restart '''
         network = self._copy()
-        network_stop = self._copy()
+        network_stop = network.copy()
+        network_start = network.copy()
         names_rename = self._nodes()
-        network_start = self._copy()
+        names_permissions = names_rename.copy()
 
         for name, degree in network_stop.out_degree_iter():
-            if degree != 0:
-                continue
-            connected = network.connected(name)
-            length = len(connected)
-            queue_out.put((-length, ('stop', name)))
+            if degree == 0:
+                queue_out.put((-len(network.connected(name)), ('stop', name)))
 
-        while network_start:
+        while network_start:  # pylint: disable=too-many-nested-blocks
             mode, name, outcome, log = queue_in.get()
             self.node[name]['Log'] += log
 
             if not outcome:
                 fail = set((name,)) | network.successors_all(name)
                 self.failed |= fail
-
-                network.remove_nodes_from(fail)
-                network_stop.remove_nodes_from(fail)
-                names_rename -= fail
-                network_start.remove_nodes_from(fail)
-
+                for obj in (network, network_stop, network_start):
+                    obj.remove_nodes_from(fail)
+                for obj in (names_rename, names_permissions):
+                    obj -= fail
                 queue_in.task_done()
                 continue
 
@@ -335,18 +331,30 @@ class Network(DiGraph):
 
             if mode == 'stop':
                 if network_stop.in_degree(name) == 0:
-                    if len(connected & network_stop.node.keys()) == 1:
-                        for node in connected & names_rename:
+                    network_stop.remove_node(name)
+                    if not connected & network_stop.node.keys():
+                        for node in connected:
                             queue_out.put((-length, ('rename', node)))
                 else:
                     for node in network_stop.predecessors_iter(name):
                         if network_stop.out_degree(node) == 1:
                             queue_out.put((-length, ('stop', node)))
-                network_stop.remove_node(name)
+                    network_stop.remove_node(name)
 
             elif mode == 'rename':
                 names_rename.remove(name)
                 if not connected & names_rename:
+                    if ARGS.perms:
+                        for node in connected:
+                            queue_out.put((-length, ('permissions', node)))
+                    else:
+                        for node in connected:
+                            if network_start.in_degree(node) == 0:
+                                queue_out.put((-length, ('start', node)))
+
+            elif mode == 'permissions':
+                names_permissions.remove(name)
+                if not connected & names_permissions:
                     for node in connected:
                         if network_start.in_degree(node) == 0:
                             queue_out.put((-length, ('start', node)))
@@ -361,7 +369,7 @@ class Network(DiGraph):
                 raise RuntimeError('Incorrect mode: {0:s}'.format(mode))
 
             queue_in.task_done()
-    # pylint: enable=too-many-branches,too-many-locals
+    # pylint: enable=too-many-branches,too-many-locals,too-many-statements
 
     def build(self, threads_max):
         ''' Build '''
@@ -378,6 +386,9 @@ class Network(DiGraph):
 
         if ARGS.setup:
             self._build_all('setup', queue_out, queue_in)
+        elif ARGS.modify:
+            if ARGS.perms:
+                self._build_all('permissions', queue_out, queue_in)
         else:
             self._build_all('create', queue_out, queue_in)
             if ARGS.create:
@@ -394,7 +405,7 @@ class Network(DiGraph):
             thread.stop()
 
         cprint('Builds finished:', 'magenta')
-        cprint('{0:s}'.format('\n'.join(sorted(self.node.keys() - self.failed))), 'green')
+        cprint('{0:s}'.format('\n'.join(sorted(self._nodes()))), 'green')
         if self.failed:
             cprint('Builds failed:', 'magenta')
             cprint('{0:s}'.format('\n'.join(sorted(self.failed))), 'red')
@@ -445,6 +456,8 @@ def main():  # pylint: disable=too-many-branches
         if ARGS.perms:
             cprint('Enforcing permissions', 'green')
             print(container.permissions())
+
+        if ARGS.modify:
             sys.exit(0)
 
         container.create()

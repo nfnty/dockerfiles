@@ -763,6 +763,11 @@ Meta:
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
+        '/srv/blacklists/domain':
+            Mode: 'u=rwX,g=rX,o='
+            User: 'blacklists-sync'
+            Group: 'blacklists-sync'
+            ACL: 'default:user:240000:rX,user:240000:rX'
 
     Create:
         HostConfig:
@@ -774,6 +779,7 @@ Meta:
                 - 'NET_BIND_SERVICE'
             Binds:
                 - 'etc:/etc/powerdns:ro'
+                - '/srv/blacklists/domain:/mnt/blacklists:ro'
             Tmpfs:
                 '/run': *TMP_MIB_32
 
