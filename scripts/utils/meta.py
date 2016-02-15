@@ -74,7 +74,7 @@ def run(command):
         process = subprocess.run(
             command, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as error:
-        raise RuntimeError('{0:s}\n{1:s}'.format(str(error), str(error.stdout)))
+        raise RuntimeError('{0:s}\n{1:s}'.format(str(error), error.stdout.decode('UTF-8')))
     return process.stdout.decode('UTF-8')
 
 
@@ -85,7 +85,7 @@ def run_pipe(command):
             command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as error:
         raise RuntimeError('{0:s}\n{1:s}\n{2:s}'.format(
-            str(error), str(error.stdout), str(error.stderr)))
+            str(error), error.stdout.decode('UTF-8'), error.stderr.decode('UTF-8')))
     return process
 
 
