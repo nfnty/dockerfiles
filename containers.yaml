@@ -73,6 +73,7 @@ Meta:
             Memory: *GIB_4
             MemorySwap: *GIB_4
             MemoryReservation: *GIB_3_5
+            CpuShares: 256
             Binds:
                 - 'etc:/etc/bitcoin:ro'
                 - 'lib:/var/lib/bitcoin:rw'
