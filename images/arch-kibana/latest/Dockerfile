@@ -11,9 +11,13 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 /opt/
         "https://download.elastic.co/kibana/kibana/kibana-${VERSION_KIBANA}-linux-x64.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/kibana' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/kibana && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/log/kibana
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/log/kibana && \
+    pacman --sync --noconfirm --refresh --sysupgrade && \
+    pacman --sync --noconfirm tini && \
+    find /var/cache/pacman/pkg -mindepth 1 -delete
+
 
 USER ${UGNAME}
 VOLUME ["/var/log/kibana"]
 EXPOSE 5601/tcp
-ENTRYPOINT ["/opt/kibana/bin/kibana"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/opt/kibana/bin/kibana"]

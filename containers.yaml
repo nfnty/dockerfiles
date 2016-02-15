@@ -264,7 +264,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
 
     Create:
-        StopSignal: 'SIGKILL'
         HostConfig:
             Memory: *GIB_2
             MemorySwap: *GIB_2
