@@ -112,12 +112,16 @@ def main():
                 cprint('{0:s}:'.format(package), 'yellow')
 
                 for source, source_dict in package_dict['Sources'].items():
-                    source_dict['Version'] = version_scrape(
-                        source_dict['URL'],
-                        source_dict['XPath'],
-                        source_dict['Attribute'] if 'Attribute' in source_dict else None,
-                        source_dict['Regex'] if 'Regex' in source_dict else None,
-                    )
+                    try:
+                        source_dict['Version'] = version_scrape(
+                            source_dict['URL'],
+                            source_dict['XPath'],
+                            source_dict['Attribute'] if 'Attribute' in source_dict else None,
+                            source_dict['Regex'] if 'Regex' in source_dict else None,
+                        )
+                    except RuntimeError as error:
+                        cprint('{0:s}: {1:s}'.format(source, str(error)), 'red')
+                        source_dict['Version'] = None
 
                 try:
                     for repo, version in version_pacman(package).items():
@@ -126,7 +130,10 @@ def main():
                     cprint(str(error), 'red')
 
                 for source, source_dict in package_dict['Sources'].items():
-                    print('{0:15s}{1:s}'.format(source, source_dict['Version'].vstring))
+                    print('{0:15s}{1:s}'.format(
+                        source,
+                        source_dict['Version'].vstring if source_dict['Version'] else 'None',
+                    ))
 
                 dockerfile_update(
                     path_dockerfile(image),
