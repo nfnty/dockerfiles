@@ -109,7 +109,7 @@ Meta:
                 - 'pkgcache:/var/cache/pacman/pkg:rw'
                 - '/opt/docker/images/arch-mini/latest/bootstrap:/var/lib/bootstrap/archive:rw'
             Tmpfs:
-                '/tmp': 'nr_inodes=10K,mode=700,rw,nosuid,nodev,exec,async,noatime'
+                '/tmp': 'size=512M,nr_inodes=200K,mode=700,rw,nosuid,nodev,exec,async,noatime'
 
 'builder':
     Image: 'nfnty/arch-builder:latest'
