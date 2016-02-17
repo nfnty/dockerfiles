@@ -77,7 +77,7 @@ class ThreadBuild(threading.Thread):
             if not ARGS.no_scratch and 'Scratch' in image.config:
                 cprint('Building scratch: {0:s}'.format(self.name), 'yellow')
                 try:
-                    image.build_scratch()
+                    log += image.build_scratch()
                 except RuntimeError as error:
                     log += 'Build scratch: {0:s}\n'.format(str(error))
                     self._return(False, log)
