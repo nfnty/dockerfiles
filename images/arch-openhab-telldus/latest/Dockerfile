@@ -3,9 +3,9 @@ MAINTAINER nfnty <docker@nfnty.se>
 
 USER root
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm telldus-core-git && \
+    pacman --sync --noconfirm telldus-core-git python && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
 VOLUME ["/var/lib/telldus"]
-ENTRYPOINT ["/usr/bin/bash", "-c", "/usr/bin/telldusd --nodaemon & exec /opt/openhab/start.sh"]
+ENTRYPOINT ["/opt/multiprocess.py", "--", "/usr/bin/telldusd --nodaemon", "/opt/openhab/start.sh"]

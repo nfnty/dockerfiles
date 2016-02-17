@@ -20,11 +20,14 @@ ENV PATH='/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl' \
     LC_IDENTIFICATION='en_US.UTF-8' \
     TZ='UTC'
 
-COPY ["etc/", "/etc/"]
 COPY ["crypto/", "/tmp/crypto/"]
+COPY ["etc/", "/etc/"]
+COPY ["opt/", "/opt/"]
 RUN locale-gen && \
 
-    chmod 'u=rwX,g=rX,o=rX' /etc/{locale.conf,locale.gen,pacman.conf,pacman.d,pacman.d/mirrorlist} && \
+    chmod 'u=rwX,g=rX,o=rX' \
+        /etc/{locale.conf,locale.gen,pacman.conf,pacman.d,pacman.d/mirrorlist} \
+        /opt/multiprocess.py && \
 
     ln --symbolic "/usr/share/zoneinfo/${TZ}" /etc/localtime && \
 
