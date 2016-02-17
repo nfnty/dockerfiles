@@ -23,6 +23,9 @@ def args_parse():
         '--wait', metavar='TIME', type=float, default=120,
         help='Time to wait for process termination before killing, in seconds, default=120')
     parser.add_argument(
+        '--cycle', metavar='TIME', type=float, default=0.01,
+        help='Time to sleep between termination cycles, in seconds, default=0.01')
+    parser.add_argument(
         '--retries', metavar='TIMES', type=int, default=3,
         help='Times to restart process before failure, default=3')
 
@@ -41,29 +44,84 @@ def args_parse():
     return args
 
 
-def print_err(base, process, items=None):
-    ''' Print error '''
-    message = base + ': {0:s}: pid: {1:d}, '.format(str(process.args), process.pid)
+def status_print(base, pid, process, items):
+    ''' Print status '''
+    message = '{0:s}: {1:d}'.format(base, pid)
+    if process:
+        message += ': Args: {0:s}'.format(str(process.args))
     if items:
+        message += ', ' if process else ': '
         message += ', '.join(('{0:s}: {1:s}'.format(key, str(value)) for key, value in items))
     print(message, file=sys.stderr)
 
 
-def terminate(processes):
+def status_decode(status):
+    ''' Decode status '''
+    if os.WIFSIGNALED(status):
+        return True, 'Signaled', \
+            (('Signal', os.WTERMSIG(status)), ('Coredump', os.WCOREDUMP(status)))
+    elif os.WIFEXITED(status):
+        return True, 'Exited', (('Status', os.WEXITSTATUS(status)),)
+    elif os.WIFCONTINUED(status):
+        return False, 'Continued', None
+    elif os.WIFSTOPPED(status):
+        return False, 'Stopped', (('Signal', os.WSTOPSIG(status)),)
+    else:
+        raise RuntimeError('Status unknown')
+
+
+def start(args):
+    ''' Start process '''
+    process = subprocess.Popen(args)
+    value = {'Process': process, 'Retries': 0, 'Start': time.time()}
+    # pylint: disable=no-member
+    print('Started: {0:d}: Args: {1:s}'.format(process.pid, str(process.args)),
+          file=sys.stderr)
+    # pylint: enable=no-member
+    return value
+
+
+def terminate(processes, gracefully):
     ''' Terminate processes '''
     print('Terminating processes', file=sys.stderr)
-    for pid, values in processes.copy().items():
-        process = values['Process']
-        process.terminate()
-        try:
-            process.wait(timeout=ARGS.wait)
-        except subprocess.TimeoutExpired:
-            process.kill()
-            base = 'Process killed'
-        else:
-            base = 'Process terminated'
-        print_err(base, process, (('returncode', process.returncode),))
-        del processes[pid]
+    for value in processes.values():
+        value['Process'].terminate()
+
+    start = time.time()
+    killed = False
+    while processes:
+        pid, status = os.waitpid(-1, os.WNOHANG)
+
+        if pid:
+            process = processes[pid]['Process'] if pid in processes else None
+
+            try:
+                action, base, items = status_decode(status)
+            except RuntimeError as error:
+                action, base, items = True, str(error), (('Status', status),)
+            status_print(base, pid, process, items)
+
+            if process is not None and action:
+                del processes[pid]
+            continue
+
+        if not killed and time.time() >= (start + ARGS.wait):
+            killed = True
+            print('Wait limit reached: Killing remaining processes', file=sys.stderr)
+            for value in processes.values():
+                process = value['Process']
+                process.kill()
+            continue
+
+        time.sleep(ARGS.cycle)
+
+    if killed:
+        sys.exit(2)
+
+    if gracefully:
+        sys.exit(0)
+    else:
+        sys.exit(1)
 
 
 class Signal(Exception):
@@ -84,24 +142,23 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
             raise Signal
 
     # pylint: disable=no-member
-    for sig in set(signal.Signals) - {signal.SIGKILL, signal.SIGSTOP, signal.SIGCHLD}:
+    for sig in set(signal.Signals) - {signal.SIGCHLD, signal.SIGKILL, signal.SIGSTOP}:
         signal.signal(sig, signal_handler)
     # pylint: enable=no-member
 
     processes = OrderedDict()
     for command in ARGS.commands:
-        process = subprocess.Popen(shlex.split(command))
-        processes[process.pid] = {'Process': process, 'Retries': 0, 'Time': time.time()}
+        value = start(shlex.split(command))
+        processes[value['Process'].pid] = value
 
     while True:
         while signals:
-            sig = signals.pop()
+            sig = signals.pop(0)
             if sig in (signal.SIGTERM, signal.SIGINT):
-                terminate(processes)
-                sys.exit(0)
+                terminate(processes, True)
             else:
-                for _, values in processes.items():
-                    values['Process'].send_signal(sig)
+                for _, value in processes.items():
+                    value['Process'].send_signal(sig)
 
         try:
             pid = None
@@ -110,40 +167,31 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
             pid = -1
             continue
 
-        process = processes[pid]['Process']
+        process = processes[pid]['Process'] if pid in processes else None
 
-        if os.WIFSIGNALED(status):
-            print_err('Process signaled', process,
-                      (('signal', os.WTERMSIG(status)), ('coredump', os.WCOREDUMP(status))))
-        elif os.WIFEXITED(status):
-            print_err('Process exited', process, (('status', os.WEXITSTATUS(status)),))
-        elif os.WIFCONTINUED(status):
-            print_err('Process continued', process)
-            continue
-        elif os.WIFSTOPPED(status):
-            print_err('Process stopped', process, (('signal', os.WSTOPSIG(status)),))
-            continue
-        else:
-            print_err('Status unknown', process, (('status', status),))
-            del processes[pid]
-            terminate(processes)
-            sys.exit(1)
+        try:
+            action, base, items = status_decode(status)
+        except RuntimeError as error:
+            status_print(str(error), pid, process, (('Status', status),))
+            terminate(processes, False)
+        status_print(base, pid, process, items)
 
-        if (time.time() - processes[pid]['Time']) >= ARGS.start:
+        if process is None or not action:
+            continue
+
+        if time.time() >= (processes[pid]['Start'] + ARGS.start):
+            print('Retries reset', file=sys.stderr)
             processes[pid]['Retries'] = 0
 
-        if processes[pid]['Retries'] < ARGS.retries:
-            processes[pid]['Retries'] += 1
-            process = subprocess.Popen(processes[pid]['Process'].args)
-            processes[process.pid] = processes[pid].copy()
-            processes[process.pid]['Time'] = time.time()
-            processes[process.pid]['Process'] = process
-            del processes[pid]
-        else:
+        if processes[pid]['Retries'] >= ARGS.retries:
             print('Maximum retries exceeded', file=sys.stderr)
             del processes[pid]
-            terminate(processes)
-            sys.exit(1)
+            terminate(processes, False)
+
+        value = start(processes[pid]['Process'].args)
+        processes[value['Process'].pid] = value
+        processes[value['Process'].pid]['Retries'] = processes[pid]['Retries'] + 1
+        del processes[pid]
 
 
 if __name__ == '__main__':
