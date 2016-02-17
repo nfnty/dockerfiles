@@ -79,8 +79,6 @@ def args_parse():
 
     return args
 
-ARGS = args_parse()
-
 
 def gpg_init():
     ''' Initialize GnuPG '''
@@ -377,4 +375,5 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
 
 
 if __name__ == '__main__':
+    ARGS = args_parse()
     main()
