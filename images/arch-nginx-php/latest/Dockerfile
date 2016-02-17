@@ -10,8 +10,8 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/php-fpm
 
 USER ${UGNAME}
-ENTRYPOINT [
-    "/opt/multiprocess.py", "--",
-    "/usr/bin/php-fpm --fpm-config /etc/php/php-fpm.conf",
-    "/usr/bin/nginx -g 'daemon off;'"
+ENTRYPOINT [ \
+    "/opt/multiprocess.py", "--", \
+    "/usr/bin/php-fpm --fpm-config /etc/php/php-fpm.conf", \
+    "/usr/bin/nginx -g 'daemon off;'" \
 ]
