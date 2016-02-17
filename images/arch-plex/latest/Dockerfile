@@ -6,7 +6,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false \
         --home-dir /var/lib/plexmediaserver/home "${UGNAME}"
 
-ENV VERSION_PLEX='0.9.15.2.1663-7efd046' \
+ENV VERSION_PLEX='0.9.15.3.1674-f46e7e6' \
     PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR='/var/lib/plexmediaserver/appsupport' \
     PLEX_MEDIA_SERVER_HOME='/opt/plexmediaserver' \
     LD_LIBRARY_PATH='/opt/plexmediaserver' \
