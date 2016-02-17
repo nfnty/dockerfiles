@@ -24,7 +24,7 @@ def args_parse():
         help='Time to wait for process termination before killing, in seconds, default=120')
     parser.add_argument(
         '--retries', metavar='TIMES', type=int, default=3,
-        help='Times to retry on process failure before termination, default=3')
+        help='Times to restart process before failure, default=3')
 
     # Positional
     parser.add_argument(
@@ -73,12 +73,12 @@ class Signal(Exception):
 
 def main():  # pylint: disable=too-many-branches,too-many-statements
     ''' Main '''
-    signal_send = []
+    signals = []
 
     def signal_handler(signum, frame):
         ''' Signal handler '''
-        nonlocal signal_send
-        signal_send.append(signum)
+        nonlocal signals
+        signals.append(signum)
         if frame.f_code.co_name == 'main' \
                 and 'pid' in frame.f_locals and frame.f_locals['pid'] is None:
             raise Signal
@@ -91,26 +91,25 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
     processes = OrderedDict()
     for command in ARGS.commands:
         process = subprocess.Popen(shlex.split(command))
-        processes[process.pid] = {
-            'Process': process, 'Signals': 0, 'Retries': 0, 'Time': time.time()}
+        processes[process.pid] = {'Process': process, 'Retries': 0, 'Time': time.time()}
 
     while True:
-        while signal_send:
-            sig = signal_send.pop()
+        while signals:
+            sig = signals.pop()
             if sig in (signal.SIGTERM, signal.SIGINT):
                 terminate(processes)
                 sys.exit(0)
             else:
                 for _, values in processes.items():
-                    values['Signals'] += 1
                     values['Process'].send_signal(sig)
 
         try:
             pid = None
             pid, status = os.waitpid(-1, 0)
         except Signal:
-            pid = 0
+            pid = -1
             continue
+
         process = processes[pid]['Process']
 
         if os.WIFSIGNALED(status):
@@ -134,15 +133,12 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
             processes[pid]['Retries'] = 0
 
         if processes[pid]['Retries'] < ARGS.retries:
-            if processes[pid]['Signals']:
-                processes[pid]['Signals'] -= 1
-            else:
-                processes[pid]['Retries'] += 1
+            processes[pid]['Retries'] += 1
             process = subprocess.Popen(processes[pid]['Process'].args)
             processes[process.pid] = processes[pid].copy()
             processes[process.pid]['Time'] = time.time()
-            del processes[pid]
             processes[process.pid]['Process'] = process
+            del processes[pid]
         else:
             print('Maximum retries exceeded', file=sys.stderr)
             del processes[pid]
