@@ -19,8 +19,6 @@ def config_parse():
     meta.dict_merge(load_meta, meta.META)
     return load, load_meta
 
-CONTAINERS, META = config_parse()
-
 
 class Container:
     ''' Container '''
@@ -242,3 +240,6 @@ def backups_cleanup(name, containers):
         else:
             break
     return removed
+
+
+CONTAINERS, META = config_parse()

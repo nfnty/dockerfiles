@@ -19,20 +19,11 @@ __all__ = [
 
 def path_repo():
     ''' Repository path '''
-    try:
-        process = subprocess.run([
-            '/usr/bin/git', '-C', os.path.dirname(os.path.realpath(__file__)),
-            'rev-parse', '--show-toplevel'
-        ], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    except subprocess.CalledProcessError as error:
-        raise RuntimeError('{0:s}: STDOUT: {1:s} STDERR: {2:s}'.format(
-            str(error), str(error.stdout), str(error.stderr)))
-    path = process.stdout.decode('UTF-8')
-    if path.endswith('\n'):
-        path = path[:-1]
+    path = run_pipe([
+        '/usr/bin/git', '-C', os.path.dirname(os.path.realpath(__file__)),
+        'rev-parse', '--show-toplevel'
+    ]).stdout.decode('UTF-8').rstrip('\n')
     return path
-
-PATH_REPO = path_repo()
 
 
 def yaml_meta():
@@ -41,8 +32,6 @@ def yaml_meta():
     meta['BackupPrefixLen'] = len(meta['BackupPrefix'])
     meta['SystemdPrefixLen'] = len(meta['SystemdPrefix'])
     return meta
-
-META = yaml_meta()
 
 
 def failed(string):
@@ -79,7 +68,7 @@ def run(command):
 
 
 def run_pipe(command):
-    ''' Run command '''
+    ''' Run command, return CompletedProcess '''
     try:
         process = subprocess.run(
             command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -146,3 +135,7 @@ def paths_include(path, excludes):
                 included.append(path_full)
 
     return included
+
+
+PATH_REPO = path_repo()
+META = yaml_meta()

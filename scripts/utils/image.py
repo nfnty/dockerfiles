@@ -18,8 +18,6 @@ def config_parse():
     meta.dict_merge(load_meta, meta.META)
     return load, load_meta
 
-IMAGES, META = config_parse()
-
 
 class Image:
     ''' Image '''
@@ -78,3 +76,6 @@ def dockerfile_from(name):
         for line in filedesc:
             if line.startswith('FROM'):
                 return line.split()[-1]
+
+
+IMAGES, META = config_parse()
