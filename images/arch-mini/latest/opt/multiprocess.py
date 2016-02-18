@@ -37,7 +37,7 @@ def args_parse():
 
     if not args.commands:
         print('No commands specified', file=sys.stderr)
-        sys.exit(1)
+        sys.exit(2)
     if args.commands[0] == '--':
         del args.commands[0]
 
@@ -72,7 +72,11 @@ def status_decode(status):
 
 def start(args):
     ''' Start process '''
-    process = subprocess.Popen(args)
+    try:
+        process = subprocess.Popen(args)
+    except Exception as error:  # pylint: disable=broad-except
+        print('Start failed: {0:s}: Args: {1:s}'.format(str(error), str(args)))
+        return None
     value = {'Process': process, 'Retries': 0, 'Start': time.time()}
     # pylint: disable=no-member
     print('Started: {0:d}: Args: {1:s}'.format(process.pid, str(process.args)),
@@ -87,7 +91,7 @@ def terminate(processes, gracefully):
     for value in processes.values():
         value['Process'].terminate()
 
-    start = time.time()
+    time_start = time.time()
     killed = False
     while processes:
         pid, status = os.waitpid(-1, os.WNOHANG)
@@ -105,7 +109,7 @@ def terminate(processes, gracefully):
                 del processes[pid]
             continue
 
-        if not killed and time.time() >= (start + ARGS.wait):
+        if not killed and time.time() >= (time_start + ARGS.wait):
             killed = True
             print('Wait limit reached: Killing remaining processes', file=sys.stderr)
             for value in processes.values():
@@ -149,6 +153,8 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
     processes = OrderedDict()
     for command in ARGS.commands:
         value = start(shlex.split(command))
+        if value is None:
+            terminate(processes, False)
         processes[value['Process'].pid] = value
 
     while True:
@@ -189,6 +195,8 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
             terminate(processes, False)
 
         value = start(processes[pid]['Process'].args)
+        if value is None:
+            terminate(processes, False)
         processes[value['Process'].pid] = value
         processes[value['Process'].pid]['Retries'] = processes[pid]['Retries'] + 1
         del processes[pid]
