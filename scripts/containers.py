@@ -241,10 +241,10 @@ class Network(DiGraph):
 
         for container, config_container in config_containers.items():
             for name, config_name in config_container['Names'].items():
-                self.add_node(name, {'Object': Container(
-                    container, name, dict_merge_copy(config_name, config_container))})
-                if 'Depends' in config_name:
-                    for dependency in config_name['Depends']:
+                config = dict_merge_copy(config_container, config_name)
+                self.add_node(name, {'Object': Container(container, name, config)})
+                if 'Depends' in config:
+                    for dependency in config['Depends']:
                         self.add_edge(dependency, name)
 
     def attr_backups(self):

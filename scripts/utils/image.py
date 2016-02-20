@@ -15,7 +15,7 @@ def config_parse():
     load = yaml.load(open(os.path.join(meta.PATH_REPO, 'images.yaml')), Loader=yaml.CLoader)
     load_meta = load['Meta']
     del load['Meta']
-    meta.dict_merge(load_meta, meta.META)
+    meta.dict_merge_add(load_meta, meta.META)
     return load, load_meta
 
 

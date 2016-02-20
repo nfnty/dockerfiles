@@ -16,7 +16,7 @@ def config_parse():
     load = yaml.load(open(os.path.join(meta.PATH_REPO, 'containers.yaml')), Loader=yaml.CLoader)
     load_meta = load['Meta']
     del load['Meta']
-    meta.dict_merge(load_meta, meta.META)
+    meta.dict_merge_add(load_meta, meta.META)
     return load, load_meta
 
 
@@ -50,10 +50,10 @@ class Container:
                 continue
             config = self.config[key]
 
-            meta.dict_merge(config, {'Hostname': self.name, 'Image': self.config['Image']})
+            meta.dict_merge_add(config, {'Hostname': self.name, 'Image': self.config['Image']})
             if self.command:
                 meta.dict_merge(config, {'Cmd': self.command})
-            meta.dict_merge(config, META['Default'])
+            meta.dict_merge_add(config, META['Default'])
 
             if 'HostConfig' in config:
                 host_config = config['HostConfig']
