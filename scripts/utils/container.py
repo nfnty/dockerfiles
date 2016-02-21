@@ -66,9 +66,9 @@ class Container:
 
     def _config_paths(self, paths):
         ''' Convert relative paths into absolute '''
-        for path, values in paths.items():
+        for path, value in paths.items():
             if not os.path.isabs(path):
-                paths[os.path.join(self.path, path)] = values
+                paths[os.path.join(self.path, path)] = value
                 del paths[path]
 
     def _config_binds(self, binds):
@@ -145,37 +145,40 @@ class Container:
         inspect = self.inspect()
         return inspect['Config']['Image'] not in api.image_inspect(inspect['Image'])['RepoTags']
 
-    def permissions(self):
+    def permissions(self):  # pylint: disable=too-many-branches
         ''' Enforce permissions '''
         log = ''
-        for path, values in self.config['Paths'].items():
+        for path, value in self.config['Paths'].items():
             if not os.path.isabs(path):
                 path = os.path.join(self.path, path)
-            user = values['User'] if 'User' in values else self.config['UGID']
-            group = values['Group'] if 'Group' in values else self.config['UGID']
+            user = value['User'] if 'User' in value else self.config['UGID']
+            group = value['Group'] if 'Group' in value else self.config['UGID']
 
             if not os.path.exists(path):
                 raise RuntimeError('Path does not exist: {0:s}'.format(path))
 
-            if 'Exclude' in values:
+            if 'Exclude' in value:
                 log += 'Path: {0:s}\n'.format(path)
                 log += meta.chown([path], user, group)
-                log += meta.chmod([path], values['Mode'])
-                if 'ACL' in values:
-                    log += meta.setfacl([path], values['ACL'])
+                log += meta.chmod([path], value['Mode'])
+                if 'ACL' in value:
+                    log += meta.setfacl([path], value['ACL'])
                 else:
                     log += meta.setfacl([path])
 
-                paths = meta.paths_include(path, values['Exclude'])
+                if value['Exclude'] == '*':
+                    paths = []
+                else:
+                    paths = meta.paths_include(path, value['Exclude'])
             else:
                 paths = [path]
 
             if paths:
                 log += 'Paths: {0:s}\n'.format(' '.join(paths))
                 log += meta.chown(paths, user, group, recursive=True)
-                log += meta.chmod(paths, values['Mode'], recursive=True)
-                if 'ACL' in values:
-                    log += meta.setfacl(paths, values['ACL'], recursive=True)
+                log += meta.chmod(paths, value['Mode'], recursive=True)
+                if 'ACL' in value:
+                    log += meta.setfacl(paths, value['ACL'], recursive=True)
                 else:
                     log += meta.setfacl([path], recursive=True)
             else:
@@ -214,9 +217,9 @@ class Container:
 def get_existing():
     ''' get existing containers '''
     return [
-        (values['Names'][0][1:] if values['Names'][0].startswith('/') else values['Names'][0],
-         values['Id'])
-        for values in api.request(api.get, '/containers/json', {'all': 'True'}).json()
+        (value['Names'][0][1:] if value['Names'][0].startswith('/') else value['Names'][0],
+         value['Id'])
+        for value in api.request(api.get, '/containers/json', {'all': 'True'}).json()
     ]
 
 

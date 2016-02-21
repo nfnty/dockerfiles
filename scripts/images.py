@@ -131,9 +131,9 @@ class Network(DiGraph):
 
     def attr_successors(self):
         ''' Add successors attributes to nodes '''
-        for node, values in self.node.items():
-            values['Successors'] = self.successors_all(node)
-            values['SuccessorsLen'] = len(values['Successors'])
+        for node, value in self.node.items():
+            value['Successors'] = self.successors_all(node)
+            value['SuccessorsLen'] = len(value['Successors'])
 
     def build(self, threads_max):
         ''' Build '''

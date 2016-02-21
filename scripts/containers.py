@@ -251,18 +251,18 @@ class Network(DiGraph):
     def attr_backups(self):
         ''' Add Backups attributes to nodes '''
         existing = get_existing()
-        for node, values in self.node.items():
-            values['Backups'] = []
+        for node, value in self.node.items():
+            value['Backups'] = []
             regex = string.re_backup(node)
 
             backups = []
             for name, identity in existing:
                 if name == node:
-                    values['Backups'].append(
-                        Container(values['Object'].basename, name, identity=identity))
+                    value['Backups'].append(
+                        Container(value['Object'].basename, name, identity=identity))
                 elif regex.match(name):
                     backups.append(
-                        Container(values['Object'].basename, name, identity=identity))
+                        Container(value['Object'].basename, name, identity=identity))
 
             self.node[node]['Backups'] += sorted(
                 backups, key=lambda container, node=node: string.backup_num(node, container.name))
@@ -271,10 +271,10 @@ class Network(DiGraph):
         ''' container is an orphan if using an unnamed image '''
         return set(
             node
-            for node, values in self.node.items()
-            if len(values['Backups']) >= 1 and
-            values['Backups'][0].name == values['Object'].name and
-            values['Backups'][0].orphan()
+            for node, value in self.node.items()
+            if len(value['Backups']) >= 1 and
+            value['Backups'][0].name == value['Object'].name and
+            value['Backups'][0].orphan()
         )
 
     def _nodes(self):
@@ -382,8 +382,8 @@ class Network(DiGraph):
             threads.append(thread)
             thread.start()
 
-        for values in self.node.values():
-            values['Log'] = ''
+        for value in self.node.values():
+            value['Log'] = ''
 
         if ARGS.setup:
             self._build_all('setup', queue_out, queue_in)
@@ -422,11 +422,11 @@ def config_args_validate(network):
                 's' if len(missing) >= 2 else '', str(missing)))
 
     error = ''
-    for node, values in network.node.items():
-        if 'Create' not in values['Object'].config:
+    for node, value in network.node.items():
+        if 'Create' not in value['Object'].config:
             error += '\'Create\' missing from config: {0:s}\n'.format(node)
         if ARGS.setup:
-            if 'Setup' not in values['Object'].config:
+            if 'Setup' not in value['Object'].config:
                 error += '\'Setup\' missing from config: {0:s}\n'.format(node)
     if error:
         failed(error)
