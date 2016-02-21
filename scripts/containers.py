@@ -45,6 +45,7 @@ def args_parse(arguments=None):
         mode.add_argument('--update', action='store_true', help='Update')
 
         # Optional
+        par1.add_argument('--no-successors', action='store_true', help='No successors')
         par1.add_argument('--orphans', action='store_true', help='Orphans only')
         par1.add_argument('--perms', action='store_true', help='Enforce permissions')
 
@@ -442,7 +443,10 @@ def main():  # pylint: disable=too-many-branches
                 failed('Found no orphans')
             ARGS.containers |= orphans
         if ARGS.containers:
-            network.remove_nodes_from_except(ARGS.containers, False)
+            if ARGS.no_successors:
+                network.remove_nodes_from_except(ARGS.containers, True)
+            else:
+                network.remove_nodes_from_except(ARGS.containers, False)
         config_args_validate(network)
         network.build(META['Limits']['Threads'])
 
