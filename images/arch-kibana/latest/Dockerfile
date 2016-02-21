@@ -18,6 +18,5 @@ RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 /opt/
 
 
 USER ${UGNAME}
-VOLUME ["/var/log/kibana"]
 EXPOSE 5601/tcp
 ENTRYPOINT ["/usr/bin/tini", "--", "/opt/kibana/bin/kibana"]

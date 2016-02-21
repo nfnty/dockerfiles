@@ -463,3 +463,11 @@ Meta:
             Variable: 'VERSION_BITCOIN_CLASSIC'
             Download: 'nfnty'
             Sources: {}
+
+'nfnty/arch-rsyslog:latest':
+    Build: True
+    Packages:
+        'rsyslog':
+            Variable: 'VERSION_RSYSLOG'
+            Download: 'nfnty'
+            Sources: {}

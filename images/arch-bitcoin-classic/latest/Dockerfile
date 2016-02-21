@@ -14,4 +14,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
 USER ${UGNAME}
 VOLUME ["/var/lib/bitcoin"]
 EXPOSE 8333/tcp
-ENTRYPOINT ["/usr/bin/bitcoind", "-conf=/etc/bitcoin/bitcoin.conf", "-datadir=/var/lib/bitcoin"]
+ENTRYPOINT ["/usr/bin/bitcoind", "-conf=/etc/bitcoin/bitcoin.conf", "-datadir=/var/lib/bitcoin", "-printtoconsole"]

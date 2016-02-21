@@ -14,6 +14,6 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/nginx
 
 USER ${UGNAME}
-VOLUME ["/var/lib/nginx", "/var/log/nginx"]
+VOLUME ["/var/lib/nginx"]
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/usr/bin/nginx", "-g", "daemon off;"]

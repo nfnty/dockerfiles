@@ -14,6 +14,6 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/samba
 
 USER ${UGNAME}
-VOLUME ["/var/cache/samba", "/var/lib/samba", "/var/log/samba"]
+VOLUME ["/var/cache/samba", "/var/lib/samba"]
 EXPOSE 139/tcp 445/tcp
 ENTRYPOINT ["/usr/bin/smbd", "--foreground", "--option=pid directory=/run/samba"]

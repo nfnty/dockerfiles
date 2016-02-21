@@ -14,6 +14,6 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/log/exim /var/spool/exim
 
 USER ${UGNAME}
-VOLUME ["/var/log/exim", "/var/spool/exim"]
+VOLUME ["/var/spool/exim"]
 EXPOSE 25/tcp 587/tcp
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/bin/exim", "-bdf", "-q30m"]

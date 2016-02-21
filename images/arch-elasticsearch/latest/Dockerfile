@@ -16,6 +16,6 @@ RUN mkdir /opt/elasticsearch && \
         /var/lib/elasticsearch /var/log/elasticsearch
 
 USER ${UGNAME}
-VOLUME ["/var/lib/elasticsearch", "/var/log/elasticsearch"]
+VOLUME ["/var/lib/elasticsearch"]
 EXPOSE 9200/tcp 9300/tcp
 ENTRYPOINT ["/opt/elasticsearch/bin/elasticsearch"]

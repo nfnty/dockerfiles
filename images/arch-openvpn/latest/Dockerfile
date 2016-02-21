@@ -13,7 +13,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
         /var/lib/openvpn /var/log/openvpn /tmp
 
 USER root
-VOLUME ["/var/lib/openvpn", "/var/log/openvpn"]
+VOLUME ["/var/lib/openvpn"]
 EXPOSE 1194/tcp 1194/udp
 ENTRYPOINT [ \
     "/usr/bin/bash", "-c", \

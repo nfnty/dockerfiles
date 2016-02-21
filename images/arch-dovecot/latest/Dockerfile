@@ -12,10 +12,10 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap 'cap_net_bind_service=ep' /usr/bin/dovecot && \
     setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/anvil && \
     setcap 'cap_sys_chroot=ep' /usr/lib/dovecot/imap-login && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        /run/dovecot /var/lib/dovecot /var/log/dovecot
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/dovecot /var/log/dovecot && \
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=755 /run/dovecot
 
 USER ${UGNAME}
-VOLUME ["/var/lib/dovecot", "/var/log/dovecot"]
+VOLUME ["/var/lib/dovecot"]
 EXPOSE 24/tcp 143/tcp
 ENTRYPOINT ["/usr/bin/dovecot", "-F"]

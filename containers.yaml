@@ -9,6 +9,8 @@ Meta:
         GIB_3_5: &GIB_3_5 3758096384
         GIB_4: &GIB_4 4294967296
         TMP_MIB_32: &TMP_MIB_32 'size=32M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
+        TMP_MIB_32_755: &TMP_MIB_32_755 'size=32M,nr_inodes=10K,mode=755,rw,nosuid,nodev,noexec,async,noatime'
+        TMP_MIB_32_EXEC: &TMP_MIB_32_EXEC 'size=32M,nr_inodes=10K,mode=700,rw,nosuid,nodev,exec,async,noatime'
         TMP_MIB_64: &TMP_MIB_64 'size=64M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
         TMP_MIB_128: &TMP_MIB_128 'size=128M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
 
@@ -36,9 +38,10 @@ Meta:
     UGID: 310000
 
     Names:
-        'avahi':
-            Depends:
-                - 'hostapd'
+        'avahi': {}
+
+    Depends:
+        - 'hostapd'
 
     Paths:
         'etc':
@@ -165,14 +168,19 @@ Meta:
     UGID: 220000
 
     Names:
-        'dovecot': {}
+        'dovecot':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/dovecot:/dev/log:rw'
+
+    Depends:
+        - 'rsyslog'
 
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
         'lib':
-            Mode: 'u=rwX,g=,o='
-        'log':
             Mode: 'u=rwX,g=,o='
 
     Create:
@@ -186,9 +194,8 @@ Meta:
             Binds:
                 - 'etc:/etc/dovecot:ro'
                 - 'lib:/var/lib/dovecot:rw'
-                - 'log:/var/log/dovecot:rw'
             Tmpfs:
-                '/run/dovecot': *TMP_MIB_32
+                '/run/dovecot': *TMP_MIB_32_755
                 '/tmp': *TMP_MIB_32
 
 'elasticsearch':
@@ -203,8 +210,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-        'log':
-            Mode: 'u=rwX,g=,o='
         'plugins':
             Mode: 'u=rX,g=,o='
 
@@ -218,10 +223,9 @@ Meta:
             Binds:
                 - 'config:/opt/elasticsearch/config:ro'
                 - 'lib:/var/lib/elasticsearch:rw'
-                - 'log:/var/log/elasticsearch:rw'
                 - 'plugins:/opt/elasticsearch/plugins:ro'
             Tmpfs:
-                '/tmp': *TMP_MIB_32
+                '/tmp': *TMP_MIB_32_EXEC
 
 'emby':
     Image: 'nfnty/arch-emby:latest'
@@ -253,14 +257,19 @@ Meta:
     UGID: 250000
 
     Names:
-        'exim': {}
+        'exim':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/exim:/dev/log:rw'
+
+    Depends:
+        - 'rsyslog'
 
     Paths:
         'etc':
             Mode: 'u=rX,g=rX,o='
             User: 'root'
-        'log':
-            Mode: 'u=rwX,g=,o='
         'spool':
             Mode: 'u=rwX,g=,o='
 
@@ -273,7 +282,6 @@ Meta:
                 - 'NET_BIND_SERVICE'
             Binds:
                 - 'etc:/etc/mail:ro'
-                - 'log:/var/log/exim:rw'
                 - 'spool:/var/spool/exim:rw'
 
 'heka':
@@ -310,11 +318,15 @@ Meta:
     Names:
         'hostapd':
             Create:
-                Entrypoint: [
-                    '/usr/bin/hostapd',
-                    '/etc/hostapd/wlan_24n0/hostapd.conf',
-                    '/etc/hostapd/wlan_50n0/hostapd.conf',
-                ]
+                Entrypoint:
+                    - '/etc/hostapd/wlan_24n0/hostapd.conf'
+                    - '/etc/hostapd/wlan_50n0/hostapd.conf'
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/hostapd:/dev/log:rw'
+
+    Depends:
+        - 'rsyslog'
 
     Paths:
         'etc':
@@ -322,6 +334,8 @@ Meta:
 
     Create:
         Hostname: Null
+        Entrypoint:
+            - '/usr/bin/hostapd'
         HostConfig:
             CpuShares: 2048
             CapAdd:
@@ -338,15 +352,19 @@ Meta:
 
     Names:
         'kea-dhcp4':
-            Depends:
-                - 'hostapd'
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/kea-dhcp4:/dev/log:rw'
+
+    Depends:
+        - 'hostapd'
+        - 'rsyslog'
 
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
         'lib':
-            Mode: 'u=rwX,g=,o='
-        'log':
             Mode: 'u=rwX,g=,o='
 
     Create:
@@ -361,7 +379,6 @@ Meta:
             Binds:
                 - 'etc:/etc/kea:ro'
                 - 'lib:/var/lib/kea:rw'
-                - 'log:/var/log/kea:rw'
             Tmpfs:
                 '/run/kea': *TMP_MIB_32
 
@@ -370,15 +387,14 @@ Meta:
     UGID: 120000
 
     Names:
-        'kibana':
-            Depends:
-                - 'elasticsearch'
+        'kibana': {}
+
+    Depends:
+        - 'elasticsearch'
 
     Paths:
         'config':
             Mode: 'u=rX,g=,o='
-        'log':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         Env:
@@ -387,7 +403,6 @@ Meta:
             CpuShares: 512
             Binds:
                 - 'config:/opt/kibana/config:ro'
-                - 'log:/var/log/kibana:rw'
             Tmpfs:
                 '/tmp': *TMP_MIB_32
 
@@ -428,16 +443,15 @@ Meta:
     UGID: 130000
 
     Names:
-        'logstash':
-            Depends:
-                - 'elasticsearch'
+        'logstash': {}
+
+    Depends:
+        - 'elasticsearch'
 
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
         'lib':
-            Mode: 'u=rwX,g=,o='
-        'log':
             Mode: 'u=rwX,g=,o='
         '/var/log/ulogd':
             Mode: 'u=rwX,g=rX,o='
@@ -455,7 +469,6 @@ Meta:
             Binds:
                 - 'etc:/etc/logstash:ro'
                 - 'lib:/var/lib/logstash:rw'
-                - 'log:/var/log/logstash:rw'
                 - '/var/log/ulogd:/mnt/ulogd:ro'
 
 'nginx':
@@ -468,7 +481,15 @@ Meta:
                 'webroot':
                     Exclude:
                         - 'letsencrypt'
-        'nginx-proxy': {}
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/nginx-proxy-wan:/dev/log:rw'
+        'nginx-proxy':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/nginx-proxy:/dev/log:rw'
         'nginx-mirror':
             Paths:
                 '/srv/mirror':
@@ -479,19 +500,17 @@ Meta:
             Create:
                 HostConfig:
                     Binds:
-                        - 'etc:/etc/nginx:ro'
-                        - 'lib:/var/lib/nginx:rw'
-                        - 'log:/var/log/nginx:rw'
-                        - 'webroot:/srv/http:ro'
                         - '/srv/docker/builder/lib/pkg:/mnt/nfnty:ro'
                         - '/srv/mirror:/mnt/mirror:ro'
+                        - '/srv/docker/rsyslog/run/nginx-mirror:/dev/log:rw'
+
+    Depends:
+        - 'rsyslog'
 
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
         'lib':
-            Mode: 'u=rwX,g=,o='
-        'log':
             Mode: 'u=rwX,g=,o='
         'webroot':
             Mode: 'u=rX,g=,o='
@@ -506,7 +525,6 @@ Meta:
             Binds:
                 - 'etc:/etc/nginx:ro'
                 - 'lib:/var/lib/nginx:rw'
-                - 'log:/var/log/nginx:rw'
                 - 'webroot:/srv/http:ro'
             Tmpfs:
                 '/run/nginx': *TMP_MIB_32
@@ -543,9 +561,10 @@ Meta:
     UGID: 170000
 
     Names:
-        'openhab':
-            Depends:
-                - 'postgresql'
+        'openhab': {}
+
+    Depends:
+        - 'postgresql'
 
     Paths:
         'addons':
@@ -559,8 +578,6 @@ Meta:
         'lib_openhab':
             Mode: 'u=rwX,g=,o='
         'lib_telldus':
-            Mode: 'u=rwX,g=,o='
-        'log':
             Mode: 'u=rwX,g=,o='
         'webapps':
             Mode: 'u=rwX,g=,o='
@@ -577,10 +594,9 @@ Meta:
                 - 'etc_telldus/tellstick.conf:/etc/tellstick.conf:ro'
                 - 'lib_openhab:/var/lib/openhab:rw'
                 - 'lib_telldus:/var/lib/telldus:rw'
-                - 'log:/var/log/openhab:rw'
                 - 'webapps:/opt/openhab/webapps/static:rw'
             Tmpfs:
-                '/tmp': 'size=32M,nr_inodes=10K,mode=700,rw,nosuid,nodev,exec,async,noatime'
+                '/tmp': *TMP_MIB_32_EXEC
             Devices:
                 - {PathOnHost: '/dev/tellstickduo0', PathInContainer: '', CgroupPermissions: 'rw'}
 
@@ -589,19 +605,35 @@ Meta:
     UGID: 190000
 
     Names:
-        'openvpn-admin-tcp': {}
-        'openvpn-admin-udp': {}
-        'openvpn-home-tcp': {}
-        'openvpn-home-udp': {}
+        'openvpn-admin-tcp':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/openvpn-admin-tcp:/dev/log:rw'
+        'openvpn-admin-udp':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/openvpn-admin-udp:/dev/log:rw'
+        'openvpn-home-tcp':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/openvpn-home-tcp:/dev/log:rw'
+        'openvpn-home-udp':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/openvpn-home-udp:/dev/log:rw'
+
+    Depends:
+        - 'rsyslog'
 
     Paths:
         'etc':
             Mode: 'u=rX,g=rX,o='
             Group: 'root'
         'lib':
-            Mode: 'u=rwX,g=rwX,o='
-            Group: 'root'
-        'log':
             Mode: 'u=rwX,g=rwX,o='
             Group: 'root'
         'tun':
@@ -622,7 +654,6 @@ Meta:
             Binds:
                 - 'etc:/etc/openvpn:ro'
                 - 'lib:/var/lib/openvpn:rw'
-                - 'log:/var/log/openvpn:rw'
             Tmpfs:
                 '/tmp': 'size=32M,nr_inodes=10K,mode=770,rw,nosuid,nodev,noexec,async,noatime,gid=0'
             Devices:
@@ -640,6 +671,9 @@ Meta:
 
     Names: {}
 
+    Depends:
+        - 'rsyslog'
+
     Paths:
         'apps':
             Mode: 'u=rwX,g=,o='
@@ -652,8 +686,6 @@ Meta:
         'etc_php':
             Mode: 'u=rX,g=,o='
         'lib_nginx':
-            Mode: 'u=rwX,g=,o='
-        'log_nginx':
             Mode: 'u=rwX,g=,o='
 
     Create:
@@ -670,7 +702,6 @@ Meta:
                 - 'etc_nginx:/etc/nginx:ro'
                 - 'etc_php:/etc/php:ro'
                 - 'lib_nginx:/var/lib/nginx:rw'
-                - 'log_nginx:/var/log/nginx:rw'
                 - '/mnt/1/share:/mnt/1:rw'
             Tmpfs:
                 '/run/nginx': *TMP_MIB_32
@@ -783,11 +814,45 @@ Meta:
             Tmpfs:
                 '/run': *TMP_MIB_32
 
+'rsyslog':
+    Image: 'nfnty/arch-rsyslog:latest'
+    UGID: 340000
+
+    Names:
+        'rsyslog': {}
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'log':
+            Mode: 'u=rwX,g=rX,o='
+        'run':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            CpuShares: 2048
+            Binds:
+                - 'etc/rsyslog.conf:/etc/rsyslog.conf:ro'
+                - 'log:/var/log/rsyslog:rw'
+                - 'run:/run:rw'
+
 'samba':
     Image: 'nfnty/arch-samba:latest'
     UGID: 140000
 
-    Names: {}
+    Names:
+        'samba':
+            Create:
+                HostConfig:
+                    Binds:
+                        - '/srv/docker/rsyslog/run/samba:/dev/log:rw'
+
+    Depends:
+        - 'rsyslog'
 
     Paths:
         'cache':
@@ -795,8 +860,6 @@ Meta:
         'etc':
             Mode: 'u=rX,g=,o='
         'lib':
-            Mode: 'u=rwX,g=,o='
-        'log':
             Mode: 'u=rwX,g=,o='
 
     Create:
@@ -810,7 +873,6 @@ Meta:
                 - 'cache:/var/cache/samba:rw'
                 - 'etc:/etc/samba:ro'
                 - 'lib:/var/lib/samba:rw'
-                - 'log:/var/log/samba:rw'
                 - '/mnt/1/share:/mnt/1:rw'
             Tmpfs:
                 '/run/samba': *TMP_MIB_32
@@ -825,8 +887,6 @@ Meta:
     Paths:
         'lib':
             Mode: 'u=rwX,g=,o='
-        'log':
-            Mode: 'u=rwX,g=,o='
         'opt':
             Mode: 'u=rX,g=,o='
 
@@ -838,6 +898,5 @@ Meta:
             CpuShares: 512
             Binds:
                 - 'lib:/var/lib/transmission:rw'
-                - 'log:/var/log/transmission:rw'
                 - 'opt:/opt/transmission:ro'
                 - '/mnt/1/share/torrent:/mnt/torrent:rw'

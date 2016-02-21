@@ -13,10 +13,6 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
         /var/lib/transmission /var/log/transmission
 
 USER ${UGNAME}
-VOLUME ["/var/lib/transmission", "/var/log/transmission"]
+VOLUME ["/var/lib/transmission"]
 EXPOSE 9091/tcp 51413/tcp 51413/udp
-ENTRYPOINT [ \
-    "/usr/bin/transmission-daemon", "--foreground", \
-    "--config-dir", "/var/lib/transmission", \
-    "--logfile", "/var/log/transmission/log" \
-]
+ENTRYPOINT ["/usr/bin/transmission-daemon", "--foreground", "--config-dir", "/var/lib/transmission"]

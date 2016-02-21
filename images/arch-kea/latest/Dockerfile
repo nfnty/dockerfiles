@@ -5,7 +5,7 @@ ENV UGID='260000' UGNAME='kea'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_KEA='1.0.0-1' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='/var/log/kea/kea.log'
+ENV VERSION_KEA='1.0.0-1' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='syslog'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "kea=${VERSION_KEA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
@@ -15,5 +15,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/kea
 
 USER ${UGNAME}
-VOLUME ["/var/lib/kea", "/var/log/kea"]
+VOLUME ["/var/lib/kea"]
 ENTRYPOINT ["/usr/bin/kea-dhcp4", "-c", "/etc/kea/kea.conf"]
