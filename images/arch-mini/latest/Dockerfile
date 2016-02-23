@@ -6,18 +6,9 @@ ADD ["bootstrap/arch-mini-bootstrap.tar.xz", "/"]
 ENV PATH='/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl' \
     LANG='en_US.UTF-8' \
     LANGUAGE='en_US:en' \
-    LC_CTYPE='en_US.UTF-8' \
-    LC_NUMERIC='en_US.UTF-8' \
     LC_TIME='en_DK.UTF-8' \
-    LC_COLLATE='en_US.UTF-8' \
-    LC_MONETARY='en_US.UTF-8' \
-    LC_MESSAGES='en_US.UTF-8' \
     LC_PAPER='en_DK.UTF-8' \
-    LC_NAME='en_US.UTF-8' \
-    LC_ADDRESS='en_US.UTF-8' \
-    LC_TELEPHONE='en_US.UTF-8' \
     LC_MEASUREMENT='en_DK.UTF-8' \
-    LC_IDENTIFICATION='en_US.UTF-8' \
     TZ='UTC'
 
 COPY ["crypto/", "/tmp/crypto/"]
