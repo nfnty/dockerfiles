@@ -436,8 +436,7 @@ Meta:
     Image: 'nfnty/arch-logstash:latest'
     UGID: 130000
 
-    Names:
-        'logstash': Null
+    Names: Null
 
     Depends:
         - 'elasticsearch'
@@ -844,12 +843,7 @@ Meta:
     Image: 'nfnty/arch-samba:latest'
     UGID: 140000
 
-    Names:
-        'samba':
-            Create:
-                HostConfig:
-                    Binds:
-                        - '/srv/docker/rsyslog/run/samba:/dev/log:rw'
+    Names: Null
 
     Depends:
         - 'rsyslog'
