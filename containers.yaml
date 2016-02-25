@@ -295,11 +295,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'etc':
             Mode: 'u=rX,g=,o='
-        '/var/log/ulogd':
-            Mode: 'u=rwX,g=rX,o='
-            User: 'root'
-            Group: 'root'
-            ACL: 'default:user:290000:rX,user:290000:rX,default:user:130000:rX,user:130000:rX'
 
     Create:
         HostConfig:
@@ -309,7 +304,6 @@ Meta:
             Binds:
                 - 'cache:/var/cache/hekad:rw'
                 - 'etc:/etc/heka:ro'
-                - '/var/log/ulogd:/mnt/ulogd:ro'
 
 'hostapd':
     Image: 'nfnty/arch-hostapd:latest'
@@ -457,7 +451,7 @@ Meta:
             Mode: 'u=rwX,g=rX,o='
             User: 'root'
             Group: 'root'
-            ACL: 'default:user:290000:rX,user:290000:rX,default:user:130000:rX,user:130000:rX'
+            ACL: 'default:user:heka:rX,user:heka:rX,default:user:130000:rX,user:130000:rX'
 
     Create:
         HostConfig:
@@ -826,8 +820,10 @@ Meta:
             Mode: 'u=rX,g=,o='
         'log':
             Mode: 'u=rwX,g=rX,o='
+            ACL: 'default:user:heka:rX,user:heka:rX'
         'run':
             Mode: 'u=rwX,g=,o='
+            Exclude: '*'
 
     Create:
         HostConfig:
