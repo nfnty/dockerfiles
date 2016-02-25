@@ -241,6 +241,8 @@ class Network(DiGraph):
         super(Network, self).__init__()
 
         for container, config_container in config_containers.items():
+            if config_container['Names'] is None:
+                continue
             for name, config_name in config_container['Names'].items():
                 config = dict_merge_copy(config_container, config_name)
                 self.add_node(name, {'Object': Container(container, name, config)})

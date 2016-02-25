@@ -38,7 +38,7 @@ Meta:
     UGID: 310000
 
     Names:
-        'avahi': {}
+        'avahi': Null
 
     Depends:
         - 'hostapd'
@@ -63,7 +63,7 @@ Meta:
     UGID: 330000
 
     Names:
-        'bitcoin-classic': {}
+        'bitcoin-classic': Null
 
     Paths:
         'etc':
@@ -85,7 +85,7 @@ Meta:
     Image: 'nfnty/arch-bootstrap:latest'
     UGID: 0
 
-    Names: {}
+    Names: Null
 
     Paths:
         'gnupg':
@@ -119,7 +119,7 @@ Meta:
     Image: 'nfnty/arch-builder:latest'
     UGID: 99999
 
-    Names: {}
+    Names: Null
 
     Paths:
         'etc':
@@ -203,7 +203,7 @@ Meta:
     UGID: 110000
 
     Names:
-        'elasticsearch': {}
+        'elasticsearch': Null
 
     Paths:
         'config':
@@ -232,7 +232,7 @@ Meta:
     UGID: 280000
 
     Names:
-        'emby': {}
+        'emby': Null
 
     Paths:
         'lib':
@@ -288,7 +288,7 @@ Meta:
     Image: 'nfnty/arch-heka:latest'
     UGID: 290000
 
-    Names: {}
+    Names: Null
 
     Paths:
         'cache':
@@ -381,7 +381,7 @@ Meta:
     UGID: 120000
 
     Names:
-        'kibana': {}
+        'kibana': Null
 
     Depends:
         - 'elasticsearch'
@@ -404,7 +404,7 @@ Meta:
     Image: 'nfnty/arch-letsencrypt:latest'
     UGID: 99998
 
-    Names: {}
+    Names: Null
 
     Paths:
         'etc':
@@ -437,7 +437,7 @@ Meta:
     UGID: 130000
 
     Names:
-        'logstash': {}
+        'logstash': Null
 
     Depends:
         - 'elasticsearch'
@@ -528,7 +528,7 @@ Meta:
     UGID: 230000
 
     Names:
-        'ntp': {}
+        'ntp': Null
 
     Paths:
         'etc':
@@ -555,7 +555,7 @@ Meta:
     UGID: 170000
 
     Names:
-        'openhab': {}
+        'openhab': Null
 
     Depends:
         - 'postgresql'
@@ -592,7 +592,9 @@ Meta:
             Tmpfs:
                 '/tmp': *TMP_MIB_32_EXEC
             Devices:
-                - {PathOnHost: '/dev/tellstickduo0', PathInContainer: '', CgroupPermissions: 'rw'}
+                - PathOnHost: '/dev/tellstickduo0'
+                  PathInContainer: ''
+                  CgroupPermissions: 'rw'
 
 'openvpn':
     Image: 'nfnty/arch-openvpn:latest'
@@ -651,7 +653,9 @@ Meta:
             Tmpfs:
                 '/tmp': 'size=32M,nr_inodes=10K,mode=770,rw,nosuid,nodev,noexec,async,noatime,gid=0'
             Devices:
-                - {PathOnHost: 'tun', PathInContainer: '/dev/net/tun', CgroupPermissions: 'rw'}
+                - PathOnHost: 'tun'
+                  PathInContainer: '/dev/net/tun'
+                  CgroupPermissions: 'rw'
 
     Setup:
         Entrypoint: ['/usr/bin/openvpn', '--genkey', '--secret', '/etc/openvpn/ssl/ta.key']
@@ -663,7 +667,7 @@ Meta:
     Image: 'nfnty/arch-owncloud:latest'
     UGID: 160000
 
-    Names: {}
+    Names: Null
 
     Depends:
         - 'rsyslog'
@@ -706,7 +710,7 @@ Meta:
     Image: 'nfnty/arch-pimd:latest'
     UGID: 300000
 
-    Names: {}
+    Names: Null
 
     Paths:
         'etc':
@@ -728,7 +732,7 @@ Meta:
     Image: 'nfnty/arch-plex:latest'
     UGID: 320000
 
-    Names: {}
+    Names: Null
 
     Paths:
         'lib':
@@ -753,7 +757,7 @@ Meta:
     UGID: 180000
 
     Names:
-        'postgresql': {}
+        'postgresql': Null
 
     Paths:
         'etc':
@@ -783,7 +787,7 @@ Meta:
     UGID: 240000
 
     Names:
-        'powerdns-recursor': {}
+        'powerdns-recursor': Null
 
     Paths:
         'etc':
@@ -813,7 +817,7 @@ Meta:
     UGID: 340000
 
     Names:
-        'rsyslog': {}
+        'rsyslog': Null
 
     Paths:
         'etc':
@@ -878,7 +882,7 @@ Meta:
     UGID: 100000
 
     Names:
-        'transmission': {}
+        'transmission': Null
 
     Paths:
         'lib':

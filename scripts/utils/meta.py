@@ -42,6 +42,11 @@ def failed(string):
 
 def dict_merge(dict_dst, dict_src):
     ''' Merge src into dst, overwriting, appending '''
+    if dict_src is None:
+        return
+    if dict_dst is None:
+        dict_dst = deepcopy(dict_src)
+        return
     for key, value in dict_src.items():
         if key in dict_dst:
             if type(dict_dst[key]) is type(value) or dict_dst[key] is None or value is None:
@@ -66,6 +71,11 @@ def dict_merge(dict_dst, dict_src):
 
 def dict_merge_add(dict_dst, dict_src):
     ''' Merge src into dst, no overwriting, no appending'''
+    if dict_src is None:
+        return
+    if dict_dst is None:
+        dict_dst = deepcopy(dict_src)
+        return
     for key, value in dict_src.items():
         if key in dict_dst:
             if type(dict_dst[key]) is type(value) or dict_dst[key] is None or value is None:
