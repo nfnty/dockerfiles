@@ -284,6 +284,28 @@ Meta:
                 - 'etc:/etc/mail:ro'
                 - 'spool:/var/spool/exim:rw'
 
+'grafana':
+    Image: 'nfnty/arch-grafana:latest'
+    UGID: 360000
+
+    Names:
+        'grafana': Null
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_2
+            MemorySwap: *GIB_2
+            MemoryReservation: *GIB_1_5
+            Binds:
+                - 'etc:/etc/grafana:ro'
+                - 'lib:/var/lib/grafana:rw'
+
 'heka':
     Image: 'nfnty/arch-heka:latest'
     UGID: 290000
@@ -339,6 +361,33 @@ Meta:
             Dns: Null
             Binds:
                 - 'etc:/etc/hostapd:ro'
+
+'influxdb':
+    Image: 'nfnty/arch-influxdb:latest'
+    UGID: 350000
+
+    Names:
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            CpuShares: 2048
+            Binds:
+                - 'etc:/etc/influxdb:ro'
+                - 'lib:/var/lib/influxdb:rw'
+    Setup:
+        Entrypoint: ['/usr/bin/bash', '-c', '/usr/bin/influxd config > /etc/influxdb/config.toml']
+        HostConfig:
+            Binds:
+                - 'etc:/etc/influxdb:rw'
 
 'kea-dhcp4':
     Image: 'nfnty/arch-kea:latest'

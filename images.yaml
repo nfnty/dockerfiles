@@ -471,3 +471,19 @@ Meta:
             Variable: 'VERSION_RSYSLOG'
             Download: 'nfnty'
             Sources: {}
+
+'nfnty/arch-influxdb:latest':
+    Build: True
+    Packages:
+        'influxdb':
+            Variable: 'VERSION_INFLUXDB'
+            Download: 'nfnty'
+            Sources: {}
+
+'nfnty/arch-grafana:latest':
+    Build: True
+    Packages:
+        'grafana':
+            Variable: 'VERSION_GRAFANA'
+            Download: 'nfnty'
+            Sources: {}
