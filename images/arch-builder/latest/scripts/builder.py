@@ -60,9 +60,16 @@ def args_parse():
     parser.add_argument('--nosign', action='store_true', help='No package/database signing')
     parser.add_argument('--noforce', action='store_true', help='No overwriting current package')
     parser.add_argument('--removeold', action='store_true', help='Remove old package after build')
-    parser.add_argument('--repackage', action='store_true', help='Repackage')
+    parser.add_argument('--repackage', action='store_true', help='Only run package()')
+    parser.add_argument('--noprepare', action='store_true', help='Do not run prepare()')
 
     args = parser.parse_args()
+
+    # Workaround for container config immutability
+    for attribute in args.__dict__:
+        if isinstance(args.__dict__[attribute], bool) and \
+                os.path.exists(os.path.join(PATH_BUILDDIR, '.' + attribute)):
+            args.__dict__[attribute] = True
 
     if args.aur and args.path:
         print('--aur and PATH are mutually exclusive\n')
@@ -289,6 +296,8 @@ def package_make():
 
     if ARGS.repackage:
         cmd.append('--repackage')
+    elif ARGS.noprepare:
+        cmd.append('--noprepare')
 
     try:
         subprocess.run(cmd, check=True)
@@ -347,14 +356,8 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
         print('Successfully changed directory to: {0:s}'.format(ARGS.path))
     print_separator()
 
-    # Repackage if wanted
-    if os.path.exists(os.path.join(PATH_BUILDDIR, '.repackage')):
-        ARGS.repackage = True
-    if ARGS.repackage:
-        ARGS.noclean = True
-
     # Clean builddir
-    if not ARGS.noclean:
+    if not ARGS.noclean and not ARGS.repackage and not ARGS.noprepare:
         try:
             subprocess.run(['/usr/bin/chmod', '--recursive', 'u+rwX', PATH_BUILDDIR], check=True)
         except subprocess.CalledProcessError as error:

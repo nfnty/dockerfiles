@@ -3,12 +3,10 @@ MAINTAINER nfnty <docker@nfnty.se>
 
 ENV UGID='99999' UGNAME='builder' GNUPGHOME='/var/lib/builder/gnupg'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}" && \
+    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false --home-dir /tmp/home "${UGNAME}" && \
 
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
-        /tmp/{build,pkgbuild} \
-        /var/lib/builder/{,gnupg,pkg,src} \
-        /var/log/builder
+        /tmp/{build,home,pkgbuild} /var/lib/builder/{,gnupg,pkg,src} /var/log/builder
 
 COPY ["etc/", "/etc/"]
 COPY ["gnupg/", "${GNUPGHOME}/"]
