@@ -5,7 +5,7 @@ ENV UGID='140000' UGNAME='samba'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_SAMBA='4.3.4-2'
+ENV VERSION_SAMBA='4.3.5-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "samba=${VERSION_SAMBA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

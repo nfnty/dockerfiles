@@ -5,7 +5,7 @@ ENV UGID='99998' UGNAME='letsencrypt'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_LETSENCRYPT='0.4.0-1'
+ENV VERSION_LETSENCRYPT='0.4.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "letsencrypt=${VERSION_LETSENCRYPT}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
