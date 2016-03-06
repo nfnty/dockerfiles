@@ -95,10 +95,10 @@ def decode_build(response):
         try:
             deserial = json.loads(line)
         except json.decoder.JSONDecodeError as error:
-            yield False, str(error)
+            yield False, str(error) + '\n'
             continue
         if not isinstance(deserial, dict):
-            yield False, 'Loaded JSON string is not a dictionary'
+            yield False, 'JSON string is not a dict: {0:s}\n'.format(str(deserial))
             continue
 
         if 'stream' in deserial:
