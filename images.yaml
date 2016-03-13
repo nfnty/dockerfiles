@@ -27,14 +27,14 @@ Meta:
 #################
 
 'nfnty/arch-mini:latest':
-    Build: True
+    Build: true
     Scratch: ['scripts/containers.py', 'run', '--rm', 'bootstrap']
 
 'nfnty/arch-devel:latest':
-    Build: False
+    Build: false
 
 'nfnty/arch-jre8:latest':
-    Build: False
+    Build: false
     Packages:
         'jre8-openjdk-headless':
             Variable: 'VERSION_JAVA'
@@ -50,7 +50,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-mono:latest':
-    Build: False
+    Build: false
     Packages:
         'mono':
             Variable: 'VERSION_MONO'
@@ -62,7 +62,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-python:latest':
-    Build: True
+    Build: true
     Packages:
         'python':
             Variable: 'VERSION_PYTHON'
@@ -74,7 +74,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-python2:latest':
-    Build: True
+    Build: true
     Packages:
         'python2':
             Variable: 'VERSION_PYTHON2'
@@ -90,13 +90,13 @@ Meta:
 ######################
 
 'nfnty/arch-bootstrap:latest':
-    Build: True
+    Build: true
 
 'nfnty/arch-builder:latest':
-    Build: True
+    Build: true
 
 'nfnty/arch-dovecot:latest':
-    Build: True
+    Build: true
     Packages:
         'dovecot':
             Variable: 'VERSION_DOVECOT'
@@ -112,7 +112,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-elasticsearch:latest':
-    Build: True
+    Build: true
     Packages:
         'elasticsearch':
             Variable: 'VERSION_ELASTICSEARCH'
@@ -128,7 +128,7 @@ Meta:
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-emby:latest':
-    Build: True
+    Build: true
     Packages:
         'emby-server':
             Variable: 'VERSION_EMBY'
@@ -140,7 +140,7 @@ Meta:
                     Regex: '(\d+\.\d+\.\d+(?:\.\d+)?)'
 
 'nfnty/arch-exim:latest':
-    Build: True
+    Build: true
     Packages:
         'exim':
             Variable: 'VERSION_EXIM'
@@ -156,7 +156,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-heka:latest':
-    Build: True
+    Build: true
     Packages:
         'heka':
             Variable: 'VERSION_HEKA'
@@ -169,7 +169,7 @@ Meta:
 
 
 'nfnty/arch-hostapd:latest':
-    Build: True
+    Build: true
     Packages:
         'hostapd':
             Variable: 'VERSION_HOSTAPD'
@@ -185,7 +185,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-kea:latest':
-    Build: True
+    Build: true
     Packages:
         'kea':
             Variable: 'VERSION_KEA'
@@ -197,7 +197,7 @@ Meta:
                     Regex: '^(\d+\.\d+(?:\.\d+)?)/$'
 
 'nfnty/arch-kibana:latest':
-    Build: True
+    Build: true
     Packages:
         'kibana':
             Variable: 'VERSION_KIBANA'
@@ -213,7 +213,7 @@ Meta:
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-logstash:latest':
-    Build: True
+    Build: true
     Packages:
         'logstash':
             Variable: 'VERSION_LOGSTASH'
@@ -229,7 +229,7 @@ Meta:
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-nginx:latest':
-    Build: True
+    Build: true
     Packages:
         'nginx':
             Variable: 'VERSION_NGINX'
@@ -245,7 +245,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-nginx-php:latest':
-    Build: True
+    Build: true
     Packages:
         'php':
             Variable: 'VERSION_PHP'
@@ -257,7 +257,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-ntp:latest':
-    Build: True
+    Build: true
     Packages:
         'ntp':
             Variable: 'VERSION_NTP'
@@ -273,7 +273,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-openhab:latest':
-    Build: True
+    Build: true
     Packages:
         'openhab':
             Variable: 'VERSION_OPENHAB'
@@ -285,11 +285,11 @@ Meta:
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-openhab-telldus:latest':
-    Build: True
-    check: False
+    Build: true
+    Check: false
 
 'nfnty/arch-openvpn:latest':
-    Build: True
+    Build: true
     Packages:
         'openvpn':
             Variable: 'VERSION_OPENVPN'
@@ -305,7 +305,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-postgresql:latest':
-    Build: True
+    Build: true
     Packages:
         'postgresql':
             Variable: 'VERSION_POSTGRESQL'
@@ -321,7 +321,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-powerdns-recursor:latest':
-    Build: True
+    Build: true
     Packages:
         'powerdns-recursor':
             Variable: 'VERSION_POWERDNS_RECURSOR'
@@ -341,7 +341,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-samba:latest':
-    Build: True
+    Build: true
     Packages:
         'samba':
             Variable: 'VERSION_SAMBA'
@@ -357,7 +357,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-transmission:latest':
-    Build: True
+    Build: true
     Packages:
         'transmission-cli':
             Variable: 'VERSION_TRANSMISSION'
@@ -373,7 +373,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-pimd:latest':
-    Build: True
+    Build: true
     Packages:
         'pimd':
             Variable: 'VERSION_PIMD'
@@ -385,7 +385,7 @@ Meta:
                     Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-avahi:latest':
-    Build: True
+    Build: true
     Packages:
         'avahi':
             Variable: 'VERSION_AVAHI'
@@ -397,7 +397,7 @@ Meta:
                     Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-plex:latest':
-    Build: False
+    Build: false
     Packages:
         'plexmediaserver':
             Variable: 'VERSION_PLEX'
@@ -409,7 +409,7 @@ Meta:
                     Regex: '(\d+\.\d+\.\d+\.\d+\.\d+-[0-9a-f]+)'
 
 'nfnty/arch-nodejs:latest':
-    Build: False
+    Build: false
     Packages:
         'nodejs':
             Variable: 'VERSION_NODEJS'
@@ -421,7 +421,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-npm:latest':
-    Build: False
+    Build: false
     Packages:
         'npm':
             Variable: 'VERSION_NPM'
@@ -433,7 +433,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-letsencrypt:latest':
-    Build: True
+    Build: true
     Packages:
         'letsencrypt':
             Variable: 'VERSION_LETSENCRYPT'
@@ -445,7 +445,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-owncloud:latest':
-    Build: True
+    Build: true
     Packages:
         'owncloud':
             Variable: 'VERSION_OWNCLOUD'
@@ -457,7 +457,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-bitcoin-classic:latest':
-    Build: True
+    Build: true
     Packages:
         'bitcoin-classic':
             Variable: 'VERSION_BITCOIN_CLASSIC'
@@ -465,7 +465,7 @@ Meta:
             Sources: {}
 
 'nfnty/arch-rsyslog:latest':
-    Build: True
+    Build: true
     Packages:
         'rsyslog':
             Variable: 'VERSION_RSYSLOG'
@@ -473,7 +473,7 @@ Meta:
             Sources: {}
 
 'nfnty/arch-influxdb:latest':
-    Build: True
+    Build: true
     Packages:
         'influxdb':
             Variable: 'VERSION_INFLUXDB'
@@ -481,7 +481,7 @@ Meta:
             Sources: {}
 
 'nfnty/arch-grafana:latest':
-    Build: True
+    Build: true
     Packages:
         'grafana':
             Variable: 'VERSION_GRAFANA'
@@ -489,7 +489,7 @@ Meta:
             Sources: {}
 
 'nfnty/arch-prometheus:latest':
-    Build: True
+    Build: true
     Packages:
         'prometheus':
             Variable: 'VERSION_PROMETHEUS'
