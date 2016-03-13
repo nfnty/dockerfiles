@@ -487,3 +487,11 @@ Meta:
             Variable: 'VERSION_GRAFANA'
             Download: 'nfnty'
             Sources: {}
+
+'nfnty/arch-prometheus:latest':
+    Build: True
+    Packages:
+        'prometheus':
+            Variable: 'VERSION_PROMETHEUS'
+            Download: 'nfnty'
+            Sources: {}

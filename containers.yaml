@@ -366,7 +366,7 @@ Meta:
     Image: 'nfnty/arch-influxdb:latest'
     UGID: 350000
 
-    Names:
+    Names: Null
 
     Paths:
         'etc':
@@ -859,6 +859,29 @@ Meta:
                 - '/srv/blacklists/domain:/mnt/blacklists:ro'
             Tmpfs:
                 '/run': *TMP_MIB_32
+
+'prometheus':
+    Image: 'nfnty/arch-prometheus:latest'
+    UGID: 360000
+
+    Names:
+        'prometheus': Null
+
+    Paths:
+        'etc':
+            Mode: 'u=rX,g=,o='
+        'lib':
+            Mode: 'u=rwX,g=,o='
+
+    Create:
+        HostConfig:
+            Memory: *GIB_4
+            MemorySwap: *GIB_4
+            MemoryReservation: *GIB_3_5
+            CpuShares: 2048
+            Binds:
+                - 'etc:/etc/prometheus:ro'
+                - 'lib:/var/lib/prometheus:rw'
 
 'rsyslog':
     Image: 'nfnty/arch-rsyslog:latest'

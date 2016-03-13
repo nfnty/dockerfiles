@@ -95,7 +95,7 @@ class ThreadBuild(threading.Thread):
             for status, decoded in decode_build(response):
                 log += decoded
                 if not status:
-                    decoded += 'FAILED FAILED FAILED\n'
+                    log += 'FAILED FAILED FAILED\n'
                     fail = True
             if fail:
                 self._return(False, log)
