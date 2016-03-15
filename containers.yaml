@@ -133,10 +133,6 @@ Meta:
             ACL: 'default:user:160000:rX,user:160000:rX'
         'log':
             Mode: 'u=rwX,g=,o='
-        'pkgcache':
-            Mode: 'u=rwX,g=rX,o='
-            User: 'root'
-            Group: 'root'
         'pkgbuild':
             Mode: 'u=rwX,g=,o='
 
@@ -161,7 +157,6 @@ Meta:
                 - 'lib:/var/lib/builder:rw'
                 - 'log:/var/log/builder:rw'
                 - 'pkgbuild:/mnt/pkgbuild:rw'
-                - 'pkgcache:/var/cache/pacman/pkg:rw'
 
 'dovecot':
     Image: 'nfnty/arch-dovecot:latest'
