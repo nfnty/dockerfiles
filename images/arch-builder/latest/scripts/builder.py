@@ -201,10 +201,13 @@ def db_update():
         cmd.insert(1, '--remove')
 
     if ARGS.dbreset:
-        try:
-            os.remove(path_db)
-        except FileNotFoundError:
-            pass
+        print('Removing database files')
+        for filename in os.listdir(PATH_PKGDEST):
+            if re.fullmatch(r'^[^.]+\.(db|files)\.tar\.xz.*$', filename):
+                os.remove(os.path.join(PATH_PKGDEST, filename))
+                print(filename)
+        print()
+
         packages = [path for path, _ in packages_mtime(PATH_PKGDEST)]
     else:
         packages = packages_newer(PATH_PKGDEST, path_db)
@@ -317,7 +320,7 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
         gpg_init()
         sys.exit(0)
     elif ARGS.dbreset:
-        print('Updating database!')
+        print('Resetting database!\n')
         db_update()
         sys.exit(0)
     elif ARGS.pkgcleanup:
