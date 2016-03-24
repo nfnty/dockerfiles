@@ -5,7 +5,7 @@ ENV UGID='170000' UGNAME='openhab'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_OPENHAB='1.8.1' JAVA_HOME='/usr/lib/jvm/default-runtime'
+ENV VERSION_OPENHAB='1.8.2' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm ttf-dejavu && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

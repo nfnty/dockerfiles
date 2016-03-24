@@ -5,7 +5,7 @@ ENV UGID='110000' UGNAME='elasticsearch'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_ELASTICSEARCH='2.2.0' JAVA_HOME='/usr/lib/jvm/default-runtime'
+ENV VERSION_ELASTICSEARCH='2.2.1' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN mkdir /opt/elasticsearch && \
     curl --speed-limit 256000 \
         "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${VERSION_ELASTICSEARCH}/elasticsearch-${VERSION_ELASTICSEARCH}.tar.gz" | \
