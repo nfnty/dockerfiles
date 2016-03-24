@@ -13,6 +13,7 @@ ENV VERSION_PLEX='0.9.16.3.1840-cece46d' \
     PLEX_MEDIA_SERVER_TMPDIR='/tmp' \
     PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS=6
 RUN mkdir /opt/plexmediaserver && \
+    set -o pipefail && \
     curl --speed-limit 256000 \
         "https://downloads.plex.tv/plex-media-server/${VERSION_PLEX}/plexmediaserver-${VERSION_PLEX}.x86_64.rpm" | \
         bsdtar --extract --file=- --include='usr/lib/plexmediaserver' --strip-components=4 --directory='/opt/plexmediaserver' && \

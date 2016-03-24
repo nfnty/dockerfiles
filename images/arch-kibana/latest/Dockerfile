@@ -7,6 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_KIBANA='4.4.2' BABEL_CACHE_PATH='/tmp/babel.json'
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 /opt/kibana && \
+    set -o pipefail && \
     curl --speed-limit 256000 \
         "https://download.elastic.co/kibana/kibana/kibana-${VERSION_KIBANA}-linux-x64.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/kibana' && \

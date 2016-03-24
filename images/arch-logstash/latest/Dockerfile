@@ -7,6 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_LOGSTASH='2.2.2' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
 RUN mkdir /opt/logstash && \
+    set -o pipefail && \
     curl --speed-limit 256000 \
         "https://download.elastic.co/logstash/logstash/logstash-${VERSION_LOGSTASH}.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/logstash' && \

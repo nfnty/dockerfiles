@@ -11,6 +11,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
 
     mkdir /opt/openhab && \
+    set -o pipefail && \
     curl --speed-limit 256000 --location \
         "https://bintray.com/artifact/download/openhab/bin/distribution-${VERSION_OPENHAB}-runtime.zip" | \
         bsdtar --extract --file=- --directory='/opt/openhab' && \
