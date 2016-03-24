@@ -90,6 +90,8 @@ def decode_attach(filedesc):
 def decode_build(response):
     ''' decode build '''
     for line in response.iter_lines():
+        if not line:
+            continue
         line = line.decode('UTF-8')
         decoded = ''
         try:
