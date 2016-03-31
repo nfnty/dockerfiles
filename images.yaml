@@ -462,7 +462,11 @@ Meta:
         'bitcoin-classic':
             Variable: 'VERSION_BITCOIN_CLASSIC'
             Download: 'nfnty'
-            Sources: {}
+            Sources:
+                'github':
+                    URL: 'https://github.com/bitcoinclassic/bitcoinclassic/releases'
+                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
+                    Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-rsyslog:latest':
     Build: true
@@ -470,7 +474,11 @@ Meta:
         'rsyslog':
             Variable: 'VERSION_RSYSLOG'
             Download: 'nfnty'
-            Sources: {}
+            Sources:
+                'github':
+                    URL: 'https://github.com/rsyslog/rsyslog/tags'
+                    XPath: '//span[@class="tag-name"]'
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-influxdb:latest':
     Build: true
@@ -478,7 +486,11 @@ Meta:
         'influxdb':
             Variable: 'VERSION_INFLUXDB'
             Download: 'nfnty'
-            Sources: {}
+            Sources:
+                'github':
+                    URL: 'https://github.com/influxdata/influxdb/tags'
+                    XPath: '//span[@class="tag-name"]'
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-grafana:latest':
     Build: true
@@ -486,7 +498,11 @@ Meta:
         'grafana':
             Variable: 'VERSION_GRAFANA'
             Download: 'nfnty'
-            Sources: {}
+            Sources:
+                'github':
+                    URL: 'https://github.com/grafana/grafana/releases'
+                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
+                    Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-prometheus:latest':
     Build: true
@@ -494,4 +510,8 @@ Meta:
         'prometheus':
             Variable: 'VERSION_PROMETHEUS'
             Download: 'nfnty'
-            Sources: {}
+            Sources:
+                'github':
+                    URL: 'https://github.com/prometheus/prometheus/releases'
+                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
+                    Regex: *REGEX_DIGITS_3
