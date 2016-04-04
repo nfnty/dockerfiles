@@ -373,7 +373,8 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-pimd:latest':
-    Build: true
+    Build: false
+    Check: false
     Packages:
         'pimd':
             Variable: 'VERSION_PIMD'
