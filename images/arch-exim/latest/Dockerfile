@@ -5,7 +5,7 @@ ENV UGID='250000' UGNAME='exim'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_EXIM='4.86.2-2'
+ENV VERSION_EXIM='4.87-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "exim=${VERSION_EXIM}" tini && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

@@ -5,7 +5,7 @@ ENV UGID='350000' UGNAME='influxdb'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_INFLUXDB='0.10.1-1'
+ENV VERSION_INFLUXDB='0.12.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "influxdb=${VERSION_INFLUXDB}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
