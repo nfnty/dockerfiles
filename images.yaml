@@ -231,16 +231,16 @@ Meta:
 'nfnty/arch-nginx:latest':
     Build: true
     Packages:
-        'nginx':
-            Variable: 'VERSION_NGINX'
+        'nginx-mainline':
+            Variable: 'VERSION_NGINX_MAINLINE'
             Download: 'extra'
             Sources:
                 'upstream':
                     URL: 'http://nginx.org/en/download.html'
-                    XPath: '((//h4[text()="Stable version"]/../following-sibling::table)[1]//a[contains(@href, "tar.gz")])[1]'
+                    XPath: '((//h4[text()="Mainline version"]/../following-sibling::table)[1]//a[contains(@href, "tar.gz")])[1]'
                     Regex: '^nginx-(\d+\.\d+\.\d+)$'
                 'archlinux':
-                    URL: 'https://www.archlinux.org/packages/extra/x86_64/nginx'
+                    URL: 'https://www.archlinux.org/packages/extra/x86_64/nginx-mainline'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 

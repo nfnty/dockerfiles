@@ -5,9 +5,9 @@ ENV UGID='160000' UGNAME='nginx'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_NGINX='1.8.1-3'
+ENV VERSION_NGINX_MAINLINE='1.9.14-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "nginx=${VERSION_NGINX}" && \
+    pacman --sync --noconfirm "nginx-mainline=${VERSION_NGINX_MAINLINE}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_bind_service=ep' /usr/bin/nginx && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/nginx /var/log/nginx && \
