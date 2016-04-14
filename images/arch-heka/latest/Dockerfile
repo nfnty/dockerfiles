@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_HEKA='0.10.0-6'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "heka=${VERSION_HEKA}" geoip-citydata && \
+    pacman --sync --noconfirm "heka=${VERSION_HEKA}" geoip-database-extra && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/cache/hekad
 
