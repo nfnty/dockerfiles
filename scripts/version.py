@@ -19,6 +19,8 @@ def fetch(url, headers, timeout):
         response.raise_for_status()
     except (requests.exceptions.Timeout, requests.exceptions.HTTPError) as error:
         raise RuntimeError('fetch: {0:s}\n{1:s}'.format(str(error), str(error.response.content)))
+    except OSError as error:
+        raise RuntimeError('fetch: {0:s}'.format(str(error)))
     return lxml.html.document_fromstring(response.content)
 
 

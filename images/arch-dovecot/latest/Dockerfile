@@ -5,7 +5,7 @@ ENV UGID='220000' UGNAME='dovecot'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_DOVECOT='2.2.23-2'
+ENV VERSION_DOVECOT='2.2.24-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${VERSION_DOVECOT}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

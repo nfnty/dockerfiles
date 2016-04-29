@@ -132,7 +132,7 @@ Meta:
     Packages:
         'emby-server':
             Variable: 'VERSION_EMBY'
-            Download: 'community'
+            Download: 'nfnty'
             Sources:
                 'github':
                     URL: 'https://github.com/MediaBrowser/Emby/releases'
@@ -503,7 +503,7 @@ Meta:
                 'github':
                     URL: 'https://github.com/grafana/grafana/releases'
                     XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: *REGEX_DIGITS_3
+                    Regex: '(\d+\.\d+\.\d+\S+)'
 
 'nfnty/arch-prometheus:latest':
     Build: true
