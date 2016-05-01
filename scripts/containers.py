@@ -43,6 +43,7 @@ def args_parse(arguments=None):
         mode.add_argument('--modify', action='store_true', help='Modify')
         mode.add_argument('--setup', action='store_true', help='Setup')
         mode.add_argument('--update', action='store_true', help='Update')
+        mode.add_argument('--info', action='store_true', help='Info')
 
         # Optional
         par1.add_argument('--no-successors', action='store_true', help='No successors')
@@ -242,6 +243,9 @@ class Network(DiGraph):
 
         for container, config_container in config_containers.items():
             if config_container['Names'] is None:
+                if ARGS.info:
+                    self.add_node(
+                        container, {'Object': Container(container, container, config_container)})
                 continue
             for name, config_name in config_container['Names'].items():
                 config = dict_merge_copy(config_container, config_name)
@@ -438,18 +442,28 @@ def main():  # pylint: disable=too-many-branches
     ''' Main '''
     if ARGS.mode == 'manage':
         network = Network(CONTAINERS)
-        network.attr_backups()
+        if not ARGS.info:
+            network.attr_backups()
+
         if ARGS.orphans:
             orphans = network.orphans()
             if not orphans:
                 failed('Found no orphans')
             ARGS.containers |= orphans
+
         if ARGS.containers:
             if ARGS.no_successors:
                 network.remove_nodes_from_except(ARGS.containers, True)
             else:
                 network.remove_nodes_from_except(ARGS.containers, False)
+
         config_args_validate(network)
+
+        if ARGS.info:
+            print(json.dumps({node: value['Object'].config
+                              for node, value in network.node.items()}))
+            sys.exit(0)
+
         network.build(META['Limits']['Threads'])
 
     elif ARGS.mode == 'run':
