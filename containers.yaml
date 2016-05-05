@@ -528,12 +528,6 @@ Meta:
                     Binds:
                         - '/srv/docker/rsyslog/run/nginx-proxy:/dev/log:rw'
         'nginx-mirror':
-            Paths:
-                '/srv/mirror':
-                    Mode: 'u=rwX,g=rX,o='
-                    User: 'mirror-sync'
-                    Group: 'mirror-sync'
-                    ACL: 'default:user:160000:rX,user:160000:rX'
             Create:
                 HostConfig:
                     Binds:
