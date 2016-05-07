@@ -21,7 +21,7 @@ def args_parse(arguments=None):
 
     # Optional
     parser.add_argument('--no-cache', action='store_true', help='Force image update')
-    parser.add_argument('--no-scratch', action='store_true', help='Do not build scratch')
+    parser.add_argument('--scratch', action='store_true', help='Build scratch')
     parser.add_argument('--no-successors', action='store_true', help='Do not build successors')
 
     # Positional
@@ -74,7 +74,7 @@ class ThreadBuild(threading.Thread):
             image = self.network.node[self.name]['Object']
             log = ''
 
-            if not ARGS.no_scratch and 'Scratch' in image.config:
+            if ARGS.scratch and 'Scratch' in image.config:
                 cprint('Building scratch: {0:s}'.format(self.name), 'yellow')
                 try:
                     log += image.build_scratch()
