@@ -168,6 +168,7 @@ Meta:
                 HostConfig:
                     Binds:
                         - '/srv/docker/rsyslog/run/dovecot:/dev/log:rw'
+                        - '/srv/ssl/letsencrypt/nfnty.se:/mnt/ssl:ro'
 
     Depends:
         - 'rsyslog'
@@ -257,6 +258,7 @@ Meta:
                 HostConfig:
                     Binds:
                         - '/srv/docker/rsyslog/run/exim:/dev/log:rw'
+                        - '/srv/ssl/letsencrypt/nfnty.se:/mnt/ssl:ro'
 
     Depends:
         - 'rsyslog'
@@ -461,9 +463,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'log':
             Mode: 'u=rwX,g=,o='
-        '/srv/docker/nginx-proxy-wan/webroot/letsencrypt':
-            Mode: 'u=rwX,g=rX,o='
-            ACL: 'default:user:160000:rX,user:160000:rX'
 
     Create:
         HostConfig:
@@ -518,10 +517,16 @@ Meta:
                 'webroot':
                     Exclude:
                         - 'letsencrypt'
+                'webroot/letsencrypt':
+                    User: '99998'
+                    Group: '99998'
+                    Mode: 'u=rwX,g=rX,o='
+                    ACL: 'default:user:160000:rX,user:160000:rX'
             Create:
                 HostConfig:
                     Binds:
                         - '/srv/docker/rsyslog/run/nginx-proxy-wan:/dev/log:rw'
+                        - '/srv/ssl/letsencrypt/nfnty.se:/mnt/ssl:ro'
         'nginx-proxy':
             Create:
                 HostConfig:
