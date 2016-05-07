@@ -387,7 +387,7 @@ class Network(DiGraph):
             queue_in.task_done()
     # pylint: enable=too-many-branches,too-many-locals,too-many-statements
 
-    def build(self, threads_max):
+    def build(self, threads_max):  # pylint: disable=too-many-branches
         ''' Build '''
         queue_out = queue.PriorityQueue()
         queue_in = queue.Queue()
@@ -411,6 +411,10 @@ class Network(DiGraph):
             self._build_all('create', queue_out, queue_in)
             if ARGS.create:
                 self._build_all('rename', queue_out, queue_in)
+                if ARGS.paths:
+                    self._build_all('paths', queue_out, queue_in)
+                elif ARGS.perms:
+                    self._build_all('permissions', queue_out, queue_in)
             else:
                 self._build_restart(queue_out, queue_in)
             self._build_all('cleanup', queue_out, queue_in)
