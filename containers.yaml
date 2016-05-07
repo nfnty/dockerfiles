@@ -92,8 +92,6 @@ Meta:
             Mode: 'u=rwX,g=,o='
         'pkgcache':
             Mode: 'u=rwX,g=rX,o='
-        '/opt/docker/images/arch-mini/latest/bootstrap':
-            Mode: 'u=rwX,g=,o='
 
     Create:
         HostConfig:
@@ -489,11 +487,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-        '/var/log/ulogd':
-            Mode: 'u=rwX,g=rX,o='
-            User: 'root'
-            Group: 'root'
-            ACL: 'default:user:heka:rX,user:heka:rX,default:user:130000:rX,user:130000:rX'
 
     Create:
         HostConfig:
@@ -834,11 +827,6 @@ Meta:
     Paths:
         'etc':
             Mode: 'u=rX,g=,o='
-        '/srv/blacklists/domain':
-            Mode: 'u=rwX,g=rX,o='
-            User: 'blacklists-sync'
-            Group: 'blacklists-sync'
-            ACL: 'default:user:240000:rX,user:240000:rX'
 
     Create:
         HostConfig:
