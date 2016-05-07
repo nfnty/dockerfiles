@@ -112,7 +112,9 @@ def run(command):
         process = subprocess.run(
             command, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as error:
+        # pylint: disable=no-member
         raise RuntimeError('{0:s}\n{1:s}'.format(str(error), error.stdout.decode('UTF-8')))
+        # pylint: enable=no-member
     return process.stdout.decode('UTF-8')
 
 
@@ -122,8 +124,10 @@ def run_pipe(command):
         process = subprocess.run(
             command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as error:
+        # pylint: disable=no-member
         raise RuntimeError('{0:s}\n{1:s}\n{2:s}'.format(
             str(error), error.stdout.decode('UTF-8'), error.stderr.decode('UTF-8')))
+        # pylint: enable=no-member
     return process
 
 

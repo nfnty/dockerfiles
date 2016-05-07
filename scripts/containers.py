@@ -48,7 +48,9 @@ def args_parse(arguments=None):
         # Optional
         par1.add_argument('--no-successors', action='store_true', help='No successors')
         par1.add_argument('--orphans', action='store_true', help='Orphans only')
-        par1.add_argument('--perms', action='store_true', help='Enforce permissions')
+        paths = par1.add_mutually_exclusive_group(required=False)
+        paths.add_argument('--paths', action='store_true', help='Enforce paths')
+        paths.add_argument('--perms', action='store_true', help='Enforce paths with permissions')
 
         # Positional
         par1.add_argument('containers', metavar='CONTAINER', action=ActionSet, nargs='*',
@@ -194,19 +196,22 @@ class ThreadBuild(threading.Thread):
         log += 'Setup done\n'
         self._return(True, log)
 
-    def _mode_permissions(self, container):
-        ''' Enforce permissions '''
-        log = 'Enforcing permissions\n'
+    def _mode_paths(self, container, permissions=False):
+        ''' Enforce paths '''
+        if permissions:
+            log = 'Enforcing paths with permissions\n'
+        else:
+            log = 'Enforcing paths\n'
         try:
-            log += container.permissions()
+            log += container.paths(permissions=permissions)
         except RuntimeError as error:
             log += '{0:s}\n'.format(str(error))
             self._return(False, log)
             return
-        log += 'Enforced permissions\n'
+        log += 'Enforced paths\n'
         self._return(True, log)
 
-    def run(self):
+    def run(self):  # pylint: disable=too-many-branches
         while True:
             try:
                 _, (self.mode, self.name) = self.queue_in.get(timeout=0.1)
@@ -216,22 +221,23 @@ class ThreadBuild(threading.Thread):
                 continue
 
             container = self.network.node[self.name]['Object']
-            backups = self.network.node[self.name]['Backups']
 
             if self.mode == 'create':
                 self._mode_create(container)
             elif self.mode == 'stop':
-                self._mode_stop(backups)
+                self._mode_stop(self.network.node[self.name]['Backups'])
             elif self.mode == 'rename':
-                self._mode_rename(container, backups)
+                self._mode_rename(container, self.network.node[self.name]['Backups'])
             elif self.mode == 'start':
                 self._mode_start(container)
             elif self.mode == 'cleanup':
-                self._mode_cleanup(backups)
+                self._mode_cleanup(self.network.node[self.name]['Backups'])
             elif self.mode == 'setup':
                 self._mode_setup(container)
+            elif self.mode == 'paths':
+                self._mode_paths(container)
             elif self.mode == 'permissions':
-                self._mode_permissions(container)
+                self._mode_paths(container, permissions=True)
             else:
                 raise RuntimeError('Incorrect mode: {0:s}'.format(self.mode))
 
@@ -243,7 +249,7 @@ class Network(DiGraph):
 
         for container, config_container in config_containers.items():
             if config_container['Names'] is None:
-                if ARGS.info:
+                if ARGS.modify or ARGS.info:
                     self.add_node(
                         container, {'Object': Container(container, container, config_container)})
                 continue
@@ -351,7 +357,10 @@ class Network(DiGraph):
             elif mode == 'rename':
                 names_rename.remove(name)
                 if not connected & names_rename:
-                    if ARGS.perms:
+                    if ARGS.paths:
+                        for node in connected:
+                            queue_out.put((-length, ('paths', node)))
+                    elif ARGS.perms:
                         for node in connected:
                             queue_out.put((-length, ('permissions', node)))
                     else:
@@ -394,7 +403,9 @@ class Network(DiGraph):
         if ARGS.setup:
             self._build_all('setup', queue_out, queue_in)
         elif ARGS.modify:
-            if ARGS.perms:
+            if ARGS.paths:
+                self._build_all('paths', queue_out, queue_in)
+            elif ARGS.perms:
                 self._build_all('permissions', queue_out, queue_in)
         else:
             self._build_all('create', queue_out, queue_in)
@@ -442,7 +453,7 @@ def main():  # pylint: disable=too-many-branches
     ''' Main '''
     if ARGS.mode == 'manage':
         network = Network(CONTAINERS)
-        if not ARGS.info:
+        if not (ARGS.modify or ARGS.info):
             network.attr_backups()
 
         if ARGS.orphans:
@@ -474,8 +485,8 @@ def main():  # pylint: disable=too-many-branches
                               path_basename=True, command=ARGS.arguments)
 
         if ARGS.perms:
-            cprint('Enforcing permissions', 'green')
-            print(container.permissions())
+            cprint('Enforcing paths with permissions', 'green')
+            print(container.paths(permissions=True))
 
         if ARGS.modify:
             sys.exit(0)

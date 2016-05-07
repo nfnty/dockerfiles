@@ -30,6 +30,7 @@ class Container:
         self.config = config
         self.identity = identity
         self.path = os.path.join(META['BindRoot'], self.basename if path_basename else self.name)
+        self.path_sep = os.path.join(self.path, os.path.sep)
         self.command = command
 
         if self.config:
@@ -145,44 +146,57 @@ class Container:
         inspect = self.inspect()
         return inspect['Config']['Image'] not in api.image_inspect(inspect['Image'])['RepoTags']
 
-    def permissions(self):  # pylint: disable=too-many-branches
-        ''' Enforce permissions '''
+    def paths(self, permissions=False):  # pylint: disable=too-many-branches
+        ''' Paths creation and permissions '''
         log = ''
-        for path, value in self.config['Paths'].items():
-            if not os.path.isabs(path):
-                path = os.path.join(self.path, path)
-            user = value['User'] if 'User' in value else self.config['UGID']
-            group = value['Group'] if 'Group' in value else self.config['UGID']
 
-            if not os.path.exists(path):
-                raise RuntimeError('Path does not exist: {0:s}'.format(path))
+        if not os.path.exists(self.path):
+            log += meta.run(['/usr/bin/btrfs', 'subvolume', 'create', self.path])
+            log += meta.run(['/usr/bin/chmod', 'u=rwx,g=rx,o=', self.path])
+            log += 'subvolume created: {0:s}\n'.format(self.path)
 
-            if 'Exclude' in value:
-                log += 'Path: {0:s}\n'.format(path)
-                log += meta.chown([path], user, group)
-                log += meta.chmod([path], value['Mode'])
-                if 'ACL' in value:
-                    log += meta.setfacl([path], value['ACL'])
-                else:
-                    log += meta.setfacl([path])
-
-                if value['Exclude'] == '*':
-                    paths = []
-                else:
-                    paths = meta.paths_include(path, value['Exclude'])
+        for path, value in sorted(self.config['Paths'].items()):
+            permissions_path = False
+            if path.startswith(self.path_sep):
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    log += 'makedirs: {0:s}\n'.format(path)
+                    permissions_path = True
             else:
-                paths = [path]
+                if not os.path.exists(path):
+                    raise RuntimeError('{0:s}\nPath does not exist: {1:s}'.format(log, path))
 
-            if paths:
-                log += 'Paths: {0:s}\n'.format(' '.join(paths))
-                log += meta.chown(paths, user, group, recursive=True)
-                log += meta.chmod(paths, value['Mode'], recursive=True)
-                if 'ACL' in value:
-                    log += meta.setfacl(paths, value['ACL'], recursive=True)
+            if permissions or permissions_path:
+                user = value['User'] if 'User' in value else self.config['UGID']
+                group = value['Group'] if 'Group' in value else self.config['UGID']
+
+                if 'Exclude' in value:
+                    log += 'Path: {0:s}\n'.format(path)
+                    log += meta.chown([path], user, group)
+                    log += meta.chmod([path], value['Mode'])
+                    if 'ACL' in value:
+                        log += meta.setfacl([path], value['ACL'])
+                    else:
+                        log += meta.setfacl([path])
+
+                    if value['Exclude'] == '*':
+                        paths = []
+                    else:
+                        paths = meta.paths_include(path, value['Exclude'])
                 else:
-                    log += meta.setfacl([path], recursive=True)
-            else:
-                log += 'No paths: {0:s}\n'.format(path)
+                    paths = [path]
+
+                if paths:
+                    log += 'Permission paths: {0:s}\n'.format(' '.join(paths))
+                    log += meta.chown(paths, user, group, recursive=True)
+                    log += meta.chmod(paths, value['Mode'], recursive=True)
+                    if 'ACL' in value:
+                        log += meta.setfacl(paths, value['ACL'], recursive=True)
+                    else:
+                        log += meta.setfacl([path], recursive=True)
+                else:
+                    log += 'No paths: {0:s}\n'.format(path)
+
         return log
 
     def remove(self):
