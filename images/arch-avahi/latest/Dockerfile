@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_AVAHI='0.6.32-2'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "avahi=${VERSION_AVAHI}" && \
+    pacman --sync --noconfirm "avahi=${VERSION_AVAHI}" nss-mdns && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
 USER ${UGNAME}
