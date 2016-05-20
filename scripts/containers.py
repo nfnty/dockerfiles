@@ -46,6 +46,7 @@ def args_parse(arguments=None):
         mode.add_argument('--info', action='store_true', help='Info')
 
         # Optional
+        par1.add_argument('--predecessors', action='store_true', help='Predecessors')
         par1.add_argument('--no-successors', action='store_true', help='No successors')
         par1.add_argument('--orphans', action='store_true', help='Orphans only')
         paths = par1.add_mutually_exclusive_group(required=False)
@@ -467,10 +468,8 @@ def main():  # pylint: disable=too-many-branches
             ARGS.containers |= orphans
 
         if ARGS.containers:
-            if ARGS.no_successors:
-                network.remove_nodes_from_except(ARGS.containers, True)
-            else:
-                network.remove_nodes_from_except(ARGS.containers, False)
+            network.remove_nodes_from_except(
+                ARGS.containers, ARGS.no_successors, not ARGS.predecessors)
 
         config_args_validate(network)
 

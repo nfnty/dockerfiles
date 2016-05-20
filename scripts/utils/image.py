@@ -7,7 +7,7 @@ import yaml
 
 from utils import meta, api
 
-__all__ = ['IMAGES', 'META', 'path_image', 'dockerfile_from']
+__all__ = ['IMAGES', 'META', 'path_image', 'dockerfile_from', 'get_existing']
 
 
 def config_parse():
@@ -76,6 +76,15 @@ def dockerfile_from(name):
         for line in filedesc:
             if line.startswith('FROM'):
                 return line.split()[-1]
+
+
+def get_existing():
+    ''' get existing images '''
+    return set(
+        tag
+        for value in api.request(api.get, '/images/json').json()
+        for tag in value['RepoTags']
+    )
 
 
 IMAGES, META = config_parse()

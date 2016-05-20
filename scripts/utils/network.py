@@ -15,18 +15,42 @@ class DiGraph(networkx.DiGraph):
         super(DiGraph, self).__init__()
         self.failed = set()
 
+    def predecessors_all(self, source):
+        ''' Successors of source '''
+        return set(itertools.chain.from_iterable(networkx.dfs_predecessors(self, source).values()))
+
     def successors_all(self, source):
         ''' Successors of source '''
         return set(itertools.chain.from_iterable(networkx.dfs_successors(self, source).values()))
 
-    def remove_nodes_from_except(self, nodes, successors):
-        ''' Remove network nodes except nodes
-            Prune successors if True '''
-        if successors:
+    def remove_nodes_from_except(self, nodes, successors=True, predecessors=True):
+        ''' Remove network nodes from self except '''
+        if successors and predecessors:
             self.remove_nodes_from(self.node.keys() - nodes)
+        elif successors:
+            self.remove_nodes_from(
+                self.node.keys() -
+                (nodes | functools.reduce(
+                    lambda s0, s1: s0 | s1,
+                    (self.predecessors_all(node) for node in nodes)
+                ))
+            )
+        elif predecessors:
+            self.remove_nodes_from(
+                self.node.keys() -
+                (nodes | functools.reduce(
+                    lambda s0, s1: s0 | s1,
+                    (self.successors_all(node) for node in nodes)
+                ))
+            )
         else:
-            self.remove_nodes_from(self.node.keys() - (nodes | functools.reduce(
-                lambda s0, s1: s0 | s1, (self.successors_all(node) for node in nodes))))
+            self.remove_nodes_from(
+                self.node.keys() -
+                (nodes | functools.reduce(
+                    lambda s0, s1: s0 | s1,
+                    (self.predecessors_all(node) | self.successors_all(node) for node in nodes)
+                ))
+            )
 
     def connected(self, node):
         ''' Connected components '''

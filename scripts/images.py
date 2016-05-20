@@ -11,7 +11,7 @@ from termcolor import cprint
 
 from utils.meta import failed
 from utils.api import request, delete, get, decode_build
-from utils.image import IMAGES, META, Image, dockerfile_from
+from utils.image import IMAGES, META, Image, dockerfile_from, get_existing
 from utils.network import DiGraph
 
 
@@ -22,7 +22,9 @@ def args_parse(arguments=None):
     # Optional
     parser.add_argument('--no-cache', action='store_true', help='Force image update')
     parser.add_argument('--scratch', action='store_true', help='Build scratch')
+    parser.add_argument('--predecessors', action='store_true', help='Build predecessors')
     parser.add_argument('--no-successors', action='store_true', help='Do not build successors')
+    parser.add_argument('--no-existing', action='store_true', help='Do not build existing images')
 
     # Positional
     parser.add_argument('images', metavar='IMAGE', action='store', nargs='*', help='Name of image')
@@ -185,8 +187,14 @@ def main():
     network = Network(IMAGES)
     network.prune_disabled(IMAGES, ARGS.images)
     network.attr_successors()
+
     if ARGS.images:
-        network.remove_nodes_from_except(ARGS.images, ARGS.no_successors)
+        network.remove_nodes_from_except(ARGS.images, ARGS.no_successors, not ARGS.predecessors)
+    if ARGS.no_existing:
+        network.remove_nodes_from(get_existing())
+    if not network:
+        cprint('\nNo images to build', 'green')
+        sys.exit(0)
 
     cprint('\nBuilding images', 'magenta')
     network.build(META['Limits']['Threads'])

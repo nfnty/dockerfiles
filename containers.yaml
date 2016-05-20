@@ -70,6 +70,12 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
+            Exclude:
+                - 'chainstate'
+        'lib/chainstate':
+            Mode: 'u=rwX,g=,o='
+            Subvolume: true
+            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -86,6 +92,7 @@ Meta:
     UGID: 0
 
     Names: null
+    Passive: true
 
     Paths:
         'gnupg':
@@ -118,6 +125,7 @@ Meta:
     UGID: 99999
 
     Names: null
+    Passive: true
 
     Paths:
         'etc':
@@ -204,6 +212,7 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
+            Attributes: '+C'
         'plugins':
             Mode: 'u=rX,g=,o='
 
@@ -231,6 +240,12 @@ Meta:
     Paths:
         'lib':
             Mode: 'u=rwX,g=,o='
+            Exclude:
+                - 'transcoding-temp'
+        'lib/transcoding-temp':
+            Mode: 'u=rwX,g=,o='
+            Subvolume: true
+            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -368,6 +383,8 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
+            Subvolume: true
+            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -449,6 +466,7 @@ Meta:
     UGID: 99998
 
     Names: null
+    Passive: true
 
     Paths:
         'etc':
@@ -456,6 +474,7 @@ Meta:
             Exclude:
                 - 'cli.ini'
         'etc/cli.ini':
+            Type: 'Regular'
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
@@ -541,6 +560,8 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
+            Subvolume: true
+            Attributes: '+C'
         'webroot':
             Mode: 'u=rX,g=,o='
 
@@ -667,10 +688,6 @@ Meta:
         'lib':
             Mode: 'u=rwX,g=rwX,o='
             Group: 'root'
-        'tun':
-            Mode: 'u=rw,g=rw,o=rw'
-            User: 'root'
-            Group: 'root'
 
     Create:
         HostConfig:
@@ -688,7 +705,7 @@ Meta:
             Tmpfs:
                 '/tmp': 'size=32M,nr_inodes=10K,mode=770,rw,nosuid,nodev,noexec,async,noatime,gid=0'
             Devices:
-                - PathOnHost: 'tun'
+                - PathOnHost: '/dev/net/tun'
                   PathInContainer: '/dev/net/tun'
                   CgroupPermissions: 'rw'
 
@@ -720,6 +737,8 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib_nginx':
             Mode: 'u=rwX,g=,o='
+            Subvolume: true
+            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -799,6 +818,7 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
+            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -854,6 +874,8 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
+            Subvolume: true
+            Attributes: '+C'
 
     Create:
         HostConfig:

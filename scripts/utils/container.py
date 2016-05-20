@@ -30,7 +30,6 @@ class Container:
         self.config = config
         self.identity = identity
         self.path = os.path.join(META['BindRoot'], self.basename if path_basename else self.name)
-        self.path_sep = os.path.join(self.path, os.path.sep)
         self.command = command
 
         if self.config:
@@ -42,9 +41,11 @@ class Container:
         if 'UGID' not in self.config:
             raise RuntimeError('UGID not in config: {0:s}'.format(self.name))
         if 'Names' in self.config:
+            self.config['Active'] = self.config['Names'] is not None and \
+                self.name in self.config['Names']
             del self.config['Names']
-        if 'Paths' in self.config:
-            self._config_paths(self.config['Paths'])
+        else:
+            self.config['Active'] = False
 
         for key in ('Create', 'Setup'):
             if key not in self.config:
@@ -65,12 +66,20 @@ class Container:
                 if 'Tmpfs' in host_config:
                     self._config_tmpfs(host_config['Tmpfs'])
 
+        if 'Paths' in self.config:
+            self._config_paths(self.config['Paths'])
+
     def _config_paths(self, paths):
         ''' Convert relative paths into absolute '''
         for path, value in paths.items():
-            if not os.path.isabs(path):
+            if os.path.isabs(path):
+                value['Absolute'] = True
+            else:
+                value['Absolute'] = False
                 paths[os.path.join(self.path, path)] = value
                 del paths[path]
+
+            value['Type'] = value.get('Type', 'Directory')
 
     def _config_binds(self, binds):
         ''' Convert relative binds into absolute '''
@@ -146,57 +155,101 @@ class Container:
         inspect = self.inspect()
         return inspect['Config']['Image'] not in api.image_inspect(inspect['Image'])['RepoTags']
 
-    def paths(self, permissions=False):  # pylint: disable=too-many-branches
-        ''' Paths creation and permissions '''
+    def _paths_create(self):
+        ''' Create paths '''
         log = ''
-
         if not os.path.exists(self.path):
             log += meta.run(['/usr/bin/btrfs', 'subvolume', 'create', self.path])
             log += meta.run(['/usr/bin/chmod', 'u=rwx,g=rx,o=', self.path])
-            log += 'subvolume created: {0:s}\n'.format(self.path)
+            log += 'Subvolume created: {0:s}\n'.format(self.path)
 
+        paths_new = set()
         for path, value in sorted(self.config['Paths'].items()):
-            permissions_path = False
-            if path.startswith(self.path_sep):
-                if not os.path.exists(path):
-                    os.makedirs(path)
-                    log += 'makedirs: {0:s}\n'.format(path)
-                    permissions_path = True
+            if not os.path.exists(path):
+                if value['Absolute']:
+                    raise RuntimeError(log + 'Path does not exist: {0:s}'.format(path))
+
+                if value['Type'] == 'Directory':
+                    if 'Subvolume' in value and value['Subvolume']:
+                        path_dir = os.path.dirname(path)
+                        try:
+                            os.makedirs(path_dir)
+                        except FileExistsError:
+                            pass
+                        else:
+                            log += 'Directories created: {0:s}\n'.format(path_dir)
+                        log += meta.run(['/usr/bin/btrfs', 'subvolume', 'create', path])
+                        log += 'Subvolume created: {0:s}\n'.format(path)
+                    else:
+                        os.makedirs(path)
+                        log += 'Directories created: {0:s}\n'.format(path)
+
+                    if 'Attributes' in value and value['Attributes']:
+                        log += meta.run(['/usr/bin/chattr', value['Attributes'], path])
+                        log += 'Attributes changed: {0:s}: {1:s}\n'.format(
+                            path, value['Attributes'])
+
+                    paths_new.add(path)
+                else:
+                    log += 'Path was not created: {0:s}\n'.format(path)
+
+        if not paths_new:
+            log += 'No paths created\n'
+        return log, paths_new
+
+    def _paths_permissions(self, paths_new, permissions):  # pylint: disable=too-many-branches
+        ''' Paths permissions '''
+        if not permissions and not paths_new:
+            return 'No permissions to enforce\n'
+
+        log = ''
+        for path, value in sorted(self.config['Paths'].items()):
+            if not permissions and path not in paths_new:
+                log += 'Skipping path: {0:s}\n'.format(path)
+                continue
+
+            user = value['User'] if 'User' in value else self.config['UGID']
+            group = value['Group'] if 'Group' in value else self.config['UGID']
+
+            if 'Exclude' in value:
+                log += 'Path: {0:s}\n'.format(path)
+                log += meta.chown([path], user, group)
+                log += meta.chmod([path], value['Mode'])
+                if 'ACL' in value:
+                    log += meta.setfacl([path], value['ACL'])
+                else:
+                    log += meta.setfacl([path])
+
+                if value['Exclude'] == '*':
+                    paths = []
+                else:
+                    paths = meta.paths_include(path, value['Exclude'])
             else:
-                if not os.path.exists(path):
-                    raise RuntimeError('{0:s}\nPath does not exist: {1:s}'.format(log, path))
+                paths = [path]
 
-            if permissions or permissions_path:
-                user = value['User'] if 'User' in value else self.config['UGID']
-                group = value['Group'] if 'Group' in value else self.config['UGID']
-
-                if 'Exclude' in value:
-                    log += 'Path: {0:s}\n'.format(path)
-                    log += meta.chown([path], user, group)
-                    log += meta.chmod([path], value['Mode'])
-                    if 'ACL' in value:
-                        log += meta.setfacl([path], value['ACL'])
-                    else:
-                        log += meta.setfacl([path])
-
-                    if value['Exclude'] == '*':
-                        paths = []
-                    else:
-                        paths = meta.paths_include(path, value['Exclude'])
+            if paths:
+                log += 'Paths: {0:s}\n'.format(' '.join(paths))
+                log += meta.chown(paths, user, group, recursive=True)
+                log += meta.chmod(paths, value['Mode'], recursive=True)
+                if 'ACL' in value:
+                    log += meta.setfacl(paths, value['ACL'], recursive=True)
                 else:
-                    paths = [path]
+                    log += meta.setfacl([path], recursive=True)
+            else:
+                log += 'No paths: {0:s}\n'.format(path)
+        return log
 
-                if paths:
-                    log += 'Permission paths: {0:s}\n'.format(' '.join(paths))
-                    log += meta.chown(paths, user, group, recursive=True)
-                    log += meta.chmod(paths, value['Mode'], recursive=True)
-                    if 'ACL' in value:
-                        log += meta.setfacl(paths, value['ACL'], recursive=True)
-                    else:
-                        log += meta.setfacl([path], recursive=True)
-                else:
-                    log += 'No paths: {0:s}\n'.format(path)
-
+    def paths(self, permissions=False):
+        ''' Paths creation and permissions '''
+        log = ''
+        try:
+            log += 'Creating paths\n'
+            log_ret, paths_new = self._paths_create()
+            log += log_ret
+            log += 'Path permissions\n'
+            log += self._paths_permissions(paths_new, permissions)
+        except RuntimeError as error:
+            raise RuntimeError(log + str(error))
         return log
 
     def remove(self):
