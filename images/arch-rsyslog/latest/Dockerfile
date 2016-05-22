@@ -9,7 +9,7 @@ ENV VERSION_RSYSLOG='8.18.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "rsyslog=${VERSION_RSYSLOG}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/log/rsyslog /run
+    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/log/rsyslog /run
 
 USER ${UGNAME}
 VOLUME ["/var/log/rsyslog"]
