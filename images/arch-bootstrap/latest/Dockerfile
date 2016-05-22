@@ -13,7 +13,7 @@ RUN chmod --recursive 'u=rX,g=,o=' /opt/bootstrap && \
     pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm arch-install-scripts && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    sed --in-place --regexp-extended --expression='s|^(chroot_setup )|#\1|' /usr/bin/pacstrap
+    perl -p -i -e 's|^(chroot_setup )|#\1|' /usr/bin/pacstrap
 
 USER ${UGNAME}
 VOLUME ["/var/lib/bootstrap"]

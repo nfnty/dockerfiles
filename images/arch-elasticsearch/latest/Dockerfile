@@ -12,7 +12,6 @@ RUN mkdir /opt/elasticsearch && \
         "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${VERSION_ELASTICSEARCH}/elasticsearch-${VERSION_ELASTICSEARCH}.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/elasticsearch' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/elasticsearch && \
-    sed --in-place --expression='s|^args=.*|args="--"|' /opt/elasticsearch/bin/elasticsearch && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/elasticsearch /var/log/elasticsearch
 

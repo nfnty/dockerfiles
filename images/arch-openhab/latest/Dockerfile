@@ -19,11 +19,11 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     chmod --recursive 755 /opt/openhab/{start.sh,start_debug.sh} && \
     chown --recursive "${UGNAME}:${UGNAME}" /opt/openhab/webapps/static && \
 
-    sed --in-place --regexp-extended \
-        --expression='s|^(java \\)|exec \1|' \
-        --expression='s|(-console)|-configuration /var/lib/openhab/work \\\n\t\1|' \
-        --expression='s|(-console)|-data /var/lib/openhab/work \\\n\t\1|' \
-        --expression='s|(-Djetty\.port=)|-Dsmarthome.userdata=/var/lib/openhab \\\n\t\1|' \
+    perl -p -i \
+        -e 's|^(java \\)|exec \1|;' \
+        -e 's|(-console)|-configuration /var/lib/openhab/work \\\n\t\1|;' \
+        -e 's|(-console)|-data /var/lib/openhab/work \\\n\t\1|;' \
+        -e 's|(-Djetty\.port=)|-Dsmarthome.userdata=/var/lib/openhab \\\n\t\1|;' \
         /opt/openhab/{start.sh,start_debug.sh} && \
     perl -0777 -p -i -e 's|( *)(<Ref id="RequestLog">.*</Ref>)|\1<!--\n\1\2\n\1-->|s' /opt/openhab/etc/jetty.xml && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
