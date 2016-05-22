@@ -71,13 +71,13 @@ class Container:
 
     def _config_paths(self, paths):
         ''' Convert relative paths into absolute '''
-        for path, value in paths.items():
+        for path, value in paths.copy().items():
             if os.path.isabs(path):
                 value['Absolute'] = True
             else:
                 value['Absolute'] = False
-                paths[os.path.join(self.path, path)] = value
                 del paths[path]
+                paths[os.path.join(self.path, path)] = value
 
             value['Type'] = value.get('Type', 'Directory')
 
