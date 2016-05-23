@@ -14,6 +14,7 @@ ENV PATH='/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl' \
 COPY ["crypto/", "/tmp/crypto/"]
 COPY ["etc/", "/etc/"]
 COPY ["opt/", "/opt/"]
+COPY ["packages/", "/tmp/packages/"]
 RUN locale-gen && \
 
     chmod 'u=rwX,g=rX,o=rX' \
@@ -37,6 +38,9 @@ RUN locale-gen && \
     rm --recursive /tmp/crypto && \
 
     pacman --sync --noconfirm --refresh --sysupgrade && \
-    find /var/cache/pacman/pkg -mindepth 1 -delete
+    find /var/cache/pacman/pkg -mindepth 1 -delete && \
+
+    find /tmp/packages -type f -not -name '.gitignore' -exec pacman --upgrade --noconfirm '{}' '+' && \
+    rm --recursive /tmp/packages
 
 CMD ["/usr/bin/bash"]

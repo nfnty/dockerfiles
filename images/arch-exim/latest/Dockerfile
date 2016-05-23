@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_EXIM='4.87-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "exim=${VERSION_EXIM}" tini && \
+    pacman --sync --noconfirm "exim=${VERSION_EXIM}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     chmod -s /usr/bin/exim && \
     setcap 'cap_net_bind_service=ep' /usr/bin/exim && \
