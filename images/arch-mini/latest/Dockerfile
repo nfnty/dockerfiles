@@ -38,9 +38,8 @@ RUN locale-gen && \
     rm --recursive /tmp/crypto && \
 
     pacman --sync --noconfirm --refresh --sysupgrade && \
-    find /var/cache/pacman/pkg -mindepth 1 -delete && \
-
     find /tmp/packages -type f -not -name '.gitignore' -exec pacman --upgrade --noconfirm '{}' '+' && \
     rm --recursive /tmp/packages
+    find /var/cache/pacman/pkg -mindepth 1 -delete && \
 
 CMD ["/usr/bin/bash"]
