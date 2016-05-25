@@ -39,7 +39,7 @@ RUN locale-gen && \
 
     pacman --sync --noconfirm --refresh --sysupgrade && \
     find /tmp/packages -type f -not -name '.gitignore' -exec pacman --upgrade --noconfirm '{}' '+' && \
-    rm --recursive /tmp/packages
-    find /var/cache/pacman/pkg -mindepth 1 -delete && \
+    rm --recursive /tmp/packages && \
+    find /var/cache/pacman/pkg -mindepth 1 -delete
 
 CMD ["/usr/bin/bash"]
