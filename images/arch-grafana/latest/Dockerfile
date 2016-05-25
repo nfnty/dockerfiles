@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_GRAFANA='3.0.4-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "nfnty/grafana-git=${VERSION_GRAFANA}" && \
+    pacman --sync --noconfirm "nfnty/grafana=${VERSION_GRAFANA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/grafana
 
