@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_KEA='1.0.0-1' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='syslog'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "kea=${VERSION_KEA}" && \
+    pacman --sync --noconfirm "nfnty/kea=${VERSION_KEA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp4 && \
     setcap 'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp6 && \

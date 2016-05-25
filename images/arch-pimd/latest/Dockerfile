@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_PIMD='2.3.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "pimd=${VERSION_PIMD}" && \
+    pacman --sync --noconfirm "nfnty/pimd=${VERSION_PIMD}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_admin,cap_net_raw=ep' /usr/bin/pimd && \
     rm /var/run && \

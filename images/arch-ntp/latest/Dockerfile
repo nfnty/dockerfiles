@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_NTP='4.2.8.p7-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "ntp=${VERSION_NTP}" && \
+    pacman --sync --noconfirm "nfnty/ntp=${VERSION_NTP}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_ipc_lock,cap_net_bind_service,cap_sys_time=ep' /usr/bin/ntpd && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/ntp

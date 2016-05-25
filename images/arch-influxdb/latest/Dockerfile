@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_INFLUXDB='0.12.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "influxdb=${VERSION_INFLUXDB}" && \
+    pacman --sync --noconfirm "nfnty/influxdb=${VERSION_INFLUXDB}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/influxdb
 

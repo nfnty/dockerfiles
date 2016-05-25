@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_BITCOIN_CLASSIC='0.12.0cl1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "bitcoin-classic=${VERSION_BITCOIN_CLASSIC}" && \
+    pacman --sync --noconfirm "nfnty/bitcoin-classic=${VERSION_BITCOIN_CLASSIC}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/bitcoin
 

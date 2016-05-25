@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_PROMETHEUS='0.18.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "prometheus=${VERSION_PROMETHEUS}" && \
+    pacman --sync --noconfirm "nfnty/prometheus=${VERSION_PROMETHEUS}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/prometheus
 
