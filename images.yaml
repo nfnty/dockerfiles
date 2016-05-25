@@ -474,7 +474,7 @@ Meta:
     Packages:
         'rsyslog':
             Variable: 'VERSION_RSYSLOG'
-            Download: 'nfnty'
+            Download: 'community'
             Sources:
                 'github':
                     URL: 'https://github.com/rsyslog/rsyslog/tags'
