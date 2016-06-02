@@ -16,8 +16,16 @@ class DiGraph(networkx.DiGraph):
         self.failed = set()
 
     def predecessors_all(self, source):
-        ''' Successors of source '''
-        return set(itertools.chain.from_iterable(networkx.dfs_predecessors(self, source).values()))
+        ''' Predecessors of source '''
+        predecessors = set()
+        predecessors_new = set(self.predecessors(source))
+        while predecessors_new:
+            predecessors |= predecessors_new
+            nodes = predecessors_new.copy()
+            predecessors_new.clear()
+            for node in nodes:
+                predecessors_new |= set(self.predecessors(node))
+        return predecessors
 
     def successors_all(self, source):
         ''' Successors of source '''
