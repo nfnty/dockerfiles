@@ -1,6 +1,7 @@
 Meta:
     Aliases:
         GIB_1: &GIB_1 1073741824
+        GIB_2: &GIB_2 2147483648
         XPathArch: &XPATH_ARCH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
         AttributeArch: &ATTRIBUTE_ARCH 'content'
         Regex2Digits: &REGEX_DIGITS_2 '(\d+\.\d+)'
@@ -19,7 +20,7 @@ Meta:
 
     Params:
         memory: *GIB_1
-        memswap: -1
+        memswap: *GIB_2
         cpushares: 128
 
 #################

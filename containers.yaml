@@ -8,6 +8,7 @@ Meta:
         GIB_2: &GIB_2 2147483648
         GIB_3_5: &GIB_3_5 3758096384
         GIB_4: &GIB_4 4294967296
+        GIB_8: &GIB_8 8589934592
         TMP_MIB_32: &TMP_MIB_32 'size=32M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
         TMP_MIB_32_755: &TMP_MIB_32_755 'size=32M,nr_inodes=10K,mode=755,rw,nosuid,nodev,noexec,async,noatime'
         TMP_MIB_32_EXEC: &TMP_MIB_32_EXEC 'size=32M,nr_inodes=10K,mode=700,rw,nosuid,nodev,exec,async,noatime'
@@ -18,7 +19,7 @@ Meta:
         StopSignal: 'SIGTERM'
         HostConfig:
             Memory: *GIB_1
-            MemorySwap: *GIB_1 # MemorySwap - Memory = 0
+            MemorySwap: *GIB_2
             MemoryReservation: *GIB_0_75
             CpuShares: 1024 # Kernel default
             CapDrop:
@@ -80,7 +81,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CpuShares: 256
             Binds:
@@ -103,7 +104,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CpuShares: 512
             CapAdd:
@@ -145,7 +146,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CpuShares: 512
             CapAdd:
@@ -188,7 +189,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             CapAdd:
                 - 'NET_BIND_SERVICE'
@@ -219,7 +220,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             ExtraHosts:
                 - 'elasticsearch:127.0.0.1'
@@ -250,7 +251,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             Binds:
                 - 'lib:/var/lib/emby:rw'
@@ -286,7 +287,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             CapAdd:
                 - 'NET_BIND_SERVICE'
@@ -310,7 +311,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             Binds:
                 - 'etc:/etc/grafana:ro'
@@ -331,7 +332,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             Binds:
                 - 'cache:/var/cache/hekad:rw'
@@ -389,7 +390,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CpuShares: 2048
             Binds:
@@ -510,7 +511,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             ExtraHosts:
                 - 'logstash:127.0.0.1'
@@ -568,7 +569,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             CapAdd:
                 - 'NET_BIND_SERVICE'
@@ -595,7 +596,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *MIB_512
-            MemorySwap: *MIB_512
+            MemorySwap: *GIB_1
             MemoryReservation: *MIB_384
             CpuShares: 2048
             CapAdd:
@@ -635,7 +636,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             Binds:
                 - 'addons:/opt/openhab/addons:ro'
@@ -692,7 +693,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             CapAdd:
                 - 'NET_ADMIN'
@@ -743,7 +744,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CapAdd:
                 - 'NET_BIND_SERVICE'
@@ -795,7 +796,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             Binds:
                 - 'lib:/var/lib/plexmediaserver:rw'
@@ -823,7 +824,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             Binds:
                 - 'etc:/etc/postgres:ro'
@@ -851,7 +852,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             CpuShares: 2048
             CapAdd:
@@ -880,7 +881,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CpuShares: 2048
             Binds:
@@ -907,7 +908,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CpuShares: 2048
             Binds:
@@ -935,7 +936,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_2
-            MemorySwap: *GIB_2
+            MemorySwap: *GIB_4
             MemoryReservation: *GIB_1_5
             CapAdd:
                 - 'NET_BIND_SERVICE'
@@ -963,7 +964,7 @@ Meta:
     Create:
         HostConfig:
             Memory: *GIB_4
-            MemorySwap: *GIB_4
+            MemorySwap: *GIB_8
             MemoryReservation: *GIB_3_5
             CpuShares: 512
             Binds:
