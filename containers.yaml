@@ -75,8 +75,6 @@ Meta:
                 - 'chainstate'
         'lib/chainstate':
             Mode: 'u=rwX,g=,o='
-            Subvolume: true
-            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -213,7 +211,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-            Attributes: '+C'
         'plugins':
             Mode: 'u=rX,g=,o='
 
@@ -245,8 +242,6 @@ Meta:
                 - 'transcoding-temp'
         'lib/transcoding-temp':
             Mode: 'u=rwX,g=,o='
-            Subvolume: true
-            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -384,8 +379,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-            Subvolume: true
-            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -561,8 +554,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-            Subvolume: true
-            Attributes: '+C'
         'webroot':
             Mode: 'u=rX,g=,o='
 
@@ -738,8 +729,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib_nginx':
             Mode: 'u=rwX,g=,o='
-            Subvolume: true
-            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -819,7 +808,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-            Attributes: '+C'
 
     Create:
         HostConfig:
@@ -875,8 +863,6 @@ Meta:
             Mode: 'u=rX,g=,o='
         'lib':
             Mode: 'u=rwX,g=,o='
-            Subvolume: true
-            Attributes: '+C'
 
     Create:
         HostConfig:

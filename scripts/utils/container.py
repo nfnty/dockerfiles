@@ -159,9 +159,8 @@ class Container:
         ''' Create paths '''
         log = ''
         if not os.path.exists(self.path):
-            log += meta.run(['/usr/bin/btrfs', 'subvolume', 'create', self.path])
-            log += meta.run(['/usr/bin/chmod', 'u=rwx,g=rx,o=', self.path])
-            log += 'Subvolume created: {0:s}\n'.format(self.path)
+            os.mkdir(self.path, mode=0o750)
+            log += 'Directory created: {0:s}\n'.format(self.path)
 
         paths_new = set()
         for path, value in sorted(self.config['Paths'].items()):
