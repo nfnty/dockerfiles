@@ -434,15 +434,15 @@ Meta:
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 
-'nfnty/arch-letsencrypt:latest':
+'nfnty/arch-certbot:latest':
     Build: true
     Packages:
-        'letsencrypt':
-            Variable: 'VERSION_LETSENCRYPT'
+        'certbot':
+            Variable: 'VERSION_CERTBOT'
             Download: 'community'
             Sources:
                 'archlinux':
-                    URL: 'https://www.archlinux.org/packages/community/any/letsencrypt'
+                    URL: 'https://www.archlinux.org/packages/community/any/certbot'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 

@@ -454,8 +454,8 @@ Meta:
             Tmpfs:
                 '/tmp': *TMP_MIB_64
 
-'letsencrypt':
-    Image: 'nfnty/arch-letsencrypt:latest'
+'certbot':
+    Image: 'nfnty/arch-certbot:latest'
     UGID: 99998
 
     Names: null
