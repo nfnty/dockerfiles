@@ -5,7 +5,7 @@ ENV UGID='360000' UGNAME='prometheus'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_PROMETHEUS='0.19.0-1'
+ENV VERSION_PROMETHEUS='0.19.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/prometheus=${VERSION_PROMETHEUS}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
