@@ -5,7 +5,7 @@ ENV UGID='230000' UGNAME='ntp'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_NTP='4.2.8.p7-1'
+ENV VERSION_NTP='4.2.8.p8-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/ntp=${VERSION_NTP}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
