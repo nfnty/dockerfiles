@@ -121,7 +121,7 @@ Meta:
             Sources:
                 'upstream':
                     URL: 'https://www.elastic.co/downloads/elasticsearch'
-                    XPath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
+                    XPath: '(//div[contains(@class, "downloads-detail-wrapper")]//div[contains(@class, "m-t-70")]//h2)[1]'
                     Regex: *REGEX_DIGITS_3
                 'github':
                     URL: 'https://github.com/elastic/elasticsearch/tags'
@@ -206,7 +206,7 @@ Meta:
             Sources:
                 'upstream':
                     URL: 'https://www.elastic.co/downloads/kibana'
-                    XPath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
+                    XPath: '(//div[contains(@class, "downloads-detail-wrapper")]//div[contains(@class, "m-t-70")]//h2)[1]'
                     Regex: *REGEX_DIGITS_3
                 'github':
                     URL: 'https://github.com/elastic/kibana/tags'
@@ -222,7 +222,7 @@ Meta:
             Sources:
                 'upstream':
                     URL: 'https://www.elastic.co/downloads/logstash'
-                    XPath: '(//div[contains(@class, "download-content-wrapper")]/header/h2)[1]'
+                    XPath: '(//div[contains(@class, "downloads-detail-wrapper")]//div[contains(@class, "m-t-70")]//h2)[1]'
                     Regex: *REGEX_DIGITS_3
                 'github':
                     URL: 'https://github.com/elastic/logstash/tags'

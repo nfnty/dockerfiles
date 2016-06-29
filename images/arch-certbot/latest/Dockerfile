@@ -5,7 +5,7 @@ ENV UGID='99998' UGNAME='certbot'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_CERTBOT='0.8.0-1'
+ENV VERSION_CERTBOT='0.8.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "certbot=${VERSION_CERTBOT}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
