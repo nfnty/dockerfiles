@@ -137,6 +137,11 @@ def main():
                         source_dict['Version'].vstring if source_dict['Version'] else 'None',
                     ))
 
+                if not package_dict['Sources'][package_dict['Download']]['Version']:
+                    cprint('No Version for Download: {0:s}'.format(
+                        package_dict['Download']), 'red')
+                    continue
+
                 dockerfile_update(
                     path_dockerfile(image),
                     package_dict['Variable'],
