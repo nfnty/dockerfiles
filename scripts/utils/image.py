@@ -11,8 +11,8 @@ __all__ = ['IMAGES', 'META', 'path_image', 'dockerfile_from', 'get_existing']
 
 
 def config_parse():
-    ''' images.yaml '''
-    load = yaml.load(open(os.path.join(meta.PATH_REPO, 'images.yaml')), Loader=yaml.CLoader)
+    ''' images.yml '''
+    load = yaml.load(open(os.path.join(meta.PATH_REPO, 'images.yml')), Loader=yaml.CLoader)
     load_meta = load['Meta']
     del load['Meta']
     meta.dict_merge_add(load_meta, meta.META)

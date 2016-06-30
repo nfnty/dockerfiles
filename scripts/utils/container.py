@@ -12,8 +12,8 @@ __all__ = ['CONTAINERS', 'META', 'get_existing', 'backups_rename', 'backups_clea
 
 
 def config_parse():
-    ''' containers.yaml '''
-    load = yaml.load(open(os.path.join(meta.PATH_REPO, 'containers.yaml')), Loader=yaml.CLoader)
+    ''' containers.yml '''
+    load = yaml.load(open(os.path.join(meta.PATH_REPO, 'containers.yml')), Loader=yaml.CLoader)
     load_meta = load['Meta']
     del load['Meta']
     meta.dict_merge_add(load_meta, meta.META)
