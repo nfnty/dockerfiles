@@ -17,6 +17,8 @@ def config_parse():
     load_meta = load['Meta']
     del load['Meta']
     meta.dict_merge_add(load_meta, meta.META)
+    load_meta['BackupPrefixLen'] = len(load_meta['BackupPrefix'])
+    load_meta['SystemdPrefixLen'] = len(load_meta['SystemdPrefix'])
     return load, load_meta
 
 

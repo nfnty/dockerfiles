@@ -3,13 +3,13 @@
 import re
 import uuid
 
-from utils.meta import META
+from utils.container import META as META_CONTAINER
 
 
 def re_backup(string):
     ''' BackupPrefix regex '''
     return re.compile(r'^{0:s}(\d+)_{1:s}$'.format(
-        re.escape(META['BackupPrefix']), re.escape(string)))
+        re.escape(META_CONTAINER['BackupPrefix']), re.escape(string)))
 
 
 def add_uuid(string):
@@ -33,7 +33,7 @@ def backup_old(name, string):
     number = backup_num(name, string)
     if number is None:
         return False
-    elif number <= META['Backups']:
+    elif number <= META_CONTAINER['Backups']:
         return False
     else:
         return True
@@ -42,10 +42,10 @@ def backup_old(name, string):
 def backup_incr(name, string):
     ''' Increment BackupPrefix number '''
     if string == name:
-        return META['BackupPrefix'] + '1' + '_' + name
+        return META_CONTAINER['BackupPrefix'] + '1' + '_' + name
 
     number = backup_num(name, string)
     if number is None:
         return None
     else:
-        return META['BackupPrefix'] + str(number + 1) + '_' + name
+        return META_CONTAINER['BackupPrefix'] + str(number + 1) + '_' + name

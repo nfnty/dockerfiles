@@ -14,6 +14,13 @@ Meta:
         TMP_MIB_64_EXEC: &TMP_MIB_64_EXEC 'size=64M,nr_inodes=20K,mode=700,rw,nosuid,nodev,exec,async,noatime'
         TMP_MIB_128: &TMP_MIB_128 'size=128M,nr_inodes=10K,mode=700,rw,nosuid,nodev,noexec,async,noatime'
 
+    BindRoot: '/srv/docker'
+
+    Backups: 1
+
+    BackupPrefix: 'bak_'
+    SystemdPrefix: 'docker_'
+
     Default:
         StopSignal: 'SIGTERM'
         HostConfig:

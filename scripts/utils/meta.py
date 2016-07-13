@@ -29,8 +29,6 @@ def path_repo():
 def yaml_meta():
     ''' meta.yml '''
     meta = yaml.load(open(os.path.join(PATH_REPO, 'meta.yml')), Loader=yaml.CLoader)
-    meta['BackupPrefixLen'] = len(meta['BackupPrefix'])
-    meta['SystemdPrefixLen'] = len(meta['SystemdPrefix'])
     return meta
 
 

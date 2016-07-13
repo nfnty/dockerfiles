@@ -1,10 +1,4 @@
 Socket: '/run/docker.sock'
-BindRoot: '/srv/docker'
-
-Backups: 1
-
-BackupPrefix: 'bak_'
-SystemdPrefix: 'docker_'
 
 Limits:
     Threads: 8
