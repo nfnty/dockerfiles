@@ -9,8 +9,9 @@ ENV VERSION_KEA='1.0.0-1' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='sys
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/kea=${VERSION_KEA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    setcap 'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp4 && \
-    setcap 'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp6 && \
+    setcap \
+        'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp4 \
+        'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp6 && \
     chown --recursive "${UGNAME}:${UGNAME}" /var/lib/kea /var/log/kea && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/kea
 
