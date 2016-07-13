@@ -5,7 +5,7 @@ ENV UGID='110000' UGNAME='elasticsearch'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_ELASTICSEARCH='2.3.3' JAVA_HOME='/usr/lib/jvm/default-runtime'
+ENV VERSION_ELASTICSEARCH='2.3.4' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN mkdir /opt/elasticsearch && \
     set -o pipefail && \
     curl --speed-limit 256000 \
