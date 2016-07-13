@@ -14,6 +14,7 @@ SESSION = unixconn.session()
 SOCKET = '/run/docker.sock'
 TIMEOUT_CONNECT = 31
 TIMEOUT_READ = 181
+TIMEOUT = (TIMEOUT_CONNECT, TIMEOUT_READ)
 
 
 def args_parse(arguments=None):
@@ -77,7 +78,7 @@ def image_exists(tag):
     ''' Does image exist? '''
     response = SESSION.get(
         url=unixconn.url_format(SOCKET, '/images/{0:s}/json'.format(tag)),
-        timeout=(TIMEOUT_CONNECT, TIMEOUT_READ),
+        timeout=TIMEOUT,
     )
 
     if response.status_code == 200:
@@ -93,7 +94,7 @@ def container_remove(name):
     ''' Remove container '''
     response = SESSION.delete(
         url=unixconn.url_format(SOCKET, '/containers/{0:s}'.format(name)),
-        timeout=(TIMEOUT_CONNECT, TIMEOUT_READ),
+        timeout=TIMEOUT,
     )
 
     if response.status_code not in (204, 404):
@@ -108,7 +109,7 @@ def container_create(name, config):
         headers={'Content-Type': 'application/json'},
         params={'name': name},
         data=json.dumps(config),
-        timeout=(TIMEOUT_CONNECT, TIMEOUT_READ),
+        timeout=TIMEOUT,
     )
 
     if response.status_code != 201:
