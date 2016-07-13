@@ -12,8 +12,6 @@ __all__ = [
     'PATH_REPO', 'META',
     'failed',
     'dict_merge', 'dict_merge_copy',
-    'run', 'chmod', 'chown', 'setfacl',
-    'paths_include',
 ]
 
 
@@ -127,65 +125,6 @@ def run_pipe(command):
             str(error), error.stdout.decode('UTF-8'), error.stderr.decode('UTF-8')))
         # pylint: enable=no-member
     return process
-
-
-def chown(paths, user, group, recursive=False):
-    ''' Change path ownership '''
-    command = ['/usr/bin/chown', '--changes', '{0:s}:{1:s}'.format(str(user), str(group))] + paths
-    if recursive:
-        command[2:2] = ['--recursive']
-    return run(command)
-
-
-def chmod(paths, mode, recursive=False):
-    ''' Change path mode '''
-    command = ['/usr/bin/chmod', '--changes', mode] + paths
-    if recursive:
-        command[2:2] = ['--recursive']
-    return run(command)
-
-
-def setfacl(paths, acl_spec=None, recursive=False):
-    ''' Set path access control lists '''
-    command = ['/usr/bin/setfacl', '--remove-all']
-    if acl_spec:
-        command += ['--modify', acl_spec]
-    if recursive:
-        command[1:1] = ['--recursive']
-    command += paths
-    return run(command)
-
-
-def paths_include(path, excludes):
-    ''' Paths to include '''
-    included = []
-    excludes = excludes.copy()
-    for root, directories, filenames in os.walk(path):
-        for directory in directories.copy():
-            path_full = os.path.join(root, directory)
-            path_rel = os.path.relpath(path_full, path)
-            for exclude in excludes:
-                if exclude == path_rel:
-                    directories.remove(directory)
-                    excludes.remove(exclude)
-                    break
-                elif exclude.startswith(path_rel + os.path.sep):
-                    break
-            else:
-                directories.remove(directory)
-                included.append(path_full)
-
-        for filename in filenames:
-            path_full = os.path.join(root, filename)
-            path_rel = os.path.relpath(path_full, path)
-            for exclude in excludes:
-                if exclude == path_rel:
-                    excludes.remove(exclude)
-                    break
-            else:
-                included.append(path_full)
-
-    return included
 
 
 PATH_REPO = path_repo()
