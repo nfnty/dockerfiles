@@ -205,8 +205,6 @@ Meta:
                 Memory: *GIB_2
                 MemorySwap: *GIB_4
                 MemoryReservation: *GIB_1_5
-                CapAdd:
-                    - 'SYS_CHROOT'
                 Binds:
                     - 'etc:/etc/dovecot:ro'
                     - 'lib:/var/lib/dovecot:rw'

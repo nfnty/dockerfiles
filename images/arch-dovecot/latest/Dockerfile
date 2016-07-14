@@ -9,11 +9,6 @@ ENV VERSION_DOVECOT='2.2.25-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${VERSION_DOVECOT}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    setcap \
-        'cap_sys_chroot=eip' /usr/bin/dovecot \
-        'cap_sys_chroot=ei' /usr/lib/dovecot/anvil \
-        'cap_sys_chroot=ei' /usr/lib/dovecot/lmtp \
-        'cap_sys_chroot=ei' /usr/lib/dovecot/imap-login && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/dovecot /var/log/dovecot && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=755 /run/dovecot
 
