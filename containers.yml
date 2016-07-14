@@ -206,7 +206,6 @@ Meta:
                 MemorySwap: *GIB_4
                 MemoryReservation: *GIB_1_5
                 CapAdd:
-                    - 'NET_BIND_SERVICE'
                     - 'SYS_CHROOT'
                 Binds:
                     - 'etc:/etc/dovecot:ro'
@@ -214,7 +213,6 @@ Meta:
                 Tmpfs:
                     '/run/dovecot': *TMP_MIB_64_755
                     '/tmp': *TMP_MIB_64
-                SecurityOpt: null
 
 'elasticsearch':
     Image: 'nfnty/arch-elasticsearch:latest'

@@ -10,14 +10,14 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${VERSION_DOVECOT}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap \
-        'cap_sys_chroot,cap_net_bind_service=eip' /usr/bin/dovecot \
-        'cap_sys_chroot=eip' /usr/lib/dovecot/anvil \
-        'cap_sys_chroot,cap_net_bind_service=eip' /usr/lib/dovecot/lmtp \
-        'cap_sys_chroot,cap_net_bind_service=eip' /usr/lib/dovecot/imap-login && \
+        'cap_sys_chroot=eip' /usr/bin/dovecot \
+        'cap_sys_chroot=ei' /usr/lib/dovecot/anvil \
+        'cap_sys_chroot=ei' /usr/lib/dovecot/lmtp \
+        'cap_sys_chroot=ei' /usr/lib/dovecot/imap-login && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/dovecot /var/log/dovecot && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=755 /run/dovecot
 
 USER ${UGNAME}
 VOLUME ["/var/lib/dovecot"]
-EXPOSE 24/tcp 143/tcp
+EXPOSE 10024/tcp 10993/tcp
 ENTRYPOINT ["/usr/bin/dovecot", "-F"]
