@@ -104,6 +104,8 @@ Meta:
     UGID: 0
 
     Paths:
+        'archive':
+            Mode: *MODE_URW
         'gnupg':
             Mode: *MODE_URW
             Managed: true
@@ -125,9 +127,9 @@ Meta:
                 Dns:
                     - '10.7.2.1'
                 Binds:
+                    - 'archive:/var/lib/bootstrap/archive:rw'
                     - 'gnupg:/var/lib/bootstrap/gnupg:rw'
                     - 'pkgcache:/var/cache/pacman/pkg:rw'
-                    - '/opt/docker/images/arch-mini/latest/bootstrap:/var/lib/bootstrap/archive:rw'
                 Tmpfs:
                     '/tmp': 'size=512M,nr_inodes=200K,mode=700,rw,nosuid,nodev,exec,async,noatime'
 
