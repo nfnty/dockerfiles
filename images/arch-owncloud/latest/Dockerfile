@@ -3,7 +3,7 @@ MAINTAINER nfnty <docker@nfnty.se>
 
 USER root
 
-ENV VERSION_OWNCLOUD='9.0.3-1'
+ENV VERSION_OWNCLOUD='9.0.4-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "owncloud=${VERSION_OWNCLOUD}" php-apcu php-pgsql && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
