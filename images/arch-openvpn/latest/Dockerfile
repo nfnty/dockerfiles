@@ -5,7 +5,7 @@ ENV UGID='190000' UGNAME='openvpn'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_OPENVPN='2.3.11-1'
+ENV VERSION_OPENVPN='2.3.11-2'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "openvpn=${VERSION_OPENVPN}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
