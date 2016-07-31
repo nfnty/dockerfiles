@@ -300,6 +300,9 @@ Meta:
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 
+'nfnty/arch-postgresql-acoustid:latest':
+    Check: false
+
 'nfnty/arch-powerdns-recursor:latest':
     Packages:
         'powerdns-recursor':
@@ -485,3 +488,20 @@ Meta:
                     URL: 'https://github.com/prometheus/prometheus/releases'
                     XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
                     Regex: *REGEX_DIGITS_3
+
+'nfnty/arch-redis:latest':
+    Packages:
+        'redis':
+            Variable: 'VERSION_REDIS'
+            Download: 'community'
+            Sources:
+                'archlinux':
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/redis'
+                    XPath: *XPATH_ARCH
+                    Attribute: *ATTRIBUTE_ARCH
+
+'nfnty/arch-acoustid:latest':
+    Check: false
+
+'nfnty/arch-acoustid-index:latest':
+    Check: false

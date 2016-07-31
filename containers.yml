@@ -46,6 +46,45 @@ Meta:
 #  CONTAINERS  #
 ################
 
+'acoustid':
+    Image: 'nfnty/arch-acoustid:latest'
+    UGID: 370000
+
+    Names:
+        'acoustid': null
+
+    Paths:
+        'config':
+            Mode: *MODE_UR
+            Managed: true
+
+    API:
+        'Normal':
+            HostConfig:
+                Binds:
+                    - 'config/acoustid.conf:/opt/acoustid-server/acoustid.conf:ro'
+
+'acoustid-index':
+    Image: 'nfnty/arch-acoustid-index:latest'
+    UGID: 390000
+
+    Names:
+        'acoustid-index': null
+
+    Paths:
+        'lib':
+            Mode: *MODE_URW
+
+    API:
+        'Normal':
+            HostConfig:
+                Memory: *GIB_4
+                MemorySwap: *GIB_8
+                MemoryReservation: *GIB_3_5
+                Binds:
+                    - 'lib:/var/lib/acoustid-index:rw'
+
+
 'avahi':
     Image: 'nfnty/arch-avahi:latest'
     UGID: 310000
@@ -861,9 +900,13 @@ Meta:
     Names:
         'postgresql': null
 
+        'postgresql-acoustid':
+            Image: 'nfnty/arch-postgresql-acoustid:latest'
+
     Paths:
         'etc':
             Mode: *MODE_UR
+            Managed: true
         'lib':
             Mode: *MODE_URW
         'lib/data':
@@ -940,6 +983,30 @@ Meta:
                 Binds:
                     - 'etc:/etc/prometheus:ro'
                     - 'lib:/var/lib/prometheus:rw'
+
+'redis':
+    Image: 'nfnty/arch-redis:latest'
+    UGID: 380000
+
+    Names:
+        'redis-acoustid': null
+
+    Paths:
+        'etc':
+            Mode: *MODE_UR
+            Managed: true
+        'lib':
+            Mode: *MODE_URW
+
+    API:
+        'Normal':
+            HostConfig:
+                Memory: *GIB_4
+                MemorySwap: *GIB_8
+                MemoryReservation: *GIB_3_5
+                Binds:
+                    - 'etc/redis.conf:/etc/redis.conf:ro'
+                    - 'lib:/var/lib/redis:rw'
 
 'rsyslog':
     Image: 'nfnty/arch-rsyslog:latest'
