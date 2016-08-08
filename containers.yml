@@ -148,8 +148,6 @@ Meta:
         'gnupg':
             Mode: *MODE_URW
             Managed: true
-        'pkgcache':
-            Mode: *MODE_URW_GR
 
     API:
         'Normal':
@@ -168,7 +166,6 @@ Meta:
                 Binds:
                     - 'archive:/var/lib/bootstrap/archive:rw'
                     - 'gnupg:/var/lib/bootstrap/gnupg:rw'
-                    - 'pkgcache:/var/cache/pacman/pkg:rw'
                 Tmpfs:
                     '/tmp': 'size=512M,nr_inodes=200K,mode=700,rw,nosuid,nodev,exec,async,noatime'
 

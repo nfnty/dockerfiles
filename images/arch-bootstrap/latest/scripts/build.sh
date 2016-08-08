@@ -15,7 +15,8 @@ cleanup() {
 trap cleanup EXIT
 
 mkdir "${ROOTFS}"
-pacstrap -c -d -G -M "${ROOTFS}" $( cat "${SCRIPTDIR}/packages" )
+pacstrap -d -G -M "${ROOTFS}" $( cat "${SCRIPTDIR}/packages" )
+find "${ROOTFS}/var/cache/pacman/pkg" -mindepth 1 -delete
 
 cd "${ARCHIVEPATH}"
 tar --create --file='arch-mini-bootstrap.tar.xz' --xz --numeric-owner --xattrs --acls --directory="${ROOTFS}" .
