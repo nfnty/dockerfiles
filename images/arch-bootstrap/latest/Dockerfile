@@ -5,9 +5,12 @@ ENV UGID='0' UGNAME='root' GNUPGHOME='/var/lib/bootstrap/gnupg'
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 \
         /var/lib/bootstrap/{,archive,gnupg}
 
+COPY ["etc/pacman.conf", "/etc/"]
 COPY ["gnupg/", "${GNUPGHOME}/"]
 COPY ["scripts/", "/opt/bootstrap/"]
-RUN chmod --recursive 'u=rX,g=,o=' /opt/bootstrap && \
+RUN chmod 'u=rw,g=r,o=r' /etc/pacman.conf && \
+
+    chmod --recursive 'u=rX,g=,o=' /opt/bootstrap && \
     chmod --recursive 'u=rwX,g=,o=' "${GNUPGHOME}" && \
 
     pacman --sync --noconfirm --refresh --sysupgrade && \
