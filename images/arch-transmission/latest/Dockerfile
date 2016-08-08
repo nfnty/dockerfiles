@@ -5,7 +5,7 @@ ENV UGID='100000' UGNAME='transmission'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_TRANSMISSION='2.92-3'
+ENV VERSION_TRANSMISSION='2.92-4'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "transmission-cli=${VERSION_TRANSMISSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

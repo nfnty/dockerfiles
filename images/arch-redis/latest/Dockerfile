@@ -5,7 +5,7 @@ ENV UGID='380000' UGNAME='redis'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_REDIS='3.2.1-1'
+ENV VERSION_REDIS='3.2.3-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "redis=${VERSION_REDIS}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
