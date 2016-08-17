@@ -505,3 +505,25 @@ Meta:
 
 'nfnty/arch-acoustid-index:latest':
     Check: false
+
+'nfnty/arch-clamav:latest':
+    Packages:
+        'clamav':
+            Variable: 'VERSION_CLAMAV'
+            Download: 'extra'
+            Sources:
+                'archlinux':
+                    URL: 'https://www.archlinux.org/packages/extra/x86_64/clamav'
+                    XPath: *XPATH_ARCH
+                    Attribute: *ATTRIBUTE_ARCH
+
+'nfnty/arch-rspamd:latest':
+    Packages:
+        'rspamd':
+            Variable: 'VERSION_RSPAMD'
+            Download: 'nfnty'
+            Sources:
+                'github':
+                    URL: 'https://github.com/vstakhov/rspamd/tags'
+                    XPath: '//span[@class="tag-name"]'
+                    Regex: *REGEX_DIGITS_3

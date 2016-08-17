@@ -7,7 +7,7 @@ RUN groupadd --gid "${UGID}" "${UGNAME}" && \
 
 ENV VERSION_DOVECOT='2.2.25-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
-    pacman --sync --noconfirm "dovecot=${VERSION_DOVECOT}" && \
+    pacman --sync --noconfirm "dovecot=${VERSION_DOVECOT}" pigeonhole && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/dovecot /var/log/dovecot && \
     install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=755 /run/dovecot
