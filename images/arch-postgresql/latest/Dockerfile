@@ -5,7 +5,7 @@ ENV UGID='180000' UGNAME='postgres'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_POSTGRESQL='9.5.3-1' PGDATA='/var/lib/postgres/data'
+ENV VERSION_POSTGRESQL='9.5.4-1' PGDATA='/var/lib/postgres/data'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "postgresql=${VERSION_POSTGRESQL}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
