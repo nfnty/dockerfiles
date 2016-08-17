@@ -123,10 +123,6 @@ Meta:
             Managed: true
         'lib':
             Mode: *MODE_URW
-            Exclude:
-                - 'chainstate'
-        'lib/chainstate':
-            Mode: *MODE_URW
 
     API:
         'Normal':
@@ -291,10 +287,7 @@ Meta:
             Managed: true
         'lib':
             Mode: *MODE_URW
-            Exclude:
-                - 'sieve'
         'lib/sieve':
-            Mode: *MODE_URW
             Managed: true
             ManagedOpts:
                 Filter:
@@ -354,10 +347,6 @@ Meta:
     Paths:
         'lib':
             Mode: *MODE_URW
-            Exclude:
-                - 'transcoding-temp'
-        'lib/transcoding-temp':
-            Mode: *MODE_URW
 
     API:
         'Normal':
@@ -396,6 +385,10 @@ Meta:
                 Filter:
                     - 'protect /ssl/dhparam.pem'
                     - 'exclude /domains'
+        'etc/domains':
+            Managed: true
+            ManagedOpts:
+                Reload: false
         'spool':
             Mode: *MODE_URW
 
