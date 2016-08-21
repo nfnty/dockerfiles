@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 ''' Check image package versions '''
 
+import argparse
 import distutils.version
 import re
 import subprocess
@@ -10,6 +11,23 @@ import requests
 from termcolor import cprint
 
 from utils.image import IMAGES, META, path_dockerfile
+
+
+def args_parse(arguments=None):
+    ''' Parse arguments '''
+    par0 = argparse.ArgumentParser(description='Image package version checker')
+
+    method = par0.add_mutually_exclusive_group(required=False)
+    method.add_argument(
+        '--include', metavar='IMAGE', action='append', choices=IMAGES.keys(),
+        help='Include image(s)',
+    )
+    method.add_argument(
+        '--exclude', metavar='IMAGE', action='append', choices=IMAGES.keys(),
+        help='Exclude image(s)',
+    )
+
+    return par0.parse_args(arguments)
 
 
 def fetch(url, headers, timeout):
@@ -99,54 +117,64 @@ def dockerfile_update(path, variable, version):
         filedesc.write(newfile)
 
 
-def main():
+def main():  # pylint: disable=too-many-branches
     ''' Main '''
     subprocess.check_call(['/usr/bin/sudo', '/usr/bin/pacman', '--sync', '--refresh'])
 
-    for image, image_dict in IMAGES.items():
+    if ARGS.include:
+        images = {image: config for image, config in IMAGES.items() if image in ARGS.include}
+    elif ARGS.exclude:
+        images = {image: config for image, config in IMAGES.items() if image not in ARGS.exclude}
+    else:
+        images = IMAGES
+
+    for image, image_dict in sorted(images.items(), key=lambda item: len(item[0])):
         cprint('\n{0:s}'.format(image), 'white', attrs=['underline'])
         if 'Check' in image_dict and not image_dict['Check']:
             print('Not checked!')
             continue
+        if 'Packages' not in image_dict:
+            print('No packages!')
+            continue
 
-        if 'Packages' in image_dict:
-            for package, package_dict in image_dict['Packages'].items():
-                cprint('{0:s}:'.format(package), 'yellow')
+        for package, package_dict in image_dict['Packages'].items():
+            cprint('{0:s}:'.format(package), 'yellow')
 
-                for source, source_dict in package_dict['Sources'].items():
-                    try:
-                        source_dict['Version'] = version_scrape(
-                            source_dict['URL'],
-                            source_dict['XPath'],
-                            source_dict['Attribute'] if 'Attribute' in source_dict else None,
-                            source_dict['Regex'] if 'Regex' in source_dict else None,
-                        )
-                    except RuntimeError as error:
-                        cprint('{0:s}: {1:s}'.format(source, str(error)), 'red')
-                        source_dict['Version'] = None
-
+            for source, source_dict in package_dict['Sources'].items():
                 try:
-                    for repo, version in version_pacman(package).items():
-                        package_dict['Sources'][repo] = {'Version': version}
+                    source_dict['Version'] = version_scrape(
+                        source_dict['URL'],
+                        source_dict['XPath'],
+                        source_dict['Attribute'] if 'Attribute' in source_dict else None,
+                        source_dict['Regex'] if 'Regex' in source_dict else None,
+                    )
                 except RuntimeError as error:
-                    cprint(str(error), 'red')
+                    cprint('{0:s}: {1:s}'.format(source, str(error)), 'red')
+                    source_dict['Version'] = None
 
-                for source, source_dict in package_dict['Sources'].items():
-                    print('{0:15s}{1:s}'.format(
-                        source,
-                        source_dict['Version'].vstring if source_dict['Version'] else 'None',
-                    ))
+            try:
+                for repo, version in version_pacman(package).items():
+                    package_dict['Sources'][repo] = {'Version': version}
+            except RuntimeError as error:
+                cprint(str(error), 'red')
 
-                if not package_dict['Sources'][package_dict['Download']]['Version']:
-                    cprint('No Version for Download: {0:s}'.format(
-                        package_dict['Download']), 'red')
-                    continue
+            for source, source_dict in package_dict['Sources'].items():
+                print('{0:15s}{1:s}'.format(
+                    source,
+                    source_dict['Version'].vstring if source_dict['Version'] else 'None',
+                ))
 
-                dockerfile_update(
-                    path_dockerfile(image),
-                    package_dict['Variable'],
-                    package_dict['Sources'][package_dict['Download']]['Version'].vstring,
-                )
+            if not package_dict['Sources'][package_dict['Download']]['Version']:
+                cprint('No Version for Download: {0:s}'.format(
+                    package_dict['Download']), 'red')
+                continue
+
+            dockerfile_update(
+                path_dockerfile(image),
+                package_dict['Variable'],
+                package_dict['Sources'][package_dict['Download']]['Version'].vstring,
+            )
 
 if __name__ == '__main__':
+    ARGS = args_parse()
     main()
