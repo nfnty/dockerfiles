@@ -1,11 +1,12 @@
 ''' requests Unix socket connection '''
+
 import socket
 
 import requests.adapters
 import urllib3
 
 
-__all__ = ['session', 'url_format']
+__all__ = ['session', 'url_format', 'error']
 
 
 class HTTPConnection(urllib3.connection.HTTPConnection):
