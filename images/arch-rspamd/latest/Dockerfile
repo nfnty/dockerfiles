@@ -5,7 +5,7 @@ ENV UGID='410000' UGNAME='rspamd'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_RSPAMD='1.3.2-1'
+ENV VERSION_RSPAMD='1.3.3-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/rspamd=${VERSION_RSPAMD}" file && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
