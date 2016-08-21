@@ -213,6 +213,31 @@ Meta:
                     - 'pkgbuild:/mnt/pkgbuild:rw'
                 SecurityOpt: null
 
+'cadvisor':
+    Image: 'nfnty/arch-cadvisor:latest'
+    UGID: 0
+
+    Names:
+        'cadvisor': null
+
+    API:
+        'Normal':
+            Cmd: ['-docker', 'unix:///mnt/docker.sock']
+            HostConfig:
+                Memory: *GIB_1
+                MemorySwap: *GIB_2
+                MemoryReservation: *GIB_0_75
+                CpuShares: 2048
+                CapAdd:
+                    - 'DAC_OVERRIDE'
+                Binds:
+                    - '/:/rootfs:ro'
+                    - '/run/docker.sock:/mnt/docker.sock:rw'
+                    - '/sys:/sys:ro'
+                    - '/var/lib/docker:/var/lib/docker:ro'
+                Tmpfs:
+                    '/tmp': *TMP_MIB_64
+
 'clamav':
     Image: 'nfnty/arch-clamav:latest'
     UGID: 400000

@@ -527,3 +527,14 @@ Meta:
                     URL: 'https://github.com/vstakhov/rspamd/tags'
                     XPath: '//span[@class="tag-name"]'
                     Regex: *REGEX_DIGITS_3
+
+'nfnty/arch-cadvisor:latest':
+    Packages:
+        'cadvisor':
+            Variable: 'VERSION_CADVISOR'
+            Download: 'nfnty'
+            Sources:
+                'github':
+                    URL: 'https://github.com/google/cadvisor/releases'
+                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
+                    Regex: *REGEX_DIGITS_3
