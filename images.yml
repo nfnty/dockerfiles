@@ -1,13 +1,11 @@
 Meta:
     Aliases:
-        GIB_1: &GIB_1 1073741824
-        GIB_2: &GIB_2 2147483648
-        XPathArch: &XPATH_ARCH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
-        AttributeArch: &ATTRIBUTE_ARCH 'content'
-        Regex2Digits: &REGEX_DIGITS_2 '(\d+\.\d+)'
-        Regex3Digits: &REGEX_DIGITS_3 '(\d+\.\d+\.\d+)'
-        Regex3DigitsVTag: &REGEX_DIGITS_3_VTAG '^v(\d+\.\d+\.\d+)$'
-        Regex4Digits: &REGEX_DIGITS_4 '(\d+\.\d+\.\d+\.\d+)'
+        XPATH_ARCH: &XPATH_ARCH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
+        ATTRIBUTE_ARCH: &ATTRIBUTE_ARCH 'content'
+        REGEX_DIGITS_2: &REGEX_DIGITS_2 '(\d+\.\d+)'
+        REGEX_DIGITS_3: &REGEX_DIGITS_3 '(\d+\.\d+\.\d+)'
+        REGEX_DIGITS_3_VTAG: &REGEX_DIGITS_3_VTAG '^v(\d+\.\d+\.\d+)$'
+        REGEX_DIGITS_4: &REGEX_DIGITS_4 '(\d+\.\d+\.\d+\.\d+)'
 
     Paths:
         'nfnty': 'images'
@@ -18,17 +16,11 @@ Meta:
         - 'extra'
         - 'community'
 
-    Params:
-        memory: *GIB_1
-        memswap: *GIB_2
-        cpushares: 128
-
 #################
 #  BASE IMAGES  #
 #################
 
-'nfnty/arch-mini:latest':
-    Scratch: ['scripts/containers.py', 'run', '--rm', 'bootstrap']
+'nfnty/arch-mini:latest': {}
 
 'nfnty/arch-devel:latest':
     Build: false

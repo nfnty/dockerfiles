@@ -1,2 +1,2 @@
-[flake8]
+[FORMAT]
 max-line-length = 99

@@ -10,7 +10,11 @@ import lxml.html
 import requests
 from termcolor import cprint
 
-from utils.image import IMAGES, META, path_dockerfile
+from utils.image import IMAGES, path_dockerfile
+
+
+TIMEOUT = (31, 181)  # (Connect, Read)
+HEADERS = {'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'}
 
 
 def args_parse(arguments=None):
@@ -30,10 +34,10 @@ def args_parse(arguments=None):
     return par0.parse_args(arguments)
 
 
-def fetch(url, headers, timeout):
+def fetch(url, timeout):
     ''' Fetch URL '''
     try:
-        response = requests.get(url, headers=headers, timeout=timeout)
+        response = requests.get(url, headers=HEADERS, timeout=timeout)
         response.raise_for_status()
     except (requests.exceptions.Timeout, requests.exceptions.HTTPError) as error:
         raise RuntimeError('fetch: {0:s}\n{1:s}'.format(str(error), str(error.response.content)))
@@ -75,8 +79,7 @@ def document_parse(document, xpath, attribute, regex):
 
 def version_scrape(url, xpath, attribute, regex):
     ''' Scrape latest version from url '''
-    document = fetch(url, META['Headers'],
-                     (META['Limits']['TimeoutConnect'], META['Limits']['TimeoutRead']))
+    document = fetch(url, TIMEOUT)
     return document_parse(document, xpath, attribute, regex)
 
 

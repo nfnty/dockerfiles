@@ -12,9 +12,7 @@ from utils import unixconn
 
 SESSION = unixconn.session()
 SOCKET = '/run/docker.sock'
-TIMEOUT_CONNECT = 31
-TIMEOUT_READ = 181
-TIMEOUT = (TIMEOUT_CONNECT, TIMEOUT_READ)
+TIMEOUT = (31, 181)  # (Connect, Read)
 
 
 def args_parse(arguments=None):

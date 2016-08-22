@@ -7,6 +7,7 @@ import yaml
 
 from utils import meta
 
+
 __all__ = ['IMAGES', 'META', 'path_image']
 
 
@@ -15,7 +16,6 @@ def config_parse():
     load = yaml.load(open(os.path.join(meta.PATH_REPO, 'images.yml')), Loader=yaml.CLoader)
     load_meta = load['Meta']
     del load['Meta']
-    meta.dict_merge_add(load_meta, meta.META)
     return load, load_meta
 
 
