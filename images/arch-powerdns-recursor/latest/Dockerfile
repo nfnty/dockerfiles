@@ -5,7 +5,7 @@ ENV UGID='240000' UGNAME='powerdns'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_POWERDNS_RECURSOR='3.7.3-3'
+ENV VERSION_POWERDNS_RECURSOR='4.0.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "powerdns-recursor=${VERSION_POWERDNS_RECURSOR}" lua-luajson && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
