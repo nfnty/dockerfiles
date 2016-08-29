@@ -222,7 +222,7 @@ Meta:
 
     API:
         'Normal':
-            Cmd: ['-docker', 'unix:///mnt/docker.sock']
+            Cmd: ['-docker', 'unix:///mnt/docker.sock', '-disable_metrics', 'disk,tcp']
             HostConfig:
                 Memory: *MIB_1024
                 MemorySwap: *MIB_2048
