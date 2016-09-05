@@ -13,4 +13,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
 USER ${UGNAME}
 VOLUME ["/var/lib/acoustid-index"]
 EXPOSE 6080/tcp
-ENTRYPOINT ["/usr/bin/fpi-server", "--directory", "/var/lib/acoustid-index", "--address", "0.0.0.0"]
+ENTRYPOINT ["/usr/bin/fpi-server", "--directory", "/var/lib/acoustid-index", "--address", "::"]
