@@ -17,7 +17,7 @@ EXPOSE 5000/tcp
 WORKDIR /opt/acoustid-server
 ENTRYPOINT [ \
     "/opt/multiprocess.py", "--", \
-    "/opt/acoustid-server/e/bin/python -m acoustid.web.app --host 0.0.0.0 --api", \
+    "/opt/acoustid-server/e/bin/python -m acoustid.web.app --host :: --api", \
     "/opt/acoustid-server/e/bin/python /opt/acoustid-server/scripts/import_submissions.py --config /opt/acoustid-server/acoustid.conf", \
     "/opt/acoustid-server/e/bin/python /opt/acoustid-server/scripts/warm_up_cache.py --config /opt/acoustid-server/acoustid.conf" \
 ]
