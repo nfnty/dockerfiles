@@ -50,14 +50,17 @@ def run(command, errexit=True):
 
 def main():
     ''' Main '''
-    name = os.environ['CNAME']
-    bridge = os.environ['BRNAME']
     interface = os.environ['IFNAME']
-    mac = os.environ['MACADDR']
-    ipaddr = os.environ['IPADDR']
-    route = os.environ['DROUTE']
 
     if sys.argv[1] == 'up':
+        name = os.environ['CNAME']
+        bridge = os.environ['BRNAME']
+        mac = os.environ['MACADDR']
+        ip4 = os.environ.get('IPADDR4')
+        route4 = os.environ.get('DROUTE4')
+        ip6 = os.environ.get('IPADDR6')
+        route6 = os.environ.get('DROUTE6')
+
         pid = container_pid(name)
         if pid is None:
             sys.exit(1)
@@ -75,8 +78,12 @@ def main():
         run(cmd + ['link', 'set', 'dev', 'vp_' + interface, 'name', INTERFACE])
         run(cmd + ['link', 'set', INTERFACE, 'address', mac])
         run(cmd + ['link', 'set', INTERFACE, 'up'])
-        run(cmd + ['addr', 'add', ipaddr, 'dev', INTERFACE])
-        run(cmd + ['route', 'add', 'default', 'via', route])
+        if ip4 and route4:
+            run(cmd + ['-family', 'inet', 'addr', 'add', ip4, 'dev', INTERFACE])
+            run(cmd + ['-family', 'inet', 'route', 'add', 'default', 'via', route4])
+        if ip6 and route6:
+            run(cmd + ['-family', 'inet6', 'addr', 'add', ip6, 'dev', INTERFACE])
+            run(cmd + ['-family', 'inet6', 'route', 'add', 'default', 'via', route6])
 
     elif sys.argv[1] == 'down':
         run(['/usr/bin/ip', 'link', 'delete', 've_' + interface], errexit=False)
