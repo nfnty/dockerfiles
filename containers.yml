@@ -542,7 +542,7 @@ Meta:
                 Binds:
                     - 'etc:/etc/influxdb:rw'
 
-'kea-dhcp4':
+'kea':
     Image: 'nfnty/arch-kea:latest'
     UGID: 260000
 
@@ -553,6 +553,13 @@ Meta:
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/kea-dhcp4:/dev/log:rw'
+        'kea-dhcp6':
+            API:
+                'Normal':
+                    Entrypoint: ["/usr/bin/kea-dhcp6", "-c", "/etc/kea/kea.conf"]
+                    HostConfig:
+                        Binds:
+                            - '/srv/docker/rsyslog/run/kea-dhcp6:/dev/log:rw'
 
     Paths:
         'etc':
