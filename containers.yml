@@ -37,7 +37,7 @@ Meta:
                     - 'ALL'
                 PublishAllPorts: false
                 Dns:
-                    - '10.7.1.1'
+                    - 'fd10::1'
                 NetworkMode: 'none'
                 ReadonlyRootfs: true
                 SecurityOpt:
@@ -159,7 +159,7 @@ Meta:
                     - 'SYS_CHROOT'
                 NetworkMode: 'bridge'
                 Dns:
-                    - '10.7.2.1'
+                    - 'fd10:0:0:1::1'
                 Binds:
                     - 'archive:/var/lib/bootstrap/archive:rw'
                     - 'gnupg:/var/lib/bootstrap/gnupg:rw'
@@ -204,7 +204,7 @@ Meta:
                     - 'SYS_RESOURCE'
                 NetworkMode: 'bridge'
                 Dns:
-                    - '10.7.2.1'
+                    - 'fd10:0:0:1::1'
                 ReadonlyRootfs: false
                 Binds:
                     - 'etc/makepkg.conf:/etc/makepkg.conf:ro'
@@ -623,7 +623,7 @@ Meta:
             HostConfig:
                 NetworkMode: 'bridge'
                 Dns:
-                    - '10.7.2.1'
+                    - 'fd10:0:0:1::1'
                 Binds:
                     - 'etc:/etc/letsencrypt:rw'
                     - 'lib:/var/lib/letsencrypt:rw'
