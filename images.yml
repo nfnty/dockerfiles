@@ -530,3 +530,14 @@ Meta:
                     URL: 'https://github.com/google/cadvisor/releases'
                     XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
                     Regex: *REGEX_DIGITS_3
+
+'nfnty/arch-radvd:latest':
+    Packages:
+        'radvd':
+            Variable: 'VERSION_RADVD'
+            Download: 'extra'
+            Sources:
+                'archlinux':
+                    URL: 'https://www.archlinux.org/packages/extra/x86_64/radvd'
+                    XPath: *XPATH_ARCH
+                    Attribute: *ATTRIBUTE_ARCH

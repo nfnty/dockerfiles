@@ -1070,6 +1070,33 @@ Meta:
                     - 'etc:/etc/prometheus:ro'
                     - 'lib:/var/lib/prometheus:rw'
 
+'radvd':
+    Image: 'nfnty/arch-radvd:latest'
+    UGID: 420000
+
+    Names:
+        'radvd': null
+
+    Paths:
+        'etc/radvd.conf':
+            Type: 'Regular'
+            Mode: *MODE_UR
+            Managed: true
+
+    API:
+        'Normal':
+            Hostname: null
+            HostConfig:
+                CpuShares: 2048
+                CapAdd:
+                    - 'NET_RAW'
+                NetworkMode: 'host'
+                Dns: null
+                Binds:
+                    - 'etc/radvd.conf:/etc/radvd.conf:ro'
+                Tmpfs:
+                    '/run': *TMP_MIB_64
+
 'redis':
     Image: 'nfnty/arch-redis:latest'
     UGID: 380000
