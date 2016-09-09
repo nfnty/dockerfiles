@@ -5,7 +5,7 @@ ENV UGID='120000' UGNAME='kibana'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_KIBANA='4.5.4' BABEL_CACHE_PATH='/tmp/babel.json'
+ENV VERSION_KIBANA='4.6.1' BABEL_CACHE_PATH='/tmp/babel.json'
 RUN install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=500 /opt/kibana && \
     set -o pipefail && \
     curl --speed-limit 256000 \
