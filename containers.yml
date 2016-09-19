@@ -37,8 +37,8 @@ Meta:
                     - 'ALL'
                 PublishAllPorts: false
                 Dns:
-                    - 'fd10::1'
-                NetworkMode: 'none'
+                    - "{{ network['devices']['vbr_docker0']['gateway4'] }}"
+                NetworkMode: 'static'
                 ReadonlyRootfs: true
                 SecurityOpt:
                     - 'no-new-privileges'
@@ -52,7 +52,15 @@ Meta:
     UGID: 370000
 
     Names:
-        'acoustid': null
+        'acoustid':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['acoustid'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['acoustid'] }}"
 
     Paths:
         'config':
@@ -70,7 +78,15 @@ Meta:
     UGID: 390000
 
     Names:
-        'acoustid-index': null
+        'acoustid-index':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['acoustid-index'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['acoustid-index'] }}"
 
     Paths:
         'lib':
@@ -115,7 +131,15 @@ Meta:
     UGID: 330000
 
     Names:
-        'bitcoin-classic': null
+        'bitcoin-classic':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['bitcoin-classic'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['bitcoin-classic'] }}"
 
     Paths:
         'etc':
@@ -159,7 +183,7 @@ Meta:
                     - 'SYS_CHROOT'
                 NetworkMode: 'bridge'
                 Dns:
-                    - 'fd10:0:0:1::1'
+                    - "{{ network['devices']['vbr_docker1']['gateway4'] }}"
                 Binds:
                     - 'archive:/var/lib/bootstrap/archive:rw'
                     - 'gnupg:/var/lib/bootstrap/gnupg:rw'
@@ -204,7 +228,7 @@ Meta:
                     - 'SYS_RESOURCE'
                 NetworkMode: 'bridge'
                 Dns:
-                    - 'fd10:0:0:1::1'
+                    - "{{ network['devices']['vbr_docker1']['gateway4'] }}"
                 ReadonlyRootfs: false
                 Binds:
                     - 'etc/makepkg.conf:/etc/makepkg.conf:ro'
@@ -218,7 +242,15 @@ Meta:
     UGID: 0
 
     Names:
-        'cadvisor': null
+        'cadvisor':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['cadvisor'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['cadvisor'] }}"
 
     API:
         'Normal':
@@ -246,6 +278,12 @@ Meta:
         'clamav':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['clamav'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['clamav'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/clamav:/dev/log:rw'
@@ -274,7 +312,15 @@ Meta:
     UGID: 400000
 
     Names:
-        'clamav-updater': null
+        'clamav-updater':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['clamav-updater'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['clamav-updater'] }}"
 
     Paths:
         'etc':
@@ -301,6 +347,12 @@ Meta:
         'dovecot':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['dovecot'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['dovecot'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/dovecot:/dev/log:rw'
@@ -336,7 +388,15 @@ Meta:
     UGID: 110000
 
     Names:
-        'elasticsearch': null
+        'elasticsearch':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['elasticsearch'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['elasticsearch'] }}"
 
     Paths:
         'config':
@@ -367,7 +427,15 @@ Meta:
     UGID: 280000
 
     Names:
-        'emby': null
+        'emby':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['emby'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['emby'] }}"
 
     Paths:
         'lib':
@@ -396,6 +464,12 @@ Meta:
         'exim':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['exim'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['exim'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/exim:/dev/log:rw'
@@ -434,7 +508,15 @@ Meta:
     UGID: 360000
 
     Names:
-        'grafana': null
+        'grafana':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['grafana'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['grafana'] }}"
 
     Paths:
         'etc':
@@ -458,7 +540,15 @@ Meta:
     UGID: 290000
 
     Names:
-        'heka': null
+        'heka':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['heka'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['heka'] }}"
 
     Paths:
         'cache':
@@ -517,7 +607,15 @@ Meta:
     UGID: 350000
 
     Names:
-        'influxdb': null
+        'influxdb':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['influxdb'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['influxdb'] }}"
 
     Paths:
         'etc':
@@ -589,7 +687,15 @@ Meta:
     UGID: 120000
 
     Names:
-        'kibana': null
+        'kibana':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['kibana'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['kibana'] }}"
 
     Paths:
         'config':
@@ -630,7 +736,7 @@ Meta:
             HostConfig:
                 NetworkMode: 'bridge'
                 Dns:
-                    - 'fd10:0:0:1::1'
+                    - "{{ network['devices']['vbr_docker1']['gateway4'] }}"
                 Binds:
                     - 'etc:/etc/letsencrypt:rw'
                     - 'lib:/var/lib/letsencrypt:rw'
@@ -642,7 +748,15 @@ Meta:
     UGID: 130000
 
     Names:
-        'logstash': null
+        'logstash':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['logstash'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['logstash'] }}"
 
     Paths:
         'etc':
@@ -678,6 +792,12 @@ Meta:
                     Mode: *MODE_URW_GRW
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['nginx-proxy-wan'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['nginx-proxy-wan'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/nginx-proxy-wan:/dev/log:rw'
@@ -686,6 +806,12 @@ Meta:
         'nginx-proxy':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['nginx-proxy'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['nginx-proxy'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/nginx-proxy:/dev/log:rw'
@@ -693,6 +819,12 @@ Meta:
         'nginx-mirror':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['nginx-mirror'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['nginx-mirror'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/builder/lib/pkg:/mnt/nfnty:ro'
@@ -731,7 +863,15 @@ Meta:
     UGID: 230000
 
     Names:
-        'ntp': null
+        'ntp':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['ntp'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['ntp'] }}"
 
     Paths:
         'etc':
@@ -763,7 +903,15 @@ Meta:
     UGID: 170000
 
     Names:
-        'openhab': null
+        'openhab':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['openhab'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['openhab'] }}"
 
     Paths:
         'addons':
@@ -814,6 +962,12 @@ Meta:
         'openvpn-admin-tcp':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static_openvpn':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['openvpn-admin-tcp'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['openvpn-admin-tcp'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/openvpn-admin-tcp:/dev/log:rw'
@@ -821,6 +975,12 @@ Meta:
         'openvpn-admin-udp':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static_openvpn':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['openvpn-admin-udp'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['openvpn-admin-udp'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/openvpn-admin-udp:/dev/log:rw'
@@ -828,6 +988,12 @@ Meta:
         'openvpn-home-tcp':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static_openvpn':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['openvpn-home-tcp'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['openvpn-home-tcp'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/openvpn-home-tcp:/dev/log:rw'
@@ -835,6 +1001,12 @@ Meta:
         'openvpn-home-udp':
             API:
                 'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static_openvpn':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['openvpn-home-udp'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['openvpn-home-udp'] }}"
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/openvpn-home-udp:/dev/log:rw'
@@ -863,6 +1035,9 @@ Meta:
                     - 'NET_RAW'
                     - 'SETGID'
                     - 'SETUID'
+                NetworkMode: 'static_openvpn'
+                Dns:
+                    - "{{ network['devices']['vbr_ovpn0']['gateway4'] }}"
                 Binds:
                     - 'etc:/etc/openvpn:ro'
                     - 'lib:/var/lib/openvpn:rw'
@@ -884,7 +1059,15 @@ Meta:
     UGID: 160000
 
     Names:
-        'owncloud': null
+        'owncloud':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['owncloud'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['owncloud'] }}"
 
     Paths:
         'apps':
@@ -954,7 +1137,15 @@ Meta:
     UGID: 320000
 
     Names:
-        'plex': null
+        'plex':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['plex'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['plex'] }}"
 
     Paths:
         'lib':
@@ -984,11 +1175,26 @@ Meta:
     UGID: 180000
 
     Names:
-        'postgresql': null
+        'postgresql':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['postgresql'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['postgresql'] }}"
 
         'postgresql-acoustid':
             Image: 'nfnty/arch-postgresql-acoustid:latest'
-
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['postgresql-acoustid'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['postgresql-acoustid'] }}"
     Paths:
         'etc':
             Mode: *MODE_UR
@@ -1023,7 +1229,15 @@ Meta:
     UGID: 240000
 
     Names:
-        'powerdns-recursor': null
+        'powerdns-recursor':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['powerdns-recursor'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['powerdns-recursor'] }}"
 
     Paths:
         'etc':
@@ -1050,7 +1264,15 @@ Meta:
     UGID: 360000
 
     Names:
-        'prometheus': null
+        'prometheus':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['prometheus'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['prometheus'] }}"
 
     Paths:
         'etc':
@@ -1102,7 +1324,15 @@ Meta:
     UGID: 380000
 
     Names:
-        'redis-acoustid': null
+        'redis-acoustid':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['redis-acoustid'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['redis-acoustid'] }}"
 
     Paths:
         'etc':
@@ -1126,7 +1356,15 @@ Meta:
     UGID: 410000
 
     Names:
-        'rspamd': null
+        'rspamd':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['rspamd'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['rspamd'] }}"
 
     Paths:
         'etc/rspamd.conf':
@@ -1169,11 +1407,13 @@ Meta:
 
     API:
         'Normal':
+            NetworkDisabled: true
             HostConfig:
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
                 MemoryReservation: *MIB_3584
                 CpuShares: 2048
+                NetworkMode: 'none'
                 Binds:
                     - 'etc/rsyslog.conf:/etc/rsyslog.conf:ro'
                     - 'log:/var/log/rsyslog:rw'
@@ -1184,7 +1424,15 @@ Meta:
     UGID: 140000
 
     Names:
-        'samba': null
+        'samba':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['samba'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['samba'] }}"
 
     Paths:
         'cache':
@@ -1216,7 +1464,15 @@ Meta:
     UGID: 100000
 
     Names:
-        'transmission': null
+        'transmission':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['transmission'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['transmission'] }}"
 
     Paths:
         'lib':
