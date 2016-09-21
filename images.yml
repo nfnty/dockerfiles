@@ -541,3 +541,14 @@ Meta:
                     URL: 'https://www.archlinux.org/packages/extra/x86_64/radvd'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
+
+'nfnty/arch-parity:latest':
+    Packages:
+        'parity':
+            Variable: 'VERSION_PARITY'
+            Download: 'nfnty'
+            Sources:
+                'github':
+                    URL: 'https://github.com/ethcore/parity/releases'
+                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
+                    Regex: *REGEX_DIGITS_3

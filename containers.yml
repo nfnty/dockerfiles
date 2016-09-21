@@ -1107,6 +1107,39 @@ Meta:
                     '/run/php-fpm': *TMP_MIB_64
                     '/tmp': *TMP_MIB_64
 
+'parity':
+    Image: 'nfnty/arch-parity:latest'
+    UGID: 430000
+
+    Names:
+        'parity':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['parity'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['parity'] }}"
+
+    Paths:
+        'lib':
+            Mode: *MODE_URW
+
+    API:
+        'Normal':
+            Cmd: [
+                '--jsonrpc-interface', '[::]', '--jsonrpc-hosts', 'all',
+                '--dapps-interface', '[::]', '--dapps-hosts', 'all',
+            ]
+            HostConfig:
+                Memory: *MIB_4096
+                MemorySwap: *MIB_8192
+                MemoryReservation: *MIB_3584
+                CpuShares: 256
+                Binds:
+                    - 'lib:/var/lib/parity:rw'
+
 'pimd':
     Image: 'nfnty/arch-pimd:latest'
     UGID: 300000
