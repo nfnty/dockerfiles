@@ -5,7 +5,7 @@ ENV UGID='420000' UGNAME='radvd'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_RADVD='2.14-1'
+ENV VERSION_RADVD='2.15-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "radvd=${VERSION_RADVD}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
