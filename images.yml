@@ -427,6 +427,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-bitcoin-classic:latest':
+    Build: false
     Packages:
         'bitcoin-classic':
             Variable: 'VERSION_BITCOIN_CLASSIC'
@@ -434,6 +435,17 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/bitcoinclassic/bitcoinclassic/releases'
+                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
+                    Regex: *REGEX_DIGITS_3
+
+'nfnty/arch-bitcoin-unlimited:latest':
+    Packages:
+        'bitcoin-unlimited':
+            Variable: 'VERSION_BITCOIN_UNLIMITED'
+            Download: 'nfnty'
+            Sources:
+                'github':
+                    URL: 'https://github.com/BitcoinUnlimited/BitcoinUnlimited/releases'
                     XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
                     Regex: *REGEX_DIGITS_3
 

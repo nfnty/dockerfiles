@@ -126,20 +126,20 @@ Meta:
                 Tmpfs:
                     '/run/avahi-daemon': *TMP_MIB_64
 
-'bitcoin-classic':
-    Image: 'nfnty/arch-bitcoin-classic:latest'
+'bitcoin':
+    Image: 'nfnty/arch-bitcoin-unlimited:latest'
     UGID: 330000
 
     Names:
-        'bitcoin-classic':
+        'bitcoin':
             API:
                 'Normal':
                     NetworkingConfig:
                         EndpointsConfig:
                             'static':
                                 IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['bitcoin-classic'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['bitcoin-classic'] }}"
+                                    IPv4Address: "{{ network['addresses4']['container']['bitcoin'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['bitcoin'] }}"
 
     Paths:
         'etc':
