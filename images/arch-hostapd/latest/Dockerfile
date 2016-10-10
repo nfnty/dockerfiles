@@ -5,7 +5,7 @@ ENV UGID='270000' UGNAME='hostapd'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
 
-ENV VERSION_HOSTAPD='2.5-2'
+ENV VERSION_HOSTAPD='2.6-3'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "hostapd=${VERSION_HOSTAPD}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

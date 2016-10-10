@@ -5,7 +5,7 @@ ENV UGID='430000' UGNAME='parity'
 RUN groupadd --gid "${UGID}" "${UGNAME}" && \
     useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false --home-dir /var/lib/parity/home "${UGNAME}"
 
-ENV VERSION_PARITY='1.3.2-1'
+ENV VERSION_PARITY='1.3.5-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/parity=${VERSION_PARITY}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
