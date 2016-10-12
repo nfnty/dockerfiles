@@ -140,6 +140,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-heka:latest':
+    Build: false
     Packages:
         'heka':
             Variable: 'VERSION_HEKA'
@@ -223,6 +224,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-nginx-php:latest':
+    Build: false
     Packages:
         'php':
             Variable: 'VERSION_PHP'
@@ -416,6 +418,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-owncloud:latest':
+    Build: false
     Packages:
         'owncloud':
             Variable: 'VERSION_OWNCLOUD'
@@ -461,6 +464,7 @@ Meta:
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-influxdb:latest':
+    Build: false
     Packages:
         'influxdb':
             Variable: 'VERSION_INFLUXDB'
