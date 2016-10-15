@@ -140,6 +140,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-heka:latest':
+    Check: false
     Build: false
     Packages:
         'heka':
