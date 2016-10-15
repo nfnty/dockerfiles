@@ -1,9 +1,9 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='420000' UGNAME='radvd'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880042' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_RADVD='2.15-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
@@ -11,5 +11,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_raw=ep' /usr/bin/radvd
 
-USER ${UGNAME}
+USER contusr
 ENTRYPOINT ["/usr/bin/radvd", "--nodaemon", "--logmethod=stderr"]

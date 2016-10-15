@@ -1,19 +1,19 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='160000' UGNAME='nginx'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880016' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_NGINX_MAINLINE='1.11.4-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx-mainline=${VERSION_NGINX_MAINLINE}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_bind_service=ep' /usr/bin/nginx && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/nginx /var/log/nginx && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/nginx
+    chown --recursive contusr:contgrp /var/lib/nginx /var/log/nginx && \
+    install --directory --owner=contusr --group=contgrp --mode=700 /run/nginx
 
-USER ${UGNAME}
+USER contusr
 VOLUME ["/var/lib/nginx"]
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/usr/bin/nginx", "-g", "daemon off;"]

@@ -49,7 +49,7 @@ Meta:
 
 'acoustid':
     Image: 'nfnty/arch-acoustid:latest'
-    UGID: 370000
+    UGID: 880037
 
     Names:
         'acoustid':
@@ -75,7 +75,7 @@ Meta:
 
 'acoustid-index':
     Image: 'nfnty/arch-acoustid-index:latest'
-    UGID: 390000
+    UGID: 880039
 
     Names:
         'acoustid-index':
@@ -104,7 +104,7 @@ Meta:
 
 'avahi':
     Image: 'nfnty/arch-avahi:latest'
-    UGID: 310000
+    UGID: 880031
 
     Names:
         'avahi': null
@@ -128,7 +128,7 @@ Meta:
 
 'bitcoin':
     Image: 'nfnty/arch-bitcoin-unlimited:latest'
-    UGID: 330000
+    UGID: 880033
 
     Names:
         'bitcoin':
@@ -192,7 +192,7 @@ Meta:
 
 'builder':
     Image: 'nfnty/arch-builder:latest'
-    UGID: 99999
+    UGID: 880001
 
     Paths:
         'etc':
@@ -272,7 +272,7 @@ Meta:
 
 'clamav':
     Image: 'nfnty/arch-clamav:latest'
-    UGID: 400000
+    UGID: 880040
 
     Names:
         'clamav':
@@ -309,7 +309,7 @@ Meta:
 
 'clamav-updater':
     Image: 'nfnty/arch-clamav:latest'
-    UGID: 400000
+    UGID: 880040
 
     Names:
         'clamav-updater':
@@ -341,7 +341,7 @@ Meta:
 
 'dovecot':
     Image: 'nfnty/arch-dovecot:latest'
-    UGID: 220000
+    UGID: 880022
 
     Names:
         'dovecot':
@@ -385,7 +385,7 @@ Meta:
 
 'elasticsearch':
     Image: 'nfnty/arch-elasticsearch:latest'
-    UGID: 110000
+    UGID: 880011
 
     Names:
         'elasticsearch':
@@ -424,7 +424,7 @@ Meta:
 
 'emby':
     Image: 'nfnty/arch-emby:latest'
-    UGID: 280000
+    UGID: 880028
 
     Names:
         'emby':
@@ -458,7 +458,7 @@ Meta:
 
 'exim':
     Image: 'nfnty/arch-exim:latest'
-    UGID: 250000
+    UGID: 880025
 
     Names:
         'exim':
@@ -505,7 +505,7 @@ Meta:
 
 'grafana':
     Image: 'nfnty/arch-grafana:latest'
-    UGID: 360000
+    UGID: 880021
 
     Names:
         'grafana':
@@ -537,7 +537,7 @@ Meta:
 
 'heka':
     Image: 'nfnty/arch-heka:latest'
-    UGID: 290000
+    UGID: 880029
 
     Names:
         'heka':
@@ -569,7 +569,7 @@ Meta:
 
 'hostapd':
     Image: 'nfnty/arch-hostapd:latest'
-    UGID: 270000
+    UGID: 880027
 
     Names:
         'hostapd':
@@ -604,7 +604,7 @@ Meta:
 
 'influxdb':
     Image: 'nfnty/arch-influxdb:latest'
-    UGID: 350000
+    UGID: 880035
 
     Names:
         'influxdb':
@@ -642,7 +642,7 @@ Meta:
 
 'kea':
     Image: 'nfnty/arch-kea:latest'
-    UGID: 260000
+    UGID: 880026
 
     Names:
         'kea-dhcp4':
@@ -684,7 +684,7 @@ Meta:
 
 'kibana':
     Image: 'nfnty/arch-kibana:latest'
-    UGID: 120000
+    UGID: 880012
 
     Names:
         'kibana':
@@ -715,7 +715,7 @@ Meta:
 
 'certbot':
     Image: 'nfnty/arch-certbot:latest'
-    UGID: 99998
+    UGID: 880002
 
     Paths:
         'etc':
@@ -745,7 +745,7 @@ Meta:
 
 'logstash':
     Image: 'nfnty/arch-logstash:latest'
-    UGID: 130000
+    UGID: 880013
 
     Names:
         'logstash':
@@ -780,7 +780,7 @@ Meta:
 
 'nginx':
     Image: 'nfnty/arch-nginx:latest'
-    UGID: 160000
+    UGID: 880016
 
     Names:
         'nginx-proxy-wan':
@@ -860,7 +860,7 @@ Meta:
 
 'ntp':
     Image: 'nfnty/arch-ntp:latest'
-    UGID: 230000
+    UGID: 880023
 
     Names:
         'ntp':
@@ -900,7 +900,7 @@ Meta:
 
 'openhab':
     Image: 'nfnty/arch-openhab-telldus:latest'
-    UGID: 170000
+    UGID: 880017
 
     Names:
         'openhab':
@@ -956,7 +956,7 @@ Meta:
 
 'openvpn':
     Image: 'nfnty/arch-openvpn:latest'
-    UGID: 190000
+    UGID: 880019
 
     Names:
         'openvpn-admin-tcp':
@@ -1056,7 +1056,7 @@ Meta:
 
 'owncloud':
     Image: 'nfnty/arch-owncloud:latest'
-    UGID: 160000
+    UGID: 880016
 
     Names:
         'owncloud':
@@ -1109,7 +1109,7 @@ Meta:
 
 'parity':
     Image: 'nfnty/arch-parity:latest'
-    UGID: 430000
+    UGID: 880043
 
     Names:
         'parity':
@@ -1142,7 +1142,7 @@ Meta:
 
 'pimd':
     Image: 'nfnty/arch-pimd:latest'
-    UGID: 300000
+    UGID: 880030
 
     Names:
         'pimd': null
@@ -1167,7 +1167,7 @@ Meta:
 
 'plex':
     Image: 'nfnty/arch-plex:latest'
-    UGID: 320000
+    UGID: 880032
 
     Names:
         'plex':
@@ -1205,7 +1205,7 @@ Meta:
 
 'postgresql':
     Image: 'nfnty/arch-postgresql:latest'
-    UGID: 180000
+    UGID: 880018
 
     Names:
         'postgresql':
@@ -1259,7 +1259,7 @@ Meta:
 
 'powerdns-recursor':
     Image: 'nfnty/arch-powerdns-recursor:latest'
-    UGID: 240000
+    UGID: 880024
 
     Names:
         'powerdns-recursor':
@@ -1294,7 +1294,7 @@ Meta:
 
 'prometheus':
     Image: 'nfnty/arch-prometheus:latest'
-    UGID: 360000
+    UGID: 880036
 
     Names:
         'prometheus':
@@ -1327,7 +1327,7 @@ Meta:
 
 'radvd':
     Image: 'nfnty/arch-radvd:latest'
-    UGID: 420000
+    UGID: 880042
 
     Names:
         'radvd': null
@@ -1354,7 +1354,7 @@ Meta:
 
 'redis':
     Image: 'nfnty/arch-redis:latest'
-    UGID: 380000
+    UGID: 880038
 
     Names:
         'redis-acoustid':
@@ -1386,7 +1386,7 @@ Meta:
 
 'rspamd':
     Image: 'nfnty/arch-rspamd:latest'
-    UGID: 410000
+    UGID: 880041
 
     Names:
         'rspamd':
@@ -1423,7 +1423,7 @@ Meta:
 
 'rsyslog':
     Image: 'nfnty/arch-rsyslog:latest'
-    UGID: 340000
+    UGID: 880034
 
     Names:
         'rsyslog': null
@@ -1454,7 +1454,7 @@ Meta:
 
 'samba':
     Image: 'nfnty/arch-samba:latest'
-    UGID: 140000
+    UGID: 880014
 
     Names:
         'samba':
@@ -1494,7 +1494,7 @@ Meta:
 
 'transmission':
     Image: 'nfnty/arch-transmission:latest'
-    UGID: 100000
+    UGID: 880010
 
     Names:
         'transmission':

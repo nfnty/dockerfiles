@@ -1,9 +1,9 @@
 FROM nfnty/arch-jre8:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='130000' UGNAME='logstash'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880013' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_LOGSTASH='2.4.0' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
 RUN mkdir /opt/logstash && \
@@ -12,8 +12,8 @@ RUN mkdir /opt/logstash && \
         "https://download.elastic.co/logstash/logstash/logstash-${VERSION_LOGSTASH}.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/logstash' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/logstash && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/logstash /var/log/logstash
+    install --directory --owner=contusr --group=contgrp --mode=700 /var/lib/logstash /var/log/logstash
 
-USER ${UGNAME}
+USER contusr
 VOLUME ["/var/lib/logstash"]
 ENTRYPOINT ["/opt/logstash/bin/logstash", "--config", "/etc/logstash/conf.d"]

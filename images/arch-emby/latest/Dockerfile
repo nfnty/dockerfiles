@@ -1,17 +1,17 @@
 FROM nfnty/arch-mono:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='280000' UGNAME='emby'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880028' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_EMBY='3.0.8100-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "emby-server=${VERSION_EMBY}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/emby
+    chown --recursive contusr:contgrp /var/lib/emby
 
-USER ${UGNAME}
+USER contusr
 VOLUME ["/var/lib/emby"]
 EXPOSE 1900/udp 7359/udp 8096/tcp 8920/tcp
 WORKDIR /usr/lib/emby-server

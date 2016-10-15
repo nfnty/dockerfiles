@@ -1,9 +1,9 @@
 FROM nfnty/arch-python2:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='370000' UGNAME='acoustid'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880037' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV PATH="/opt/acoustid-server/e/bin:${PATH}" \
     PYTHONPATH="/opt/acoustid-server" \
@@ -12,7 +12,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm python nfnty/acoustid-server-git && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
-USER ${UGNAME}
+USER contusr
 EXPOSE 5000/tcp
 WORKDIR /opt/acoustid-server
 ENTRYPOINT [ \

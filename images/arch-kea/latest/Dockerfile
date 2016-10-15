@@ -1,9 +1,9 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='260000' UGNAME='kea'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880026' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_KEA='1.1.0-1' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='syslog'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
@@ -12,9 +12,9 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap \
         'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp4 \
         'cap_net_bind_service,cap_net_raw=ep' /usr/bin/kea-dhcp6 && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/kea /var/log/kea && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /run/kea
+    chown --recursive contusr:contgrp /var/lib/kea /var/log/kea && \
+    install --directory --owner=contusr --group=contgrp --mode=700 /run/kea
 
-USER ${UGNAME}
+USER contusr
 VOLUME ["/var/lib/kea"]
 ENTRYPOINT ["/usr/bin/kea-dhcp4", "-c", "/etc/kea/kea.conf"]

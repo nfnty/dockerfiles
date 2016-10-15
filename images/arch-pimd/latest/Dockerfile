@@ -1,9 +1,9 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='300000' UGNAME='pimd'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880030' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_PIMD='2.3.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
@@ -11,7 +11,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     setcap 'cap_net_admin,cap_net_raw=ep' /usr/bin/pimd && \
     rm /var/run && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/run
+    install --directory --owner=contusr --group=contgrp --mode=700 /var/run
 
-USER ${UGNAME}
+USER contusr
 ENTRYPOINT ["/usr/bin/pimd", "--foreground", "--disable-vifs"]

@@ -1,9 +1,9 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='250000' UGNAME='exim'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880025' && \
+    groupadd --gid "${ugid}" exim && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false --home-dir /var/spool/exim exim
 
 ENV VERSION_EXIM='4.87-2'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
@@ -13,9 +13,9 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     setcap \
         'cap_net_bind_service=eip' /usr/bin/tini \
         'cap_net_bind_service=ei' /usr/bin/exim && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/log/exim /var/spool/exim
+    chown --recursive exim:exim /var/log/exim /var/spool/exim
 
-USER ${UGNAME}
+USER exim
 VOLUME ["/var/spool/exim"]
 EXPOSE 25/tcp 587/tcp
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/bin/exim", "-bdf", "-q30m"]

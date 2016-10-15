@@ -1,17 +1,17 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='360000' UGNAME='prometheus'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880036' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_PROMETHEUS='1.2.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/prometheus=${VERSION_PROMETHEUS}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/prometheus
+    chown --recursive contusr:contgrp /var/lib/prometheus
 
-USER ${UGNAME}
+USER contusr
 VOLUME ["/var/lib/prometheus"]
 EXPOSE 9090/tcp
 ENTRYPOINT [ \

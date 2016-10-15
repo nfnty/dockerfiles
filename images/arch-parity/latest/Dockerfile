@@ -1,17 +1,17 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='430000' UGNAME='parity'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false --home-dir /var/lib/parity/home "${UGNAME}"
+RUN ugid='880043' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false --home-dir /var/lib/parity/home contusr
 
 ENV VERSION_PARITY='1.3.5-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/parity=${VERSION_PARITY}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    install --directory --owner="${UGNAME}" --group="${UGNAME}" --mode=700 /var/lib/parity/home
+    install --directory --owner=contusr --group=contgrp --mode=700 /var/lib/parity/home
 
-USER ${UGNAME}
+USER contusr
 VOLUME ["/var/lib/parity"]
 EXPOSE  8080/tcp 8180/tcp 8545/tcp 30303/tcp 30303/udp
 ENTRYPOINT [ \

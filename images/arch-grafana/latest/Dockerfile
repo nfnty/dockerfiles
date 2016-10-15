@@ -1,17 +1,17 @@
 FROM nfnty/arch-mini:latest
 MAINTAINER nfnty <docker@nfnty.se>
 
-ENV UGID='360000' UGNAME='grafana'
-RUN groupadd --gid "${UGID}" "${UGNAME}" && \
-    useradd --uid "${UGID}" --gid "${UGID}" --shell /usr/bin/false "${UGNAME}"
+RUN ugid='880021' && \
+    groupadd --gid "${ugid}" contgrp && \
+    useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
 ENV VERSION_GRAFANA='3.1.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/grafana=${VERSION_GRAFANA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    chown --recursive "${UGNAME}:${UGNAME}" /var/lib/grafana
+    chown --recursive contusr:contgrp /var/lib/grafana
 
-USER ${UGNAME}
+USER contusr
 VOLUME ["/var/lib/grafana"]
 EXPOSE 3000/tcp
 ENTRYPOINT [ \
