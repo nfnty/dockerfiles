@@ -22,7 +22,8 @@ def args_parse(arguments=None):
     # Optional
     par0.add_argument('--name', metavar='NAME', help='Name')
     par0.add_argument('--uuid', action='store_true', help='Append uuid to name')
-    par0.add_argument('--entrypoint', metavar='ENTRYPOINT', help='Override ENTRYPOINT of image')
+    par0.add_argument('--entrypoint', metavar='ENTRYPOINT', help='Override Entrypoint')
+    par0.add_argument('--env', metavar='ENV', action='append', help='Append Env')
 
     # Positional
     par0.add_argument('config', metavar='CONFIG', help='JSON config file')
@@ -55,6 +56,8 @@ def config_init(config):
         config['Cmd'] = ARGS.arguments
     if ARGS.entrypoint:
         config['Entrypoint'] = ARGS.entrypoint
+    if ARGS.env:
+        config['Env'] = config.get('Env', []) + ARGS.env
 
     host_config = config.get('HostConfig')
     if host_config:
