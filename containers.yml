@@ -743,6 +743,23 @@ Meta:
                     - 'log:/var/log/letsencrypt:rw'
                     - '/srv/docker/nginx-proxy-wan/webroot/letsencrypt:/mnt/webroot:rw'
 
+'lego':
+    Image: 'nfnty/arch-lego:latest'
+    UGID: 880003
+
+    Paths:
+        'lib':
+            Mode: *MODE_URW
+
+    API:
+        'Normal':
+            HostConfig:
+                NetworkMode: 'bridge'
+                Dns:
+                    - "{{ network['devices']['vbr_docker1']['gateway4'] }}"
+                Binds:
+                    - 'lib:/var/lib/letsencrypt:rw'
+
 'logstash':
     Image: 'nfnty/arch-logstash:latest'
     UGID: 880013
