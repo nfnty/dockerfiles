@@ -408,6 +408,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-certbot:latest':
+    Build: false
     Packages:
         'certbot':
             Variable: 'VERSION_CERTBOT'
