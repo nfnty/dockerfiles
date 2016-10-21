@@ -356,7 +356,6 @@ Meta:
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/dovecot:/dev/log:rw'
-                            - '/srv/ssl/letsencrypt/nfnty.se:/mnt/ssl:ro'
 
     Paths:
         'etc':
@@ -473,7 +472,6 @@ Meta:
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/exim:/dev/log:rw'
-                            - '/srv/ssl/letsencrypt/nfnty.se:/mnt/ssl:ro'
 
     Paths:
         'etc':
@@ -818,7 +816,6 @@ Meta:
                     HostConfig:
                         Binds:
                             - '/srv/docker/rsyslog/run/nginx-proxy-wan:/dev/log:rw'
-                            - '/srv/ssl/letsencrypt/nfnty.se:/mnt/ssl:ro'
 
         'nginx-proxy':
             API:
