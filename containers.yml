@@ -799,12 +799,6 @@ Meta:
 
     Names:
         'nginx-proxy-wan':
-            Paths:
-                'webroot':
-                    Exclude:
-                        - 'letsencrypt'
-                'webroot/letsencrypt':
-                    Mode: *MODE_URW_GRW
             API:
                 'Normal':
                     NetworkingConfig:
