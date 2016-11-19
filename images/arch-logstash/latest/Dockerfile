@@ -5,11 +5,11 @@ RUN ugid='880013' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_LOGSTASH='2.4.0' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
+ENV VERSION_LOGSTASH='5.0.1' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
 RUN mkdir /opt/logstash && \
     set -o pipefail && \
     curl --speed-limit 256000 \
-        "https://download.elastic.co/logstash/logstash/logstash-${VERSION_LOGSTASH}.tar.gz" | \
+        "https://artifacts.elastic.co/downloads/logstash/logstash-${VERSION_LOGSTASH}.tar.gz" | \
         tar --extract --file=- --gzip --strip-components=1 --directory='/opt/logstash' && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/logstash && \
     install --directory --owner=contusr --group=contgrp --mode=700 /var/lib/logstash /var/log/logstash

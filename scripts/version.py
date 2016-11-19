@@ -62,7 +62,7 @@ def document_parse(document, xpath, attribute, regex):
             string = node.text
 
         if regex:
-            obj = re.search(regex, string)
+            obj = re.search(regex, string, flags=(re.MULTILINE | re.DOTALL))
             if not obj:
                 continue
             elif len(obj.groups()) > 1:

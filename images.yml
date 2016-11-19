@@ -1,11 +1,17 @@
 Meta:
     Aliases:
+        REGEX_DIGITS_2: &REGEX_DIGITS_2 '\A(\d+\.\d+)\Z'
+        REGEX_DIGITS_2_VTAG: &REGEX_DIGITS_2_VTAG '\Av(\d+\.\d+)\Z'
+        REGEX_DIGITS_2_BOUND: &REGEX_DIGITS_2_BOUND '\b(\d+\.\d+)\b'
+        REGEX_DIGITS_3: &REGEX_DIGITS_3 '\A(\d+\.\d+\.\d+)\Z'
+        REGEX_DIGITS_3_BOUND: &REGEX_DIGITS_3_BOUND '\b(\d+\.\d+\.\d+)\b'
+        REGEX_DIGITS_3_VTAG: &REGEX_DIGITS_3_VTAG '\Av(\d+\.\d+\.\d+)\Z'
+        REGEX_DIGITS_4: &REGEX_DIGITS_4 '\A(\d+\.\d+\.\d+\.\d+)\Z'
+
         XPATH_ARCH: &XPATH_ARCH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
         ATTRIBUTE_ARCH: &ATTRIBUTE_ARCH 'content'
-        REGEX_DIGITS_2: &REGEX_DIGITS_2 '(\d+\.\d+)'
-        REGEX_DIGITS_3: &REGEX_DIGITS_3 '(\d+\.\d+\.\d+)'
-        REGEX_DIGITS_3_VTAG: &REGEX_DIGITS_3_VTAG '^v(\d+\.\d+\.\d+)$'
-        REGEX_DIGITS_4: &REGEX_DIGITS_4 '(\d+\.\d+\.\d+\.\d+)'
+        XPATH_GITHUB_RELEASE: &XPATH_GITHUB_RELEASE '//div[@class="release label-latest"]/div[@class="release-meta"]/ul[@class="tag-references"]//span[@class="css-truncate-target"]'
+        XPATH_GITHUB_TAG: &XPATH_GITHUB_TAG '//span[@class="tag-name"]'
 
     Paths:
         'nfnty': 'images'
@@ -92,7 +98,7 @@ Meta:
                 'upstream':
                     URL: 'http://dovecot.org/download.html'
                     XPath: '(//h3[text()="Stable releases"]/following-sibling::ul/li/a)[1]'
-                    Regex: *REGEX_DIGITS_3
+                    Regex: '\Av(\d+\.\d+\.\d+)\n'
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/extra/x86_64/dovecot'
                     XPath: *XPATH_ARCH
@@ -106,11 +112,11 @@ Meta:
             Sources:
                 'upstream':
                     URL: 'https://www.elastic.co/downloads/elasticsearch'
-                    XPath: '(//div[contains(@class, "downloads-detail-wrapper")]//div[contains(@class, "m-t-70")]//h2)[1]'
+                    XPath: '//div[text()="Version:"]/following-sibling::div'
                     Regex: *REGEX_DIGITS_3
                 'github':
                     URL: 'https://github.com/elastic/elasticsearch/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-emby:latest':
@@ -121,8 +127,8 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/MediaBrowser/Emby/releases'
-                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: '(\d+\.\d+\.\d+(?:\.\d+)?)'
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-exim:latest':
     Packages:
@@ -133,7 +139,7 @@ Meta:
                 'upstream':
                     URL: 'http://exim.org/index.html'
                     XPath: '//div[@id="content"]/h2[contains(text(), "Latest Version")]'
-                    Regex: *REGEX_DIGITS_2
+                    Regex: *REGEX_DIGITS_2_BOUND
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/community/x86_64/exim'
                     XPath: *XPATH_ARCH
@@ -149,7 +155,7 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/mozilla-services/heka/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
 
 
@@ -162,7 +168,7 @@ Meta:
                 'upstream':
                     URL: 'https://w1.fi/hostapd'
                     XPath: '//li[contains(text(), "Latest release")]//a'
-                    Regex: *REGEX_DIGITS_2
+                    Regex: '\Ahostapd-(\d+\.\d+).tar.gz\Z'
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/community/x86_64/hostapd'
                     XPath: *XPATH_ARCH
@@ -187,11 +193,11 @@ Meta:
             Sources:
                 'upstream':
                     URL: 'https://www.elastic.co/downloads/kibana'
-                    XPath: '(//div[contains(@class, "downloads-detail-wrapper")]//div[contains(@class, "m-t-70")]//h2)[1]'
+                    XPath: '//div[text()="Version:"]/following-sibling::div'
                     Regex: *REGEX_DIGITS_3
                 'github':
                     URL: 'https://github.com/elastic/kibana/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-logstash:latest':
@@ -202,11 +208,11 @@ Meta:
             Sources:
                 'upstream':
                     URL: 'https://www.elastic.co/downloads/logstash'
-                    XPath: '(//div[contains(@class, "downloads-detail-wrapper")]//div[contains(@class, "m-t-70")]//h2)[1]'
+                    XPath: '//div[text()="Version:"]/following-sibling::div'
                     Regex: *REGEX_DIGITS_3
                 'github':
                     URL: 'https://github.com/elastic/logstash/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-nginx:latest':
@@ -259,7 +265,7 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/openhab/openhab/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-openhab-telldus:latest':
@@ -309,9 +315,9 @@ Meta:
                     XPath: '//a[contains(text(), "pdns-recursor")]'
                     Regex: '^pdns-recursor-(\d+\.\d+\.\d+)\.tar\.bz2'
                 'github':
-                    URL: 'https://github.com/PowerDNS/pdns/releases'
-                    XPath: '//span[@class="tag-name"]'
-                    Regex: '^rec-(\d+\.\d+\.\d+)$'
+                    URL: 'https://github.com/PowerDNS/pdns/tags'
+                    XPath: *XPATH_GITHUB_TAG
+                    Regex: '\Arec-(\d+\.\d+\.\d+)\Z'
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/community/x86_64/powerdns-recursor'
                     XPath: *XPATH_ARCH
@@ -338,10 +344,10 @@ Meta:
             Variable: 'VERSION_TRANSMISSION'
             Download: 'extra'
             Sources:
-                'upstream':
-                    URL: 'http://download.transmissionbt.com/files'
-                    XPath: '//a[contains(text(), "transmission-")]'
-                    Regex: '^transmission-(\d+\.\d+?).tar.xz$'
+                'github':
+                    URL: 'https://github.com/transmission/transmission/releases'
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_2
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/extra/x86_64/transmission-cli'
                     XPath: *XPATH_ARCH
@@ -357,7 +363,7 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/troglobit/pimd/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-avahi:latest':
@@ -366,13 +372,14 @@ Meta:
             Variable: 'VERSION_AVAHI'
             Download: 'extra'
             Sources:
-                'upstream':
-                    URL: 'http://www.avahi.org/wiki/DownloadAvahi'
-                    XPath: '//p[contains(text(), "latest version")]/a'
-                    Regex: *REGEX_DIGITS_3
+                'github':
+                    URL: 'https://github.com/lathiat/avahi/releases'
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-plex:latest':
     Build: false
+    Check: false
     Packages:
         'plexmediaserver':
             Variable: 'VERSION_PLEX'
@@ -440,8 +447,8 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/bitcoinclassic/bitcoinclassic/releases'
-                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: *REGEX_DIGITS_3
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-bitcoin-unlimited:latest':
     Packages:
@@ -451,8 +458,8 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/BitcoinUnlimited/BitcoinUnlimited/releases'
-                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: *REGEX_DIGITS_3
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: '\Abu(\d+\.\d+\.\d+[a-z])\Z'
 
 'nfnty/arch-rsyslog:latest':
     Packages:
@@ -462,7 +469,7 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/rsyslog/rsyslog/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-influxdb:latest':
@@ -474,7 +481,7 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/influxdata/influxdb/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-grafana:latest':
@@ -485,8 +492,8 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/grafana/grafana/releases'
-                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: '(\d+\.\d+\.\d+\S*)'
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-prometheus:latest':
     Packages:
@@ -496,8 +503,8 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/prometheus/prometheus/releases'
-                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: *REGEX_DIGITS_3
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-redis:latest':
     Packages:
@@ -535,7 +542,7 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/vstakhov/rspamd/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-cadvisor:latest':
@@ -546,8 +553,8 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/google/cadvisor/releases'
-                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: *REGEX_DIGITS_3
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-radvd:latest':
     Packages:
@@ -568,8 +575,8 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/ethcore/parity/releases'
-                    XPath: '//div[@class="release label-latest"]//h1[@class="release-title"]/a'
-                    Regex: *REGEX_DIGITS_3
+                    XPath: *XPATH_GITHUB_RELEASE
+                    Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-lego:latest':
     Packages:
@@ -579,5 +586,5 @@ Meta:
             Sources:
                 'github':
                     URL: 'https://github.com/xenolf/lego/tags'
-                    XPath: '//span[@class="tag-name"]'
+                    XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG

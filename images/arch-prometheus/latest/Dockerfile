@@ -5,7 +5,7 @@ RUN ugid='880036' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_PROMETHEUS='1.2.1-1'
+ENV VERSION_PROMETHEUS='1.3.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/prometheus=${VERSION_PROMETHEUS}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

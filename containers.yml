@@ -699,6 +699,8 @@ Meta:
         'config':
             Mode: *MODE_UR
             Managed: true
+        'data':
+            Mode: *MODE_URW
 
     API:
         'Normal':
@@ -708,6 +710,7 @@ Meta:
                 CpuShares: 512
                 Binds:
                     - 'config:/opt/kibana/config:ro'
+                    - 'data:/opt/kibana/data:rw'
                 Tmpfs:
                     '/tmp': *TMP_MIB_64
 
@@ -1139,6 +1142,7 @@ Meta:
             Cmd: [
                 '--jsonrpc-interface', '[::]', '--jsonrpc-hosts', 'all',
                 '--dapps-interface', '[::]', '--dapps-hosts', 'all',
+                '--ui-interface', '[::]', '--ui-no-validation',
             ]
             HostConfig:
                 Memory: *MIB_4096

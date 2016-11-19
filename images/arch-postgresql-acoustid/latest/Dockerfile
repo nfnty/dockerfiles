@@ -7,4 +7,4 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm nfnty/pg_acoustid-git && \
     find /var/cache/pacman/pkg -mindepth 1 -delete
 
-USER contusr
+USER postgres
