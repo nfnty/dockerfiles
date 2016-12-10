@@ -571,7 +571,7 @@ Meta:
     Packages:
         'parity':
             Variable: 'VERSION_PARITY'
-            Download: 'nfnty'
+            Download: 'community'
             Sources:
                 'github':
                     URL: 'https://github.com/ethcore/parity/releases'

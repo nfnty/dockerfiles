@@ -5,7 +5,7 @@ RUN ugid='880021' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_GRAFANA='3.1.1-1'
+ENV VERSION_GRAFANA='4.0.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/grafana=${VERSION_GRAFANA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
