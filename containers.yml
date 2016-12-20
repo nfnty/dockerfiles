@@ -1540,3 +1540,34 @@ Meta:
                     - 'lib:/var/lib/transmission:rw'
                     - 'opt:/opt/transmission:ro'
                     - '/mnt/1/share/torrent:/mnt/torrent:rw'
+
+'znc':
+    Image: 'nfnty/arch-znc:latest'
+    UGID: 880044
+
+    Names:
+        'znc':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['znc'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['znc'] }}"
+
+    Paths:
+        'lib':
+            Mode: *MODE_URW
+            Managed: true
+            ManagedOpts:
+                Delete: false
+
+    API:
+        'Normal':
+            HostConfig:
+                Memory: *MIB_1024
+                MemorySwap: *MIB_2048
+                MemoryReservation: *MIB_768
+                Binds:
+                    - 'lib:/var/lib/znc:rw'

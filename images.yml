@@ -588,3 +588,14 @@ Meta:
                     URL: 'https://github.com/xenolf/lego/tags'
                     XPath: *XPATH_GITHUB_TAG
                     Regex: *REGEX_DIGITS_3_VTAG
+
+'nfnty/arch-znc:latest':
+    Packages:
+        'znc':
+            Variable: 'VERSION_ZNC'
+            Download: 'community'
+            Sources:
+                'archlinux':
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/znc'
+                    XPath: *XPATH_ARCH
+                    Attribute: *ATTRIBUTE_ARCH
