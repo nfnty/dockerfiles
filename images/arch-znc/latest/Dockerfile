@@ -13,5 +13,5 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
 
 USER contusr
 VOLUME ["/var/lib/znc"]
-EXPOSE 8080/tcp
+EXPOSE 6697/tcp 8080/tcp
 ENTRYPOINT ["/usr/bin/znc", "--datadir=/var/lib/znc", "--foreground"]
