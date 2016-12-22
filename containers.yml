@@ -368,6 +368,8 @@ Meta:
             ManagedOpts:
                 Filter:
                     - 'protect *.svbin'
+                    - 'protect *.log'
+                Reload: false
 
     API:
         'Normal':
