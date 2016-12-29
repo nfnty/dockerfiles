@@ -5,7 +5,6 @@ import subprocess
 import os
 import sys
 import argparse
-import signal
 import shutil
 import re
 
@@ -18,11 +17,6 @@ PATH_LIB = '/var/lib/builder'
 PATH_PKGDEST = os.path.join(PATH_LIB, 'pkg')
 PATH_GPG = os.environ['GNUPGHOME'] if 'GNUPGHOME' in os.environ else \
     os.path.join(PATH_LIB, 'gnupg')
-
-
-def signal_handle_sigchld(signum, frame):  # pylint: disable=unused-argument
-    ''' Handle zombie processes '''
-    os.waitpid(0, os.WNOHANG)
 
 
 def failed(string):
@@ -311,9 +305,6 @@ def package_make():
 def main():  # pylint: disable=too-many-branches,too-many-statements
     ''' Main '''
     print_separator()
-
-    # Handle zombie processes
-    signal.signal(signal.SIGCHLD, signal_handle_sigchld)
 
     # Options
     if ARGS.gpginit:

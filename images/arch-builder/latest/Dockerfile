@@ -25,4 +25,4 @@ RUN chmod 'u=rw,g=r,o=r' /etc/makepkg.conf && \
 
 USER contusr
 VOLUME ["/var/lib/builder", "/var/log/builder"]
-ENTRYPOINT ["/opt/builder/builder.py"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/opt/builder/builder.py"]
