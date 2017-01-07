@@ -323,6 +323,21 @@ Meta:
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 
+'nfnty/arch-dnsdist:latest':
+    Packages:
+        'dnsdist':
+            Variable: 'VERSION_DNSDIST'
+            Download: 'nfnty'
+            Sources:
+                'upstream':
+                    URL: 'https://downloads.powerdns.com/releases'
+                    XPath: '//a[contains(text(), "dnsdist")]'
+                    Regex: '^dnsdist-(\d+\.\d+\.\d+)\.tar\.bz2'
+                'github':
+                    URL: 'https://github.com/PowerDNS/pdns/tags'
+                    XPath: *XPATH_GITHUB_TAG
+                    Regex: '\Adnsdist-(\d+\.\d+\.\d+)\Z'
+
 'nfnty/arch-samba:latest':
     Packages:
         'samba':

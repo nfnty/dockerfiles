@@ -338,6 +338,37 @@ Meta:
                     - 'etc:/etc/clamav:ro'
                     - '/srv/docker/clamav/lib:/var/lib/clamav:rw'
 
+'dnsdist':
+    Image: 'nfnty/arch-dnsdist:latest'
+    UGID: 880045
+
+    Names:
+        'dnsdist':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['dnsdist'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['dnsdist'] }}"
+
+    Paths:
+        'etc':
+            Mode: *MODE_UR
+            Managed: true
+
+    API:
+        'Normal':
+            HostConfig:
+                Memory: *MIB_2048
+                MemorySwap: *MIB_4096
+                MemoryReservation: *MIB_1536
+                CpuShares: 2048
+                CapAdd:
+                    - 'NET_BIND_SERVICE'
+                Binds:
+                    - 'etc:/etc/dnsdist:ro'
 
 'dovecot':
     Image: 'nfnty/arch-dovecot:latest'
