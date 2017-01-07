@@ -5,7 +5,7 @@ RUN ugid='880025' && \
     groupadd --gid "${ugid}" exim && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false --home-dir /var/spool/exim exim
 
-ENV VERSION_EXIM='4.87-2'
+ENV VERSION_EXIM='4.88-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "exim=${VERSION_EXIM}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
