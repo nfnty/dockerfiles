@@ -1173,9 +1173,15 @@ Meta:
     API:
         'Normal':
             Cmd: [
-                '--jsonrpc-interface', '[::]', '--jsonrpc-hosts', 'all',
-                '--dapps-interface', '[::]', '--dapps-hosts', 'all',
-                '--ui-interface', '[::]', '--ui-no-validation',
+                '--jsonrpc-interface', '[::]',
+                '--jsonrpc-hosts', 'all',
+                '--dapps-interface', '[::]',
+                '--dapps-hosts', 'all',
+                '--ui-interface', '[::]',
+                '--ui-no-validation',
+                '--min-peers', '128',
+                '--max-peers', '256',
+                '--max-pending-peers', '256',
             ]
             HostConfig:
                 Memory: *MIB_4096
