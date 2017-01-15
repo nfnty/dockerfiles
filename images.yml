@@ -201,6 +201,7 @@ Meta:
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-logstash:latest':
+    Build: false
     Packages:
         'logstash':
             Variable: 'VERSION_LOGSTASH'
@@ -339,6 +340,7 @@ Meta:
                     Regex: '\Adnsdist-(\d+\.\d+\.\d+)\Z'
 
 'nfnty/arch-samba:latest':
+    Build: false
     Packages:
         'samba':
             Variable: 'VERSION_SAMBA'
