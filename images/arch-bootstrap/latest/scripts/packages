@@ -5,6 +5,7 @@ filesystem
 findutils
 gcc-libs
 glibc
+grep
 gzip
 pacman
 perl

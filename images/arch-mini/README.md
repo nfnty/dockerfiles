@@ -10,6 +10,7 @@ Arch Linux: Minimal Base Image
 * [findutils](https://www.archlinux.org/packages/core/x86_64/findutils)
 * [gcc-libs](https://www.archlinux.org/packages/core/x86_64/gcc-libs)
 * [glibc](https://www.archlinux.org/packages/core/x86_64/glibc)
+* [grep](https://www.archlinux.org/packages/core/x86_64/grep)
 * [gzip](https://www.archlinux.org/packages/core/x86_64/gzip)
 * [pacman](https://www.archlinux.org/packages/core/x86_64/pacman)
 * [perl](https://www.archlinux.org/packages/core/x86_64/perl)
