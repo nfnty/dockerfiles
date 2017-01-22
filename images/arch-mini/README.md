@@ -1,7 +1,7 @@
 Arch Linux: Minimal Base Image
 =====
 
-14 packages explicitly installed:
+15 packages explicitly installed:
 
 * [bash](https://www.archlinux.org/packages/core/x86_64/bash)
 * [coreutils](https://www.archlinux.org/packages/core/x86_64/coreutils)
