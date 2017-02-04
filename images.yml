@@ -476,7 +476,7 @@ Meta:
                 'github':
                     URL: 'https://github.com/BitcoinUnlimited/BitcoinUnlimited/releases'
                     XPath: *XPATH_GITHUB_RELEASE
-                    Regex: '\Abu(\d+\.\d+\.\d+[a-z])\Z'
+                    Regex: *REGEX_DIGITS_4
 
 'nfnty/arch-rsyslog:latest':
     Packages:

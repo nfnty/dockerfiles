@@ -5,7 +5,7 @@ RUN ugid='880033' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_BITCOIN_UNLIMITED='0.12.1c-1'
+ENV VERSION_BITCOIN_UNLIMITED='1.0.0.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/bitcoin-unlimited=${VERSION_BITCOIN_UNLIMITED}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

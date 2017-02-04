@@ -5,7 +5,7 @@ RUN ugid='880002' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_CERTBOT='0.10.1-1'
+ENV VERSION_CERTBOT='0.11.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "certbot=${VERSION_CERTBOT}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

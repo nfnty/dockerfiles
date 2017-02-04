@@ -5,7 +5,7 @@ RUN ugid='880038' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_REDIS='3.2.6-1'
+ENV VERSION_REDIS='3.2.7-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "redis=${VERSION_REDIS}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

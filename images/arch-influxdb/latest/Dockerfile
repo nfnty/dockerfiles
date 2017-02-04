@@ -5,7 +5,7 @@ RUN ugid='880035' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_INFLUXDB='1.1.1-1'
+ENV VERSION_INFLUXDB='1.2.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/influxdb=${VERSION_INFLUXDB}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
