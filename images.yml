@@ -259,6 +259,7 @@ Meta:
                     Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-openhab:latest':
+    Check: false
     Packages:
         'openhab':
             Variable: 'VERSION_OPENHAB'

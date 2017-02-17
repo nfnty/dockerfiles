@@ -783,7 +783,7 @@ Meta:
 
     Paths:
         'lib':
-            Mode: *MODE_URW
+            Mode: *MODE_URW_GR
 
     API:
         'Normal':
