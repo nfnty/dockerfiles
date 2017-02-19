@@ -1,5 +1,5 @@
 Arch Linux: Minimal Base Image
-=====
+==============================
 
 15 packages explicitly installed:
 
@@ -19,6 +19,6 @@ Arch Linux: Minimal Base Image
 * [tar](https://www.archlinux.org/packages/core/x86_64/tar)
 * [xz](https://www.archlinux.org/packages/core/x86_64/xz)
 
-Bootstrap archive is built by `nfnty/arch-bootstrap`
+Bootstrap archive is built by [nfnty/arch-bootstrap](https://github.com/nfnty/dockerfiles/tree/master/images/arch-bootstrap/latest).
 
 High entropy is needed during build. [Haveged](https://wiki.archlinux.org/index.php/Haveged) is recommended.

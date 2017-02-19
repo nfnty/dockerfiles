@@ -1,8 +1,8 @@
 Arch Linux: openHAB
-=====
+===================
 
-Based on [openhab](https://github.com/openhab/openhab)
+Based on [openhab](https://github.com/openhab/openhab).
 
-####Documentation:
+#### Documentation
 
 * [Wiki](https://github.com/openhab/openhab/wiki)

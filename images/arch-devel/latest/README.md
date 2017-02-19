@@ -1,5 +1,5 @@
 Arch Linux: Development
-=====
+=======================
 
 Based on:
 
