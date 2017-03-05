@@ -93,14 +93,14 @@ Meta:
     Packages:
         'dovecot':
             Variable: 'VERSION_DOVECOT'
-            Download: 'extra'
+            Download: 'community'
             Sources:
                 'upstream':
                     URL: 'http://dovecot.org/download.html'
                     XPath: '(//h3[text()="Stable releases"]/following-sibling::ul/li/a)[1]'
                     Regex: '\Av(\d+\.\d+\.\d+)\n'
                 'archlinux':
-                    URL: 'https://www.archlinux.org/packages/extra/x86_64/dovecot'
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/dovecot'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 
@@ -446,6 +446,7 @@ Meta:
 
 'nfnty/arch-owncloud:latest':
     Build: false
+    Check: false
     Packages:
         'owncloud':
             Variable: 'VERSION_OWNCLOUD'
