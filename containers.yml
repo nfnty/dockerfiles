@@ -236,6 +236,7 @@ Meta:
                     - 'log:/var/log/builder:rw'
                     - 'pkgbuild:/mnt/pkgbuild:rw'
                 SecurityOpt: null
+                Init: true
 
 'cadvisor':
     Image: 'nfnty/arch-cadvisor:latest'
@@ -487,6 +488,7 @@ Meta:
                     - '/mnt/1/share/Series:/mnt/Series:rw'
                 Tmpfs:
                     '/tmp': *TMP_MIB_64
+                Init: true
 
 'exim':
     Image: 'nfnty/arch-exim:latest'
@@ -533,6 +535,7 @@ Meta:
                 Binds:
                     - 'etc:/etc/mail:ro'
                     - 'spool:/var/spool/exim:rw'
+                Init: true
 
 'grafana':
     Image: 'nfnty/arch-grafana:latest'
@@ -746,6 +749,7 @@ Meta:
                     - 'data:/opt/kibana/data:rw'
                 Tmpfs:
                     '/tmp': *TMP_MIB_64
+                Init: true
 
 'certbot':
     Image: 'nfnty/arch-certbot:latest'

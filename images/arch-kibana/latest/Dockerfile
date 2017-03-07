@@ -17,4 +17,4 @@ RUN install --directory --owner=contusr --group=contgrp --mode=500 /opt/kibana &
 
 USER contusr
 EXPOSE 5601/tcp
-ENTRYPOINT ["/usr/bin/tini", "--", "/opt/kibana/bin/kibana"]
+ENTRYPOINT ["/opt/kibana/bin/kibana"]

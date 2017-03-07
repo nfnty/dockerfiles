@@ -16,7 +16,6 @@ VOLUME ["/var/lib/emby"]
 EXPOSE 1900/udp 7359/udp 8096/tcp 8920/tcp
 WORKDIR /usr/lib/emby-server
 ENTRYPOINT [ \
-    "/usr/bin/tini", "--", \
     "/usr/bin/mono", "/usr/lib/emby-server/MediaBrowser.Server.Mono.exe", \
     "-programdata", "/var/lib/emby", \
     "-ffmpeg", "/usr/bin/ffmpeg", \
