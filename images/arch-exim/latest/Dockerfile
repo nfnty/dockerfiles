@@ -10,10 +10,12 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "exim=${VERSION_EXIM}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
     chmod -s /usr/bin/exim && \
-    setcap 'cap_net_bind_service=eip' /usr/bin/exim && \
+    setcap \
+        'cap_net_bind_service=eip' /usr/bin/tini \
+        'cap_net_bind_service=ei' /usr/bin/exim && \
     chown --recursive exim:exim /var/log/exim /var/spool/exim
 
 USER exim
 VOLUME ["/var/spool/exim"]
 EXPOSE 25/tcp 587/tcp
-ENTRYPOINT ["/usr/bin/exim", "-bdf", "-q30m"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/bin/exim", "-bdf", "-q30m"]

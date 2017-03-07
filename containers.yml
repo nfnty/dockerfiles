@@ -535,7 +535,6 @@ Meta:
                 Binds:
                     - 'etc:/etc/mail:ro'
                     - 'spool:/var/spool/exim:rw'
-                Init: true
 
 'grafana':
     Image: 'nfnty/arch-grafana:latest'
