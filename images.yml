@@ -459,6 +459,7 @@ Meta:
 
 'nfnty/arch-bitcoin-classic:latest':
     Build: false
+    Check: false
     Packages:
         'bitcoin-classic':
             Variable: 'VERSION_BITCOIN_CLASSIC'
@@ -470,6 +471,8 @@ Meta:
                     Regex: *REGEX_DIGITS_3_VTAG
 
 'nfnty/arch-bitcoin-unlimited:latest':
+    Build: false
+    Check: false
     Packages:
         'bitcoin-unlimited':
             Variable: 'VERSION_BITCOIN_UNLIMITED'
