@@ -593,12 +593,16 @@ Meta:
     Packages:
         'parity':
             Variable: 'VERSION_PARITY'
-            Download: 'community'
+            Download: 'nfnty'
             Sources:
                 'github':
                     URL: 'https://github.com/ethcore/parity/releases'
                     XPath: *XPATH_GITHUB_RELEASE
                     Regex: *REGEX_DIGITS_3_VTAG
+                'archlinux':
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/parity'
+                    XPath: *XPATH_ARCH
+                    Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-lego:latest':
     Packages:

@@ -5,7 +5,7 @@ RUN ugid='880014' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_SAMBA='4.5.4-1'
+ENV VERSION_SAMBA='4.5.7-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "samba=${VERSION_SAMBA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
