@@ -5,7 +5,7 @@ RUN ugid='880013' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_LOGSTASH='5.2.2' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
+ENV VERSION_LOGSTASH='5.3.0' JAVA_HOME='/usr/lib/jvm/default-runtime' SINCEDB_DIR='/var/lib/logstash'
 RUN mkdir /opt/logstash && \
     set -o pipefail && \
     curl --speed-limit 256000 \

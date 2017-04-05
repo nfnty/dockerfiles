@@ -596,7 +596,7 @@ Meta:
             Download: 'nfnty'
             Sources:
                 'github':
-                    URL: 'https://github.com/ethcore/parity/releases'
+                    URL: 'https://github.com/paritytech/parity/releases'
                     XPath: *XPATH_GITHUB_RELEASE
                     Regex: *REGEX_DIGITS_3_VTAG
                 'archlinux':
