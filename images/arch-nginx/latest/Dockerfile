@@ -5,7 +5,7 @@ RUN ugid='880016' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_NGINX_MAINLINE='1.11.10-1'
+ENV VERSION_NGINX_MAINLINE='1.12.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nginx-mainline=${VERSION_NGINX_MAINLINE}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
