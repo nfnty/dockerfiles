@@ -397,19 +397,6 @@ Meta:
                     XPath: *XPATH_GITHUB_RELEASE
                     Regex: *REGEX_DIGITS_3_VTAG
 
-'nfnty/arch-plex:latest':
-    Build: false
-    Check: false
-    Packages:
-        'plexmediaserver':
-            Variable: 'VERSION_PLEX'
-            Download: 'upstream'
-            Sources:
-                'upstream':
-                    URL: 'https://plex.tv/downloads'
-                    XPath: '//span[@class="linux fedora"]/..//text()[contains(., "Version")]'
-                    Regex: '(\d+\.\d+\.\d+\.\d+\.\d+-[0-9a-f]+)'
-
 'nfnty/arch-nodejs:latest':
     Build: false
     Packages:

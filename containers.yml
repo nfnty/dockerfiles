@@ -1191,33 +1191,6 @@ Meta:
                 Tmpfs:
                     '/var/run': *TMP_MIB_64
 
-'plex':
-    Image: 'nfnty/arch-plex:latest'
-    UGID: 880032
-
-    Paths:
-        'lib':
-            Mode: *MODE_URW
-        'lib/data':
-            Managed: true
-            ManagedOpts:
-                Delete: false
-
-    API:
-        'Normal':
-            HostConfig:
-                Memory: *MIB_4096
-                MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
-                Binds:
-                    - 'lib:/var/lib/plexmediaserver:rw'
-                    - '/mnt/1/share/Anime:/mnt/Anime:ro'
-                    - '/mnt/1/share/Home:/mnt/Home:ro'
-                    - '/mnt/1/share/Movies:/mnt/Movies:ro'
-                    - '/mnt/1/share/Series:/mnt/Series:ro'
-                Tmpfs:
-                    '/tmp': *TMP_MIB_64
-
 'postgresql':
     Image: 'nfnty/arch-postgresql:latest'
     UGID: 880018
