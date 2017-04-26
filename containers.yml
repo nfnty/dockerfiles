@@ -1047,6 +1047,46 @@ Meta:
                 Binds:
                     - 'etc:/etc/openvpn:rw'
 
+'openvpn-cli':
+    Image: 'nfnty/arch-openvpn:latest'
+    UGID: 880019
+
+    Paths:
+        'etc':
+            Mode: *MODE_UR_GR
+            Group: 'root'
+            Managed: true
+        'lib':
+            Mode: *MODE_URW_GRW
+            Group: 'root'
+
+    API:
+        'Normal':
+            Entrypoint: [
+                "/usr/bin/bash", "-c",
+                "/usr/bin/iptables --table nat --append POSTROUTING --out-interface tun0 --jump MASQUERADE && \
+                 /usr/bin/ip6tables --table nat --append POSTROUTING --out-interface tun0 --jump MASQUERADE && \
+                 exec /usr/bin/openvpn --config /etc/openvpn/client.conf"
+            ]
+            HostConfig:
+                Memory: *MIB_1024
+                MemorySwap: *MIB_2048
+                MemoryReservation: *MIB_768
+                CapAdd:
+                    - 'NET_ADMIN'
+                    - 'NET_RAW'
+                    - 'SETGID'
+                    - 'SETUID'
+                Binds:
+                    - 'etc:/etc/openvpn:ro'
+                    - 'lib:/var/lib/openvpn:rw'
+                Tmpfs:
+                    '/tmp': 'size=32M,nr_inodes=10K,mode=770,rw,nosuid,nodev,noexec,async,noatime,gid=0'
+                Devices:
+                    - PathOnHost: '/dev/net/tun'
+                      PathInContainer: '/dev/net/tun'
+                      CgroupPermissions: 'rw'
+
 'owncloud':
     Image: 'nfnty/arch-owncloud:latest'
     UGID: 880016
