@@ -1533,6 +1533,47 @@ Meta:
                     - 'opt:/opt/transmission:ro'
                     - '/mnt/1/share/torrent:/mnt/torrent:rw'
 
+'unifi':
+    Image: 'nfnty/arch-unifi:latest'
+    UGID: 880004
+
+    Names:
+        'unifi':
+            API:
+                'Normal':
+                    NetworkingConfig:
+                        EndpointsConfig:
+                            'static':
+                                IPAMConfig:
+                                    IPv4Address: "{{ network['addresses4']['container']['unifi'] }}"
+                                    IPv6Address: "{{ network['addresses6']['container']['unifi'] }}"
+
+    Paths:
+        'conf':
+            Mode: *MODE_UR
+            Managed: true
+        'data':
+            Mode: *MODE_URW
+        'logs':
+            Mode: *MODE_URW
+        'work':
+            Mode: *MODE_URW
+
+    API:
+        'Normal':
+            HostConfig:
+                Memory: *MIB_1024
+                MemorySwap: *MIB_2048
+                MemoryReservation: *MIB_768
+                Binds:
+                    - 'conf:/opt/unifi/conf:ro'
+                    - 'data:/opt/unifi/data:rw'
+                    - 'logs:/opt/unifi/logs:rw'
+                    - 'work:/opt/unifi/work:rw'
+                Tmpfs:
+                    '/tmp': *TMP_MIB_64_EXEC
+                    '/opt/unifi/run': *TMP_MIB_64
+
 'znc':
     Image: 'nfnty/arch-znc:latest'
     UGID: 880044
