@@ -161,6 +161,7 @@ Meta:
 
 
 'nfnty/arch-hostapd:latest':
+    Build: false
     Packages:
         'hostapd':
             Variable: 'VERSION_HOSTAPD'
