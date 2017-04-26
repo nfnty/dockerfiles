@@ -130,17 +130,6 @@ Meta:
     Image: 'nfnty/arch-bitcoin-unlimited:latest'
     UGID: 880033
 
-    Names:
-        'bitcoin':
-            API:
-                'Normal':
-                    NetworkingConfig:
-                        EndpointsConfig:
-                            'static':
-                                IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['bitcoin'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['bitcoin'] }}"
-
     Paths:
         'etc':
             Mode: *MODE_UR
@@ -572,17 +561,6 @@ Meta:
     Image: 'nfnty/arch-heka:latest'
     UGID: 880029
 
-    Names:
-        'heka':
-            API:
-                'Normal':
-                    NetworkingConfig:
-                        EndpointsConfig:
-                            'static':
-                                IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['heka'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['heka'] }}"
-
     Paths:
         'cache':
             Mode: *MODE_URW
@@ -603,17 +581,6 @@ Meta:
 'hostapd':
     Image: 'nfnty/arch-hostapd:latest'
     UGID: 880027
-
-    Names:
-        'hostapd':
-            API:
-                'Normal':
-                    Entrypoint:
-                        - '/etc/hostapd/wlan_24n0/hostapd.conf'
-                        - '/etc/hostapd/wlan_50n0/hostapd.conf'
-                    HostConfig:
-                        Binds:
-                            - '/srv/docker/rsyslog/run/hostapd:/dev/log:rw'
 
     Paths:
         'etc':
@@ -638,17 +605,6 @@ Meta:
 'influxdb':
     Image: 'nfnty/arch-influxdb:latest'
     UGID: 880035
-
-    Names:
-        'influxdb':
-            API:
-                'Normal':
-                    NetworkingConfig:
-                        EndpointsConfig:
-                            'static':
-                                IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['influxdb'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['influxdb'] }}"
 
     Paths:
         'etc':
@@ -801,17 +757,6 @@ Meta:
 'logstash':
     Image: 'nfnty/arch-logstash:latest'
     UGID: 880013
-
-    Names:
-        'logstash':
-            API:
-                'Normal':
-                    NetworkingConfig:
-                        EndpointsConfig:
-                            'static':
-                                IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['logstash'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['logstash'] }}"
 
     Paths:
         'etc':
@@ -1106,17 +1051,6 @@ Meta:
     Image: 'nfnty/arch-owncloud:latest'
     UGID: 880016
 
-    Names:
-        'owncloud':
-            API:
-                'Normal':
-                    NetworkingConfig:
-                        EndpointsConfig:
-                            'static':
-                                IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['owncloud'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['owncloud'] }}"
-
     Paths:
         'apps':
             Mode: *MODE_URW
@@ -1199,9 +1133,6 @@ Meta:
     Image: 'nfnty/arch-pimd:latest'
     UGID: 880030
 
-    Names:
-        'pimd': null
-
     Paths:
         'etc':
             Mode: *MODE_UR
@@ -1223,17 +1154,6 @@ Meta:
 'plex':
     Image: 'nfnty/arch-plex:latest'
     UGID: 880032
-
-    Names:
-        'plex':
-            API:
-                'Normal':
-                    NetworkingConfig:
-                        EndpointsConfig:
-                            'static':
-                                IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['plex'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['plex'] }}"
 
     Paths:
         'lib':
@@ -1510,17 +1430,6 @@ Meta:
 'samba':
     Image: 'nfnty/arch-samba:latest'
     UGID: 880014
-
-    Names:
-        'samba':
-            API:
-                'Normal':
-                    NetworkingConfig:
-                        EndpointsConfig:
-                            'static':
-                                IPAMConfig:
-                                    IPv4Address: "{{ network['addresses4']['container']['samba'] }}"
-                                    IPv6Address: "{{ network['addresses6']['container']['samba'] }}"
 
     Paths:
         'cache':
