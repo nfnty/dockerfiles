@@ -5,7 +5,7 @@ RUN ugid='880027' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_HOSTAPD='2.6-3'
+ENV VERSION_HOSTAPD='2.6-4'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "hostapd=${VERSION_HOSTAPD}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

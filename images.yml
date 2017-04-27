@@ -165,7 +165,7 @@ Meta:
     Packages:
         'hostapd':
             Variable: 'VERSION_HOSTAPD'
-            Download: 'nfnty'
+            Download: 'community'
             Sources:
                 'upstream':
                     URL: 'https://w1.fi/hostapd'
@@ -222,14 +222,14 @@ Meta:
     Packages:
         'nginx-mainline':
             Variable: 'VERSION_NGINX_MAINLINE'
-            Download: 'extra'
+            Download: 'community'
             Sources:
                 'upstream':
                     URL: 'http://nginx.org/en/download.html'
                     XPath: '((//h4[text()="Mainline version"]/../following-sibling::table)[1]//a[contains(@href, "tar.gz")])[1]'
                     Regex: '^nginx-(\d+\.\d+\.\d+)$'
                 'archlinux':
-                    URL: 'https://www.archlinux.org/packages/extra/x86_64/nginx-mainline'
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/nginx-mainline'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 
@@ -485,6 +485,7 @@ Meta:
 
 'nfnty/arch-influxdb:latest':
     Build: false
+    Check: false
     Packages:
         'influxdb':
             Variable: 'VERSION_INFLUXDB'

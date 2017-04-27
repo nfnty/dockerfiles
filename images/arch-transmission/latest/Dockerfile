@@ -5,7 +5,7 @@ RUN ugid='880010' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_TRANSMISSION='2.92-5'
+ENV VERSION_TRANSMISSION='2.92-6'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "transmission-cli=${VERSION_TRANSMISSION}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

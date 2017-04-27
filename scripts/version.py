@@ -62,7 +62,8 @@ def document_parse(document, xpath, attribute, regex):
             string = node.text
 
         if regex:
-            obj = re.search(regex, string, flags=(re.MULTILINE | re.DOTALL))
+            obj = re.search(regex, string,
+                            flags=(re.MULTILINE | re.DOTALL))  # pylint: disable=no-member
             if not obj:
                 continue
             elif len(obj.groups()) > 1:
@@ -131,7 +132,7 @@ def main():  # pylint: disable=too-many-branches
     else:
         images = IMAGES
 
-    for image, image_dict in sorted(images.items(), key=lambda item: len(item[0])):
+    for image, image_dict in sorted(images.items(), key=lambda item: item[0]):
         cprint('\n{0:s}'.format(image), 'white', attrs=['underline'])
         if 'Check' in image_dict and not image_dict['Check']:
             print('Not checked!')
@@ -177,6 +178,7 @@ def main():  # pylint: disable=too-many-branches
                 package_dict['Variable'],
                 package_dict['Sources'][package_dict['Download']]['Version'].vstring,
             )
+
 
 if __name__ == '__main__':
     ARGS = args_parse()
