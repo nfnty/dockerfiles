@@ -5,7 +5,7 @@ RUN ugid='880026' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_KEA='1.1.0-2' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='syslog'
+ENV VERSION_KEA='1.2.0-1' KEA_PIDFILE_DIR='/run/kea' KEA_LOGGER_DESTINATION='syslog'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/kea=${VERSION_KEA}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
