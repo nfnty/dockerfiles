@@ -5,7 +5,7 @@ RUN ugid='880044' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_ZNC='1.6.5-3'
+ENV VERSION_ZNC='1.6.5-4'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "znc=${VERSION_ZNC}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
