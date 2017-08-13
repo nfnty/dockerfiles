@@ -5,7 +5,7 @@ RUN ugid='880031' && \
     groupadd --gid "${ugid}" avahi && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false avahi
 
-ENV VERSION_AVAHI='0.6.32-3'
+ENV VERSION_AVAHI='0.7-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "avahi=${VERSION_AVAHI}" nss-mdns && \
     find /var/cache/pacman/pkg -mindepth 1 -delete

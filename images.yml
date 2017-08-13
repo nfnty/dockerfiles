@@ -2,6 +2,7 @@ Meta:
     Aliases:
         REGEX_DIGITS_2: &REGEX_DIGITS_2 '\A(\d+\.\d+)\Z'
         REGEX_DIGITS_2_VTAG: &REGEX_DIGITS_2_VTAG '\Av(\d+\.\d+)\Z'
+        REGEX_DIGITS_2_3_VTAG: &REGEX_DIGITS_2_3_VTAG '\Av(\d+\.\d+(?:\.\d+)?)\Z'
         REGEX_DIGITS_2_BOUND: &REGEX_DIGITS_2_BOUND '\b(\d+\.\d+)\b'
         REGEX_DIGITS_3: &REGEX_DIGITS_3 '\A(\d+\.\d+\.\d+)\Z'
         REGEX_DIGITS_3_BOUND: &REGEX_DIGITS_3_BOUND '\b(\d+\.\d+\.\d+)\b'
@@ -97,9 +98,9 @@ Meta:
             Download: 'community'
             Sources:
                 'upstream':
-                    URL: 'http://dovecot.org/download.html'
+                    URL: 'https://dovecot.org/download.html'
                     XPath: '(//h3[text()="Stable releases"]/following-sibling::ul/li/a)[1]'
-                    Regex: '\Av(\d+\.\d+\.\d+(?:\.\d+))?\n'
+                    Regex: '\Av(\d+\.\d+\.\d+(?:\.\d+)?)\n'
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/community/x86_64/dovecot'
                     XPath: *XPATH_ARCH
@@ -395,7 +396,7 @@ Meta:
                 'github':
                     URL: 'https://github.com/lathiat/avahi/releases'
                     XPath: *XPATH_GITHUB_RELEASE
-                    Regex: *REGEX_DIGITS_3_VTAG
+                    Regex: *REGEX_DIGITS_2_3_VTAG
 
 'nfnty/arch-nodejs:latest':
     Build: false

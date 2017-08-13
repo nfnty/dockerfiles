@@ -69,13 +69,19 @@ def document_parse(document, xpath, attribute, regex):
             elif len(obj.groups()) > 1:
                 raise RuntimeError('Incorrect regex: More than 1 capture group')
             string = obj.group(1)
+            if not string:
+                raise RuntimeError('Incorrect regex: Invalid capture group')
 
         versions.append(distutils.version.LooseVersion(string))
 
     if not versions:
-        raise RuntimeError('Incorrect regex: No match')
+        raise RuntimeError('No matching versions')
 
-    return sorted(versions, reverse=True)[0]
+    version = sorted(versions, reverse=True)[0]
+    if not version or not hasattr(version, 'vstring'):
+        raise RuntimeError('Version is invalid')
+
+    return version
 
 
 def version_scrape(url, xpath, attribute, regex):
