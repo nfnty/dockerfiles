@@ -631,3 +631,14 @@ Meta:
                     URL: 'https://community.ubnt.com/t5/UniFi-Updates-Blog/bg-p/Blog_UniFi'
                     XPath: '//div[contains(@class, "blog-articles")]//h2[@class="lia-message-subject"]/a'
                     Regex: 'UniFi (\d+\.\d+\.\d+) Stable(?! [A-Z])'
+
+'nfnty/arch-dante:latest':
+    Packages:
+        'dante':
+            Variable: 'VERSION_DANTE'
+            Download: 'community'
+            Sources:
+                'archlinux':
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/dante'
+                    XPath: *XPATH_ARCH
+                    Attribute: *ATTRIBUTE_ARCH
