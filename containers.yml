@@ -52,6 +52,8 @@ Meta:
                 CapDrop:
                     - 'ALL'
                 PublishAllPorts: false
+                Sysctls:
+                    'net.ipv6.conf.all.disable_ipv6': '0'
                 Dns:
                     - "{{ network['devices']['vbr_docker0']['gateway4'] }}"
                 NetworkMode: 'static'
@@ -1057,6 +1059,12 @@ Meta:
                     - 'SETGID'
                     - 'SETUID'
                 NetworkMode: 'static_openvpn'
+                Sysctls:
+                    'net.ipv4.ip_forward': '1'
+                    'net.ipv4.conf.default.forwarding': '1'
+                    'net.ipv4.conf.all.forwarding': '1'
+                    'net.ipv6.conf.default.forwarding': '1'
+                    'net.ipv6.conf.all.forwarding': '1'
                 Dns:
                     - "{{ network['devices']['vbr_ovpn0']['gateway4'] }}"
                 Binds:
@@ -1106,6 +1114,12 @@ Meta:
                     - 'NET_RAW'
                     - 'SETGID'
                     - 'SETUID'
+                Sysctls:
+                    'net.ipv4.ip_forward': '1'
+                    'net.ipv4.conf.default.forwarding': '1'
+                    'net.ipv4.conf.all.forwarding': '1'
+                    'net.ipv6.conf.default.forwarding': '1'
+                    'net.ipv6.conf.all.forwarding': '1'
                 Binds:
                     - 'etc:/etc/openvpn:ro'
                     - 'lib:/var/lib/openvpn:rw'
