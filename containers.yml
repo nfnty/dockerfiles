@@ -7,15 +7,20 @@ Meta:
         MODE_URW_GRW: &MODE_URW_GRW 'u=rwX,g=rwX,o='
         MODE_URW_GR_OR: &MODE_URW_GR_OR 'u=rwX,g=rX,o=rX'
 
-        MIB_384: &MIB_384 402653184
+        MIB_448: &MIB_448 469762048  # 512MiB - 64MiB
         MIB_512: &MIB_512 536870912
-        MIB_768: &MIB_768 805306368
+        MIB_896: &MIB_896 939524096  # 1024MiB - 128MiB
         MIB_1024: &MIB_1024 1073741824
-        MIB_1536: &MIB_1536 1610612736
+        MIB_1792: &MIB_1792 1879048192  # 2048MiB - 256MiB
         MIB_2048: &MIB_2048 2147483648
-        MIB_3584: &MIB_3584 3758096384
+        MIB_3840: &MIB_3840 4026531840  # 4096MiB - 256MiB
         MIB_4096: &MIB_4096 4294967296
+        MIB_7936: &MIB_7936 8321499136  # 8192MiB - 256MiB
         MIB_8192: &MIB_8192 8589934592
+        MIB_16128: &MIB_16128 16911433728  # 16384MiB - 256MiB
+        MIB_16384: &MIB_16384 17179869184
+        MIB_32512: &MIB_32512 34091302912  # 32768MiB - 256MiB
+        MIB_32768: &MIB_32768 34359738368
 
         CPU_1S: &CPU_1S 1000000
         CPU_2S: &CPU_2S 2000000
@@ -38,9 +43,9 @@ Meta:
         Default:
             StopSignal: 'SIGTERM'
             HostConfig:
+                MemoryReservation: *MIB_896
                 Memory: *MIB_1024
                 MemorySwap: *MIB_2048
-                MemoryReservation: *MIB_768
                 CpuShares: 1024  # Kernel default
                 CpuPeriod: *CPU_1S
                 CpuQuota: *CPU_2S
@@ -106,9 +111,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuQuota: *CPU_4S
                 Binds:
                     - 'lib:/var/lib/acoustid-index:rw'
@@ -152,9 +157,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 256
                 CpuQuota: *CPU_4S
                 Binds:
@@ -175,9 +180,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 512
                 CpuQuota: *CPU_4S
                 CapAdd:
@@ -219,9 +224,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 512
                 CpuQuota: *CPU_4S
                 CapAdd:
@@ -261,9 +266,9 @@ Meta:
         'Normal':
             Cmd: ['-docker', 'unix:///mnt/docker.sock', '-disable_metrics', 'disk,tcp']
             HostConfig:
+                MemoryReservation: *MIB_896
                 Memory: *MIB_1024
                 MemorySwap: *MIB_2048
-                MemoryReservation: *MIB_768
                 CpuShares: 2048
                 CapAdd:
                     - 'DAC_OVERRIDE'
@@ -303,9 +308,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 Binds:
                     - 'etc:/etc/clamav:ro'
                     - 'lib:/var/lib/clamav:rw'
@@ -336,9 +341,9 @@ Meta:
         'Normal':
             Entrypoint: ['/usr/bin/freshclam', '--daemon', '--stdout']
             HostConfig:
+                MemoryReservation: *MIB_896
                 Memory: *MIB_1024
                 MemorySwap: *MIB_2048
-                MemoryReservation: *MIB_768
                 Binds:
                     - 'etc:/etc/clamav:ro'
                     - '/srv/docker/clamav/lib:/var/lib/clamav:rw'
@@ -366,9 +371,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CpuShares: 2048
                 CapAdd:
                     - 'NET_BIND_SERVICE'
@@ -410,9 +415,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 Binds:
                     - 'etc:/etc/dovecot:ro'
                     - 'lib:/var/lib/dovecot:rw'
@@ -447,9 +452,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuQuota: *CPU_4S
                 ExtraHosts:
                     - 'elasticsearch:127.0.0.1'
@@ -482,9 +487,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuQuota: *CPU_4S
                 Binds:
                     - 'lib:/var/lib/emby:rw'
@@ -533,9 +538,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CapAdd:
                     - 'NET_BIND_SERVICE'
                 Binds:
@@ -567,9 +572,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CpuQuota: *CPU_4S
                 Binds:
                     - 'etc:/etc/grafana:ro'
@@ -589,9 +594,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 Binds:
                     - 'cache:/var/cache/hekad:rw'
                     - 'etc:/etc/heka:ro'
@@ -634,9 +639,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 2048
                 CpuQuota: *CPU_4S
                 Binds:
@@ -788,9 +793,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CpuQuota: *CPU_4S
                 ExtraHosts:
                     - 'logstash:127.0.0.1'
@@ -860,9 +865,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CpuQuota: *CPU_4S
                 CapAdd:
                     - 'NET_BIND_SERVICE'
@@ -898,9 +903,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_448
                 Memory: *MIB_512
                 MemorySwap: *MIB_1024
-                MemoryReservation: *MIB_384
                 CpuShares: 2048
                 CapAdd:
                     - 'IPC_LOCK'
@@ -951,9 +956,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 Binds:
                     - 'addons:/opt/openhab/addons:ro'
                     - 'config:/opt/openhab/configurations:ro'
@@ -1042,9 +1047,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CpuQuota: *CPU_4S
                 CapAdd:
                     - 'NET_ADMIN'
@@ -1092,9 +1097,9 @@ Meta:
                  exec /usr/bin/openvpn --config /etc/openvpn/client.conf"
             ]
             HostConfig:
+                MemoryReservation: *MIB_896
                 Memory: *MIB_1024
                 MemorySwap: *MIB_2048
-                MemoryReservation: *MIB_768
                 CpuQuota: *CPU_4S
                 CapAdd:
                     - 'NET_ADMIN'
@@ -1135,9 +1140,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CapAdd:
                     - 'NET_BIND_SERVICE'
                 Binds:
@@ -1186,9 +1191,9 @@ Meta:
                 '--tx-queue-size', '16384',
             ]
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 256
                 CpuQuota: *CPU_4S
                 Binds:
@@ -1255,9 +1260,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CpuQuota: *CPU_4S
                 Binds:
                     - 'etc:/etc/postgres:ro'
@@ -1294,9 +1299,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CpuShares: 2048
                 CapAdd:
                     - 'NET_BIND_SERVICE'
@@ -1331,9 +1336,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 2048
                 CpuQuota: *CPU_4S
                 Binds:
@@ -1392,9 +1397,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuQuota: *CPU_4S
                 Binds:
                     - 'etc/redis.conf:/etc/redis.conf:ro'
@@ -1429,9 +1434,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 Binds:
                     - 'etc/rspamd.conf:/etc/rspamd/rspamd.conf:ro'
                     - 'etc/override.d:/etc/rspamd/override.d:ro'
@@ -1458,9 +1463,9 @@ Meta:
         'Normal':
             NetworkDisabled: true
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 2048
                 CpuQuota: *CPU_4S
                 NetworkMode: 'none'
@@ -1485,9 +1490,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_1792
                 Memory: *MIB_2048
                 MemorySwap: *MIB_4096
-                MemoryReservation: *MIB_1536
                 CapAdd:
                     - 'NET_BIND_SERVICE'
                 Binds:
@@ -1526,9 +1531,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_3840
                 Memory: *MIB_4096
                 MemorySwap: *MIB_8192
-                MemoryReservation: *MIB_3584
                 CpuShares: 512
                 Binds:
                     - 'lib:/var/lib/transmission:rw'
@@ -1564,9 +1569,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_896
                 Memory: *MIB_1024
                 MemorySwap: *MIB_2048
-                MemoryReservation: *MIB_768
                 Binds:
                     - 'conf:/opt/unifi/conf:ro'
                     - 'data:/opt/unifi/data:rw'
@@ -1601,8 +1606,8 @@ Meta:
     API:
         'Normal':
             HostConfig:
+                MemoryReservation: *MIB_896
                 Memory: *MIB_1024
                 MemorySwap: *MIB_2048
-                MemoryReservation: *MIB_768
                 Binds:
                     - 'lib:/var/lib/znc:rw'
