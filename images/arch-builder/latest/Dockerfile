@@ -16,11 +16,11 @@ RUN chmod 'u=rw,g=r,o=r' /etc/makepkg.conf && \
     chown --recursive contusr:contgrp "${GNUPGHOME}" && \
     chmod --recursive 'u=rwX,g=,o=' "${GNUPGHOME}" && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/builder && \
-
+    \
     pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm python-requests && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-
+    \
     perl -0777 -p -i -e 's|#(\[multilib\]\n)#(Include = /etc/pacman.d/mirrorlist)|\1\2|s' /etc/pacman.conf
 
 USER contusr

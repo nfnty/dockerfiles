@@ -9,7 +9,7 @@ ENV VERSION_UNIFI='5.5.20' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm mongodb && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-
+    \
     mkdir /opt/unifi && \
     set -o pipefail && \
     curl --speed-limit 256000 --location \

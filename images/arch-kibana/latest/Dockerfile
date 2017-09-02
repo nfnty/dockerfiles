@@ -5,7 +5,7 @@ RUN ugid='880012' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_KIBANA='5.5.1' BABEL_CACHE_PATH='/tmp/babel.json'
+ENV VERSION_KIBANA='5.5.2' BABEL_CACHE_PATH='/tmp/babel.json'
 RUN install --directory --owner=contusr --group=contgrp --mode=500 /opt/kibana && \
     set -o pipefail && \
     curl --speed-limit 256000 \

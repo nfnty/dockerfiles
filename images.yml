@@ -623,10 +623,6 @@ Meta:
             Variable: 'VERSION_UNIFI'
             Download: 'upstream'
             Sources:
-                'archlinux':
-                    URL: 'https://www.archlinux.org/packages/community/any/unifi'
-                    XPath: *XPATH_ARCH
-                    Attribute: *ATTRIBUTE_ARCH
                 'upstream':
                     URL: 'https://community.ubnt.com/t5/UniFi-Updates-Blog/bg-p/Blog_UniFi'
                     XPath: '//div[contains(@class, "blog-articles")]//h2[@class="lia-message-subject"]/a'

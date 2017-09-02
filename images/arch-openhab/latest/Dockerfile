@@ -9,7 +9,7 @@ ENV VERSION_OPENHAB='1.8.3' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm ttf-dejavu && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-
+    \
     mkdir /opt/openhab && \
     set -o pipefail && \
     curl --speed-limit 256000 --location \
@@ -18,7 +18,7 @@ RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     chmod --recursive 'u=rwX,g=rX,o=rX' /opt/openhab && \
     chmod --recursive 755 /opt/openhab/{start.sh,start_debug.sh} && \
     chown --recursive contusr:contgrp /opt/openhab/webapps/static && \
-
+    \
     perl -p -i \
         -e 's|^(java \\)|exec \1|;' \
         -e 's|(-console)|-configuration /var/lib/openhab/work \\\n\t\1|;' \
