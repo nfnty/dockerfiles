@@ -268,9 +268,6 @@ Meta:
         'Normal':
             Cmd: ['-docker', 'unix:///mnt/docker.sock', '-disable_metrics', 'disk,tcp']
             HostConfig:
-                MemoryReservation: *MIB_896
-                Memory: *MIB_1024
-                MemorySwap: *MIB_2048
                 CpuShares: 2048
                 CapAdd:
                     - 'DAC_OVERRIDE'
@@ -343,9 +340,6 @@ Meta:
         'Normal':
             Entrypoint: ['/usr/bin/freshclam', '--daemon', '--stdout']
             HostConfig:
-                MemoryReservation: *MIB_896
-                Memory: *MIB_1024
-                MemorySwap: *MIB_2048
                 Binds:
                     - 'etc:/etc/clamav:ro'
                     - '/srv/docker/clamav/lib:/var/lib/clamav:rw'
@@ -1105,9 +1099,6 @@ Meta:
                  exec /usr/bin/openvpn --config /etc/openvpn/client.conf"
             ]
             HostConfig:
-                MemoryReservation: *MIB_896
-                Memory: *MIB_1024
-                MemorySwap: *MIB_2048
                 CpuQuota: *CPU_4S
                 CapAdd:
                     - 'NET_ADMIN'
@@ -1194,10 +1185,7 @@ Meta:
     API:
         'Normal':
             Cmd: [
-                '--jsonrpc-interface', '[::]',
-                '--jsonrpc-hosts', 'all',
-                '--dapps-interface', '[::]',
-                '--dapps-hosts', 'all',
+                '--unsafe-expose',
                 '--no-ui',
                 '--min-peers', '128',
                 '--max-peers', '256',
@@ -1583,9 +1571,9 @@ Meta:
     API:
         'Normal':
             HostConfig:
-                MemoryReservation: *MIB_896
-                Memory: *MIB_1024
-                MemorySwap: *MIB_2048
+                MemoryReservation: *MIB_1792
+                Memory: *MIB_2048
+                MemorySwap: *MIB_4096
                 Binds:
                     - 'conf:/opt/unifi/conf:ro'
                     - 'data:/opt/unifi/data:rw'
@@ -1620,8 +1608,5 @@ Meta:
     API:
         'Normal':
             HostConfig:
-                MemoryReservation: *MIB_896
-                Memory: *MIB_1024
-                MemorySwap: *MIB_2048
                 Binds:
                     - 'lib:/var/lib/znc:rw'

@@ -5,7 +5,7 @@ RUN ugid='880004' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_UNIFI='5.5.20' JAVA_HOME='/usr/lib/jvm/default-runtime'
+ENV VERSION_UNIFI='5.6.20' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm mongodb && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

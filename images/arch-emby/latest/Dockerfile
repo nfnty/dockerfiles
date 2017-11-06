@@ -5,7 +5,7 @@ RUN ugid='880028' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_EMBY='3.2.30.0-1'
+ENV VERSION_EMBY='3.2.33.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "emby-server=${VERSION_EMBY}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

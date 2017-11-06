@@ -5,7 +5,7 @@ RUN ugid='880022' && \
     groupadd --gid "${ugid}" dovecot && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false dovecot
 
-ENV VERSION_DOVECOT='2.2.31-1'
+ENV VERSION_DOVECOT='2.2.33.2-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "dovecot=${VERSION_DOVECOT}" pigeonhole && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

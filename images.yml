@@ -8,6 +8,7 @@ Meta:
         REGEX_DIGITS_3_BOUND: &REGEX_DIGITS_3_BOUND '\b(\d+\.\d+\.\d+)\b'
         REGEX_DIGITS_3_VTAG: &REGEX_DIGITS_3_VTAG '\Av(\d+\.\d+\.\d+)\Z'
         REGEX_DIGITS_3_4: &REGEX_DIGITS_3_4 '\A(\d+\.\d+\.\d+(?:\.\d+)?)\Z'
+        REGEX_DIGITS_3_4_VTAG: &REGEX_DIGITS_3_4_VTAG '\Av(\d+\.\d+\.\d+(?:\.\d+)?)\Z'
         REGEX_DIGITS_4: &REGEX_DIGITS_4 '\A(\d+\.\d+\.\d+\.\d+)\Z'
 
         XPATH_ARCH: &XPATH_ARCH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
@@ -90,6 +91,8 @@ Meta:
 'nfnty/arch-bootstrap:latest': {}
 
 'nfnty/arch-builder:latest': {}
+
+'nfnty/arch-python-script:latest': {}
 
 'nfnty/arch-dovecot:latest':
     Packages:
