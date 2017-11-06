@@ -5,10 +5,11 @@ import argparse
 import distutils.version
 import re
 import subprocess
+from typing import Any, Dict, Sequence, Tuple
 
-import lxml.html
+import lxml.html  # type: ignore
 import requests
-from termcolor import cprint
+from termcolor import cprint  # type: ignore
 
 from utils.image import IMAGES, path_dockerfile
 
@@ -17,7 +18,7 @@ TIMEOUT = (31, 181)  # (Connect, Read)
 HEADERS = {'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'}
 
 
-def args_parse(arguments=None):
+def args_parse(arguments: Sequence[str] = None) -> argparse.Namespace:
     ''' Parse arguments '''
     par0 = argparse.ArgumentParser(description='Image package version checker')
 
@@ -34,7 +35,7 @@ def args_parse(arguments=None):
     return par0.parse_args(arguments)
 
 
-def fetch(url, timeout):
+def fetch(url: str, timeout: Tuple[int, int]) -> Any:
     ''' Fetch URL '''
     try:
         response = requests.get(url, headers=HEADERS, timeout=timeout)
@@ -43,10 +44,11 @@ def fetch(url, timeout):
         raise RuntimeError('fetch: {0:s}\n{1:s}'.format(str(error), str(error.response.content)))
     except OSError as error:
         raise RuntimeError('fetch: {0:s}'.format(str(error)))
-    return lxml.html.document_fromstring(response.content)
+    return lxml.html.document_fromstring(response.content)  # type: ignore
 
 
-def document_parse(document, xpath, attribute, regex):
+def document_parse(document: Any, xpath: str, attribute: str,
+                   regex: str) -> distutils.version.LooseVersion:
     ''' xpath version extractor '''
     nodes = document.xpath(xpath)
     if not nodes:
@@ -72,25 +74,26 @@ def document_parse(document, xpath, attribute, regex):
             if not string:
                 raise RuntimeError('Incorrect regex: Invalid capture group')
 
-        versions.append(distutils.version.LooseVersion(string))
+        versions.append(distutils.version.LooseVersion(string))  # type: ignore
 
     if not versions:
         raise RuntimeError('No matching versions')
 
-    version = sorted(versions, reverse=True)[0]
+    version: distutils.version.LooseVersion = sorted(versions, reverse=True)[0]
     if not version or not hasattr(version, 'vstring'):
         raise RuntimeError('Version is invalid')
 
     return version
 
 
-def version_scrape(url, xpath, attribute, regex):
+def version_scrape(url: str, xpath: str, attribute: str,
+                   regex: str) -> distutils.version.LooseVersion:
     ''' Scrape latest version from url '''
     document = fetch(url, TIMEOUT)
     return document_parse(document, xpath, attribute, regex)
 
 
-def version_pacman(package):
+def version_pacman(package: str) -> Dict[str, distutils.version.LooseVersion]:
     ''' Return dict with repository versions of package '''
     try:
         output = subprocess.run([
@@ -101,15 +104,15 @@ def version_pacman(package):
     except subprocess.CalledProcessError:
         raise RuntimeError('{0:s} not in any repository'.format(package))
 
-    versions = {}
+    versions: Dict[str, distutils.version.LooseVersion] = {}
     for line in output.splitlines():
         name, repo, version = line.split()
         if name == package:
-            versions[repo] = distutils.version.LooseVersion(version)
+            versions[repo] = distutils.version.LooseVersion(version)  # type: ignore
     return versions
 
 
-def dockerfile_update(path, variable, version):
+def dockerfile_update(path: str, variable: str, version: str) -> None:
     ''' Update Dockerfiles with current version '''
     with open(path, 'r') as filedesc:
         newfile, found = re.subn(
@@ -127,7 +130,7 @@ def dockerfile_update(path, variable, version):
         filedesc.write(newfile)
 
 
-def main():  # pylint: disable=too-many-branches
+def main() -> None:  # pylint: disable=too-many-branches
     ''' Main '''
     subprocess.check_call(['/usr/bin/sudo', '/usr/bin/pacman', '--sync', '--refresh'])
 

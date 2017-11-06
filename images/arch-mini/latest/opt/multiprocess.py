@@ -9,9 +9,10 @@ import signal
 import subprocess
 import sys
 import time
+from typing import Any, Dict, List, Optional, Tuple
 
 
-def args_parse():
+def args_parse() -> argparse.Namespace:
     ''' Parse arguments '''
     parser = argparse.ArgumentParser(description='Orchestrate multiple processes')
 
@@ -44,7 +45,11 @@ def args_parse():
     return args
 
 
-def status_print(base, pid, process, items):
+T_PROCESS_ITEMS = Optional[Tuple[Tuple[str, int], ...]]
+
+
+def status_print(base: str, pid: int, process: subprocess.CompletedProcess,
+                 items: T_PROCESS_ITEMS) -> None:
     ''' Print status '''
     message = '{0:s}: {1:d}'.format(base, pid)
     if process:
@@ -55,7 +60,7 @@ def status_print(base, pid, process, items):
     print(message, file=sys.stderr)
 
 
-def status_decode(status):
+def status_decode(status: int) -> Tuple[bool, str, T_PROCESS_ITEMS]:
     ''' Decode status '''
     if os.WIFSIGNALED(status):
         return True, 'Signaled', \
@@ -70,7 +75,7 @@ def status_decode(status):
         raise RuntimeError('Status unknown')
 
 
-def start(args):
+def start(args: List[str]) -> Optional[Dict[str, Any]]:
     ''' Start process '''
     try:
         process = subprocess.Popen(args)
@@ -85,7 +90,7 @@ def start(args):
     return value
 
 
-def terminate(processes, gracefully):
+def terminate(processes: Dict[int, Dict[str, Any]], gracefully: bool) -> None:
     ''' Terminate processes '''
     print('Terminating processes', file=sys.stderr)
     for value in processes.values():
@@ -133,11 +138,11 @@ class Signal(Exception):
     pass
 
 
-def main():  # pylint: disable=too-many-branches,too-many-statements
+def main() -> None:  # pylint: disable=too-many-branches,too-many-statements
     ''' Main '''
     signals = []
 
-    def signal_handler(signum, frame):
+    def signal_handler(signum: int, frame: Any) -> None:
         ''' Signal handler '''
         nonlocal signals
         signals.append(signum)
@@ -146,15 +151,17 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
             raise Signal
 
     # pylint: disable=no-member
-    for sig in set(signal.Signals) - {signal.SIGCHLD, signal.SIGKILL, signal.SIGSTOP}:
-        signal.signal(sig, signal_handler)
+    for sig in \
+            set(signal.Signals) - {signal.SIGCHLD, signal.SIGKILL, signal.SIGSTOP}:  # type: ignore
+        signal.signal(sig, signal_handler)  # type: ignore
     # pylint: enable=no-member
 
-    processes = OrderedDict()
+    processes: Dict[int, Dict[str, Any]] = OrderedDict()
     for command in ARGS.commands:
         value = start(shlex.split(command))
         if value is None:
             terminate(processes, False)
+            assert False, 'Unreachable code'
         processes[value['Process'].pid] = value
 
     while True:
@@ -197,6 +204,7 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
         value = start(processes[pid]['Process'].args)
         if value is None:
             terminate(processes, False)
+            assert False, 'Unreachable code'
         processes[value['Process'].pid] = value
         processes[value['Process'].pid]['Retries'] = processes[pid]['Retries'] + 1
         del processes[pid]

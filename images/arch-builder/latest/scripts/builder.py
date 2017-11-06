@@ -7,6 +7,7 @@ import sys
 import argparse
 import shutil
 import re
+from typing import List, Optional, Set, Tuple
 
 import requests
 
@@ -19,18 +20,18 @@ PATH_GPG = os.environ['GNUPGHOME'] if 'GNUPGHOME' in os.environ else \
     os.path.join(PATH_LIB, 'gnupg')
 
 
-def failed(string):
+def failed(string: str) -> None:
     ''' Print and exit '''
     print(string, file=sys.stderr)
     sys.exit(1)
 
 
-def print_separator():
+def print_separator() -> None:
     ''' Prints a separator for redability '''
     print('\n##################################################\n')
 
 
-def args_parse():
+def args_parse() -> argparse.Namespace:
     ''' Parse arguments '''
     parser = argparse.ArgumentParser(description='Arch package build script')
 
@@ -81,7 +82,7 @@ def args_parse():
     return args
 
 
-def gpg_init():
+def gpg_init() -> None:
     ''' Initialize GnuPG '''
     batchcfg_path = os.path.join(PATH_GPG, 'batch.conf')
 
@@ -99,7 +100,7 @@ def gpg_init():
         failed('Failed to export GnuPG key from: {0:s}\n{1:s}'.format(PATH_GPG, str(error)))
 
 
-def gpg_hack():
+def gpg_hack() -> None:
     ''' Reset GPG '''
     try:
         subprocess.run([
@@ -109,7 +110,7 @@ def gpg_hack():
         failed('GPG hack failed\n{0:s}'.format(str(error)))
 
 
-def pacman_upgrade():
+def pacman_upgrade() -> None:
     ''' Pacman upgrade '''
     try:
         subprocess.run([
@@ -121,7 +122,7 @@ def pacman_upgrade():
         failed('Pacman upgrade failed\n{0:s}'.format(str(error)))
 
 
-def db_files(path):
+def db_files(path: str) -> Optional[Set[str]]:
     ''' Parse database and return files '''
     try:
         output = subprocess.run([
@@ -137,7 +138,7 @@ def db_files(path):
     return set(re.findall(r'^%FILENAME%$\n(.*)\n', output, re.MULTILINE))
 
 
-def packages_cleanup(path_packages, db_name):
+def packages_cleanup(path_packages: str, db_name: str) -> None:
     ''' Cleanup packages not present in database '''
     print('Starting cleanup:\nDatabase: {0:s}\nPath: {1:s}'.format(db_name, path_packages))
 
@@ -148,6 +149,7 @@ def packages_cleanup(path_packages, db_name):
     files_db = db_files(path_db)
     if files_db is None:
         failed('Failed parsing database')
+        assert False, 'Unreachable code'
     if not files_db:
         failed('Failed: Found no packages')
     if '' in files_db:
@@ -164,9 +166,9 @@ def packages_cleanup(path_packages, db_name):
     print('\nPackage cleanup finished!')
 
 
-def packages_mtime(path_packages):
+def packages_mtime(path_packages: str) -> List[Tuple[str, float]]:
     ''' Packages sorted by mtime '''
-    packages = [
+    packages: List[Tuple[str, float]] = [
         (
             os.path.join(path_packages, filename),
             os.stat(os.path.join(path_packages, filename)).st_mtime,
@@ -177,14 +179,14 @@ def packages_mtime(path_packages):
     return sorted(packages, key=lambda package: package[1])
 
 
-def packages_newer(path_packages, path):
+def packages_newer(path_packages: str, path: str) -> List[str]:
     ''' Packages newer than path '''
     mtime_path = os.stat(path).st_mtime
     packages = packages_mtime(path_packages)
     return [path for path, mtime in packages if mtime >= mtime_path]
 
 
-def db_update():
+def db_update() -> None:
     ''' Update database '''
     path_db = os.path.join(PATH_PKGDEST, ARGS.db + '.db.tar.xz')
 
@@ -214,7 +216,7 @@ def db_update():
         failed('Failed to create db!\n{0:s}'.format(str(error)))
 
 
-def extract_tar(data, extension, path_dest):
+def extract_tar(data: bytes, extension: str, path_dest: str) -> None:
     ''' Extract tar '''
     cmd = ['/usr/bin/tar', '--extract', '--file=-', '--strip-components=1',
            '--directory={0:s}'.format(path_dest)]
@@ -236,7 +238,7 @@ def extract_tar(data, extension, path_dest):
     print('Archive extracted: {0:s}'.format(extension))
 
 
-def prepare_git(url, path):
+def prepare_git(url: str, path: str) -> None:
     ''' Prepare git pkgbuild directory '''
     try:
         subprocess.run(['/usr/bin/git', 'clone', url, path], check=True)
@@ -245,7 +247,7 @@ def prepare_git(url, path):
     print('Successfully cloned repository: {0:s}'.format(url))
 
 
-def prepare_remote(url, path):
+def prepare_remote(url: str, path: str) -> None:
     ''' Prepare remote pkgbuild directory '''
     try:
         response = requests.get(url)
@@ -271,7 +273,7 @@ def prepare_remote(url, path):
         failed('Failed to download remote: {0:s}'.format(url))
 
 
-def path_find(base_path, name):
+def path_find(base_path: str, name: str) -> Optional[str]:
     ''' Find PATH_PKGBUILD path for name '''
     for root, dirnames, _ in os.walk(base_path):
         if name in dirnames and os.path.exists(os.path.join(root, name, 'PKGBUILD')):
@@ -279,7 +281,7 @@ def path_find(base_path, name):
     return None
 
 
-def package_make():
+def package_make() -> None:
     ''' Make package '''
     cmd = ['/usr/bin/makepkg', '--noconfirm', '--log', '--syncdeps']
 
@@ -302,7 +304,7 @@ def package_make():
         failed('Failed to make package!\n{0:s}'.format(str(error)))
 
 
-def main():  # pylint: disable=too-many-branches,too-many-statements
+def main() -> None:  # pylint: disable=too-many-branches,too-many-statements
     ''' Main '''
     print_separator()
 
@@ -344,6 +346,7 @@ def main():  # pylint: disable=too-many-branches,too-many-statements
         path = path_find(os.getcwd(), ARGS.pathfind)
         if not path:
             failed('Failed to find path: {0:s}'.format(ARGS.pathfind))
+            assert False, 'Unreachable code'
         os.chdir(path)
     elif ARGS.path:
         os.chdir(ARGS.path)

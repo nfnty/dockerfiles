@@ -3,29 +3,29 @@
 import subprocess
 import sys
 import os
+from typing import List
 
-from termcolor import cprint
+from termcolor import cprint  # type: ignore
 
 
 __all__ = ['PATH_REPO', 'failed']
 
 
-def path_repo():
+def path_repo() -> str:
     ''' Repository path '''
-    path = run_pipe([
+    return run_pipe([  # type: ignore
         '/usr/bin/git', '-C', os.path.dirname(os.path.realpath(__file__)),
         'rev-parse', '--show-toplevel'
     ]).stdout.decode('UTF-8').rstrip('\n')
-    return path
 
 
-def failed(string):
+def failed(string: str) -> None:
     ''' Print string and exit '''
     cprint(string, 'red', file=sys.stderr)
     sys.exit(1)
 
 
-def run(command):
+def run(command: List[str]) -> str:
     ''' Run command '''
     try:
         process = subprocess.run(
@@ -34,10 +34,10 @@ def run(command):
         # pylint: disable=no-member
         raise RuntimeError('{0:s}\n{1:s}'.format(str(error), error.stdout.decode('UTF-8')))
         # pylint: enable=no-member
-    return process.stdout.decode('UTF-8')
+    return process.stdout.decode('UTF-8')  # type: ignore
 
 
-def run_pipe(command):
+def run_pipe(command: List[str]) -> subprocess.CompletedProcess:
     ''' Run command, return CompletedProcess '''
     try:
         process = subprocess.run(

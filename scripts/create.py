@@ -6,16 +6,17 @@ import json
 import os.path
 import sys
 import uuid
+from typing import Any, Dict, Sequence, Tuple
 
 from utils import unixconn
 
 
 SESSION = unixconn.session()
-SOCKET = '/run/docker.sock'
-TIMEOUT = (31, 181)  # (Connect, Read)
+SOCKET: str = '/run/docker.sock'
+TIMEOUT: Tuple[int, int] = (31, 181)  # (Connect, Read)
 
 
-def args_parse(arguments=None):
+def args_parse(arguments: Sequence[str] = None) -> argparse.Namespace:
     ''' Parse arguments '''
     par0 = argparse.ArgumentParser(description='Run container')
 
@@ -34,7 +35,7 @@ def args_parse(arguments=None):
     return args0
 
 
-def config_devices(devices):
+def config_devices(devices: Sequence[Dict[str, Any]]) -> None:
     ''' Convert config Devices paths into real '''
     if devices is None:
         return
@@ -46,7 +47,7 @@ def config_devices(devices):
             device['PathInContainer'] = device['PathOnHost']
 
 
-def config_init(config):
+def config_init(config: Dict[str, Any]) -> None:
     ''' Initialize config '''
     if 'Image' not in config:
         print('Image not in config', file=sys.stderr)
@@ -64,18 +65,16 @@ def config_init(config):
         config_devices(host_config.get('Devices'))
 
 
-def name_format():
+def name_format() -> str:
     ''' Format name '''
     if ARGS.name:
         if ARGS.uuid:
             return '{0:s}-{1:s}'.format(ARGS.name, uuid.uuid4().hex)
-        else:
-            return ARGS.name
-    else:
-        return uuid.uuid4().hex
+        return ARGS.name  # type: ignore
+    return uuid.uuid4().hex
 
 
-def image_exists(tag):
+def image_exists(tag: str) -> bool:
     ''' Does image exist? '''
     response = SESSION.get(
         url=unixconn.url_format(SOCKET, '/images/{0:s}/json'.format(tag)),
@@ -91,7 +90,7 @@ def image_exists(tag):
             dict(**unixconn.error(response), **{'tag': tag}))))
 
 
-def container_remove(name):
+def container_remove(name: str) -> None:
     ''' Remove container '''
     response = SESSION.delete(
         url=unixconn.url_format(SOCKET, '/containers/{0:s}'.format(name)),
@@ -103,9 +102,9 @@ def container_remove(name):
             dict(**unixconn.error(response), **{'name': name}))))
 
 
-def container_create(name, config):
+def container_create(name: str, config: Dict[str, Any]) -> Any:
     ''' Create container '''
-    response = SESSION.post(
+    response = SESSION.post(  # type: ignore
         url=unixconn.url_format(SOCKET, '/containers/create'),
         headers={'Content-Type': 'application/json'},
         params={'name': name},
@@ -117,10 +116,10 @@ def container_create(name, config):
         raise RuntimeError('{0:s}'.format(json.dumps(
             dict(**unixconn.error(response), **{'name': name, 'config': config}))))
 
-    return json.loads(response.text)
+    return response.json()
 
 
-def main():
+def main() -> None:
     ''' Main '''
     with open(ARGS.config) as filedesc:
         config = json.load(filedesc)
