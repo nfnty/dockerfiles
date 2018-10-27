@@ -5,7 +5,7 @@ RUN ugid='880036' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_PROMETHEUS='1.8.2-1'
+ENV VERSION_PROMETHEUS='2.4.3-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/prometheus=${VERSION_PROMETHEUS}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
@@ -16,6 +16,6 @@ VOLUME ["/var/lib/prometheus"]
 EXPOSE 9090/tcp
 ENTRYPOINT [ \
     "/usr/bin/prometheus", \
-    "-config.file=/etc/prometheus/config.yml", \
-    "-storage.local.path=/var/lib/prometheus/data" \
+    "--config.file=/etc/prometheus/config.yml", \
+    "--storage.tsdb.path=/var/lib/prometheus/data" \
 ]

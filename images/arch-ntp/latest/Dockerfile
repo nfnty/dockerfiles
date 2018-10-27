@@ -5,7 +5,7 @@ RUN ugid='880023' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_NTP='4.2.8.p10-2'
+ENV VERSION_NTP='4.2.8.p12-2'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/ntp=${VERSION_NTP}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

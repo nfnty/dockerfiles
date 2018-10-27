@@ -5,7 +5,7 @@ RUN ugid='880041' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_RSPAMD='1.6.5-1'
+ENV VERSION_RSPAMD='1.8.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/rspamd=${VERSION_RSPAMD}" file && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

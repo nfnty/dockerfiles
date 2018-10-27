@@ -5,7 +5,7 @@ RUN ugid='880018' && \
     groupadd --gid "${ugid}" postgres && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false postgres
 
-ENV VERSION_POSTGRESQL='9.6.5-1' PGDATA='/var/lib/postgres/data'
+ENV VERSION_POSTGRESQL='10.5-2' PGDATA='/var/lib/postgres/data'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "postgresql=${VERSION_POSTGRESQL}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

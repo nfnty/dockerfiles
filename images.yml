@@ -1,20 +1,18 @@
 Meta:
     Aliases:
-        REGEX_DIGITS_2: &REGEX_DIGITS_2 '\A(\d+\.\d+)\Z'
-        REGEX_DIGITS_2_VTAG: &REGEX_DIGITS_2_VTAG '\Av(\d+\.\d+)\Z'
-        REGEX_DIGITS_2_3_VTAG: &REGEX_DIGITS_2_3_VTAG '\Av(\d+\.\d+(?:\.\d+)?)\Z'
-        REGEX_DIGITS_2_BOUND: &REGEX_DIGITS_2_BOUND '\b(\d+\.\d+)\b'
-        REGEX_DIGITS_3: &REGEX_DIGITS_3 '\A(\d+\.\d+\.\d+)\Z'
-        REGEX_DIGITS_3_BOUND: &REGEX_DIGITS_3_BOUND '\b(\d+\.\d+\.\d+)\b'
-        REGEX_DIGITS_3_VTAG: &REGEX_DIGITS_3_VTAG '\Av(\d+\.\d+\.\d+)\Z'
-        REGEX_DIGITS_3_4: &REGEX_DIGITS_3_4 '\A(\d+\.\d+\.\d+(?:\.\d+)?)\Z'
-        REGEX_DIGITS_3_4_VTAG: &REGEX_DIGITS_3_4_VTAG '\Av(\d+\.\d+\.\d+(?:\.\d+)?)\Z'
-        REGEX_DIGITS_4: &REGEX_DIGITS_4 '\A(\d+\.\d+\.\d+\.\d+)\Z'
+        REGEX_DIGITS_2: &REGEX_DIGITS_2 '\b(\d+\.\d+)\b'
+        REGEX_DIGITS_2_VTAG: &REGEX_DIGITS_2_VTAG '\bv(\d+\.\d+)\b'
+        REGEX_DIGITS_2_3_VTAG: &REGEX_DIGITS_2_3_VTAG '\bv(\d+\.\d+(?:\.\d+)?)\b'
+        REGEX_DIGITS_3: &REGEX_DIGITS_3 '\b(\d+\.\d+\.\d+)\b'
+        REGEX_DIGITS_3_VTAG: &REGEX_DIGITS_3_VTAG '\bv(\d+\.\d+\.\d+)\b'
+        REGEX_DIGITS_3_4: &REGEX_DIGITS_3_4 '\b(\d+\.\d+\.\d+(?:\.\d+)?)\b'
+        REGEX_DIGITS_3_4_VTAG: &REGEX_DIGITS_3_4_VTAG '\bv(\d+\.\d+\.\d+(?:\.\d+)?)\b'
+        REGEX_DIGITS_4: &REGEX_DIGITS_4 '\b(\d+\.\d+\.\d+\.\d+)\b'
 
         XPATH_ARCH: &XPATH_ARCH '//div[@itemtype="http://schema.org/SoftwareApplication"]/meta[@itemprop="version"]'
         ATTRIBUTE_ARCH: &ATTRIBUTE_ARCH 'content'
-        XPATH_GITHUB_RELEASE: &XPATH_GITHUB_RELEASE '//div[@class="release label-latest"]/div[@class="release-meta"]/ul[@class="tag-references"]//span[@class="css-truncate-target"]'
-        XPATH_GITHUB_TAG: &XPATH_GITHUB_TAG '//span[@class="tag-name"]'
+        XPATH_GITHUB_RELEASE: &XPATH_GITHUB_RELEASE '//div[@class="release-entry"]//a[contains(@href, "/releases/tag/")]'
+        XPATH_GITHUB_TAG: &XPATH_GITHUB_TAG '//h4[contains(@class, "commit-title")]//a[contains(@href, "/releases/tag/")]'
 
     Paths:
         'nfnty': 'images'
@@ -126,7 +124,7 @@ Meta:
 
 'nfnty/arch-emby:latest':
     Packages:
-        'emby-server':
+        'emby-server-unlocked':
             Variable: 'VERSION_EMBY'
             Download: 'nfnty'
             Sources:
@@ -144,7 +142,7 @@ Meta:
                 'upstream':
                     URL: 'http://exim.org/index.html'
                     XPath: '//div[@id="content"]/h2[contains(text(), "Latest Version")]'
-                    Regex: *REGEX_DIGITS_2_BOUND
+                    Regex: *REGEX_DIGITS_2
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/community/x86_64/exim'
                     XPath: *XPATH_ARCH
@@ -184,12 +182,16 @@ Meta:
     Packages:
         'kea':
             Variable: 'VERSION_KEA'
-            Download: 'nfnty'
+            Download: 'community'
             Sources:
                 'upstream':
                     URL: 'http://ftp.isc.org/isc/kea'
                     XPath: '//table[@id="indexlist"]//td[@class="indexcolname"]/a'
                     Regex: '^(\d+\.\d+(?:\.\d+)?)/$'
+                'archlinux':
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/kea'
+                    XPath: *XPATH_ARCH
+                    Attribute: *ATTRIBUTE_ARCH
 
 'nfnty/arch-kibana:latest':
     Packages:
@@ -325,7 +327,7 @@ Meta:
                 'github':
                     URL: 'https://github.com/PowerDNS/pdns/tags'
                     XPath: *XPATH_GITHUB_TAG
-                    Regex: '\Arec-(\d+\.\d+\.\d+)\Z'
+                    Regex: 'rec-(\d+\.\d+\.\d+)'
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/community/x86_64/powerdns-recursor'
                     XPath: *XPATH_ARCH
@@ -344,7 +346,7 @@ Meta:
                 'github':
                     URL: 'https://github.com/PowerDNS/pdns/tags'
                     XPath: *XPATH_GITHUB_TAG
-                    Regex: '\Adnsdist-(\d+\.\d+\.\d+)\Z'
+                    Regex: 'dnsdist-(\d+\.\d+\.\d+)'
 
 'nfnty/arch-samba:latest':
     Build: false
@@ -480,7 +482,7 @@ Meta:
     Packages:
         'rsyslog':
             Variable: 'VERSION_RSYSLOG'
-            Download: 'community'
+            Download: 'nfnty'
             Sources:
                 'github':
                     URL: 'https://github.com/rsyslog/rsyslog/tags'
@@ -520,7 +522,7 @@ Meta:
                 'github':
                     URL: 'https://github.com/prometheus/prometheus/releases'
                     XPath: *XPATH_GITHUB_RELEASE
-                    Regex: *REGEX_DIGITS_3_VTAG
+                    Regex: *REGEX_DIGITS_3
 
 'nfnty/arch-redis:latest':
     Packages:
@@ -576,10 +578,10 @@ Meta:
     Packages:
         'radvd':
             Variable: 'VERSION_RADVD'
-            Download: 'extra'
+            Download: 'community'
             Sources:
                 'archlinux':
-                    URL: 'https://www.archlinux.org/packages/extra/x86_64/radvd'
+                    URL: 'https://www.archlinux.org/packages/community/x86_64/radvd'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
 
@@ -590,9 +592,9 @@ Meta:
             Download: 'nfnty'
             Sources:
                 'github':
-                    URL: 'https://github.com/paritytech/parity/releases'
+                    URL: 'https://github.com/paritytech/parity-ethereum/releases'
                     XPath: *XPATH_GITHUB_RELEASE
-                    Regex: *REGEX_DIGITS_3_VTAG
+                    Regex: '(\d+\.\d+\.\d+)-stable'
                 'archlinux':
                     URL: 'https://www.archlinux.org/packages/community/x86_64/parity'
                     XPath: *XPATH_ARCH
@@ -629,7 +631,7 @@ Meta:
                 'upstream':
                     URL: 'https://community.ubnt.com/t5/UniFi-Updates-Blog/bg-p/Blog_UniFi'
                     XPath: '//div[contains(@class, "blog-articles")]//h2[@class="lia-message-subject"]/a'
-                    Regex: 'UniFi (\d+\.\d+\.\d+) Stable(?! [A-Z])'
+                    Regex: 'UniFi SDN Controller (\d+\.\d+\.\d+) Stable(?! [A-Z])'
 
 'nfnty/arch-dante:latest':
     Packages:
@@ -641,3 +643,5 @@ Meta:
                     URL: 'https://www.archlinux.org/packages/community/x86_64/dante'
                     XPath: *XPATH_ARCH
                     Attribute: *ATTRIBUTE_ARCH
+
+'nfnty/arch-udp-broadcast-relay:latest': {}

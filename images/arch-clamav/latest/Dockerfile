@@ -5,11 +5,11 @@ RUN ugid='880040' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_CLAMAV='0.99.2-7'
+ENV VERSION_CLAMAV='0.100.2-2'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "clamav=${VERSION_CLAMAV}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
-    chown --recursive contusr:contgrp /var/lib/clamav
+    install --directory --owner=contusr --group=contgrp --mode=700 /var/lib/clamav
 
 USER contusr
 VOLUME ["/var/lib/clamav"]

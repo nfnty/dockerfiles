@@ -5,7 +5,7 @@ RUN ugid='880042' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_RADVD='2.17-1'
+ENV VERSION_RADVD='2.17-2'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "radvd=${VERSION_RADVD}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
