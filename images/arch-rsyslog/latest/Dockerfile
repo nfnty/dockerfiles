@@ -5,7 +5,7 @@ RUN ugid='880034' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_RSYSLOG='8.35.0-1'
+ENV VERSION_RSYSLOG='8.40.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/rsyslog=${VERSION_RSYSLOG}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

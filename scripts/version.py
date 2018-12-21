@@ -9,7 +9,7 @@ from typing import Any, Dict, Sequence, Tuple
 
 import lxml.html  # type: ignore
 import requests
-from termcolor import cprint  # type: ignore
+from termcolor import cprint
 
 from utils.image import IMAGES, path_dockerfile
 
@@ -44,7 +44,7 @@ def fetch(url: str, timeout: Tuple[int, int]) -> Any:
         raise RuntimeError('fetch: {0:s}\n{1:s}'.format(str(error), str(error.response.content)))
     except OSError as error:
         raise RuntimeError('fetch: {0:s}'.format(str(error)))
-    return lxml.html.document_fromstring(response.content)  # type: ignore
+    return lxml.html.document_fromstring(response.content)
 
 
 def document_parse(document: Any, xpath: str, attribute: str,
@@ -74,7 +74,7 @@ def document_parse(document: Any, xpath: str, attribute: str,
             if not string:
                 raise RuntimeError('Incorrect regex: Invalid capture group')
 
-        versions.append(distutils.version.LooseVersion(string))  # type: ignore
+        versions.append(distutils.version.LooseVersion(string))
 
     if not versions:
         raise RuntimeError('No matching versions')
@@ -108,17 +108,17 @@ def version_pacman(package: str) -> Dict[str, distutils.version.LooseVersion]:
     for line in output.splitlines():
         name, repo, version = line.split()
         if name == package:
-            versions[repo] = distutils.version.LooseVersion(version)  # type: ignore
+            versions[repo] = distutils.version.LooseVersion(version)
     return versions
 
 
 def dockerfile_update(path: str, variable: str, version: str) -> None:
     ''' Update Dockerfiles with current version '''
-    with open(path, 'r') as filedesc:
+    with open(path, 'r') as fobj:
         newfile, found = re.subn(
             r'{0:s}=\'\S*\''.format(variable),
             '{0:s}=\'{1:s}\''.format(variable, version),
-            filedesc.read(),
+            fobj.read(),
         )
 
     if not found:
@@ -126,8 +126,8 @@ def dockerfile_update(path: str, variable: str, version: str) -> None:
     elif found > 1:
         raise ValueError('More than 1: {0:s}'.format(variable))
 
-    with open(path, 'w') as filedesc:
-        filedesc.write(newfile)
+    with open(path, 'w') as fobj:
+        fobj.write(newfile)
 
 
 def main() -> None:  # pylint: disable=too-many-branches

@@ -154,10 +154,10 @@ def packages_cleanup(path_packages: str, db_name: str) -> None:
         failed('Failed: Found no packages')
     if '' in files_db:
         failed('Failed parsing database: Empty filename present')
-    files_db = files_db | set([filename + '.sig' for filename in files_db])
+    files_db |= {filename + '.sig' for filename in files_db}
 
-    files_packages = set(filename for filename in os.listdir(path_packages)
-                         if filename.endswith(('.pkg.tar.xz', '.pkg.tar.xz.sig')))
+    files_packages = {filename for filename in os.listdir(path_packages)
+                      if filename.endswith(('.pkg.tar.xz', '.pkg.tar.xz.sig'))}
 
     for filename in sorted(files_packages - files_db):
         os.remove(os.path.join(path_packages, filename))

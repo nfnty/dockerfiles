@@ -14,8 +14,8 @@ __all__ = ['IMAGES', 'META', 'path_image']
 
 def config_parse() -> Tuple[Dict[str, Any], Dict[str, Any]]:
     ''' images.yml '''
-    load = yaml.load(  # type: ignore
-        open(os.path.join(meta.PATH_REPO, 'images.yml')), Loader=yaml.CLoader)
+    with open(os.path.join(meta.PATH_REPO, 'images.yml')) as fobj:
+        load = yaml.load(fobj, Loader=yaml.CLoader)  # type: ignore
     load_meta = load['Meta']
     del load['Meta']
     return load, load_meta
@@ -24,7 +24,7 @@ def config_parse() -> Tuple[Dict[str, Any], Dict[str, Any]]:
 def path_image(name: str) -> str:
     ''' Path to image '''
     base, name, tag = re.split(r'[/:]', name)
-    return os.path.join(meta.PATH_REPO, META['Paths'][base], name, tag)  # type: ignore
+    return os.path.join(meta.PATH_REPO, META['Paths'][base], name, tag)
 
 
 def path_dockerfile(name: str) -> str:

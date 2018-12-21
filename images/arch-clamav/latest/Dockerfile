@@ -5,7 +5,7 @@ RUN ugid='880040' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_CLAMAV='0.100.2-2'
+ENV VERSION_CLAMAV='0.101.0-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "clamav=${VERSION_CLAMAV}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

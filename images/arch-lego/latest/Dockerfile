@@ -5,7 +5,7 @@ RUN ugid='880003' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_LEGO='1.1.0-1'
+ENV VERSION_LEGO='1.2.1-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "nfnty/lego=${VERSION_LEGO}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \

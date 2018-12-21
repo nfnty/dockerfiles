@@ -83,11 +83,10 @@ def image_exists(tag: str) -> bool:
 
     if response.status_code == 200:
         return True
-    elif response.status_code == 404:
+    if response.status_code == 404:
         return False
-    else:
-        raise RuntimeError('{0:s}'.format(json.dumps(
-            dict(**unixconn.error(response), **{'tag': tag}))))
+    raise RuntimeError('{0:s}'.format(json.dumps(
+        dict(**unixconn.error(response), **{'tag': tag}))))
 
 
 def container_remove(name: str) -> None:
@@ -121,8 +120,8 @@ def container_create(name: str, config: Dict[str, Any]) -> Any:
 
 def main() -> None:
     ''' Main '''
-    with open(ARGS.config) as filedesc:
-        config = json.load(filedesc)
+    with open(ARGS.config) as fobj:
+        config = json.load(fobj)
     config_init(config)
 
     if not image_exists(config['Image']):

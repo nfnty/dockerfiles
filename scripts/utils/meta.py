@@ -5,7 +5,7 @@ import sys
 import os
 from typing import List
 
-from termcolor import cprint  # type: ignore
+from termcolor import cprint
 
 
 __all__ = ['PATH_REPO', 'failed']

@@ -5,7 +5,7 @@ RUN ugid='880011' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false contusr
 
-ENV VERSION_ELASTICSEARCH='6.4.2' JAVA_HOME='/usr/lib/jvm/default-runtime'
+ENV VERSION_ELASTICSEARCH='6.5.4' JAVA_HOME='/usr/lib/jvm/default-runtime'
 RUN mkdir /opt/elasticsearch && \
     set -o pipefail && \
     curl --speed-limit 256000 \

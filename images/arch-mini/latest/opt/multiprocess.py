@@ -45,11 +45,11 @@ def args_parse() -> argparse.Namespace:
     return args
 
 
-T_PROCESS_ITEMS = Optional[Tuple[Tuple[str, int], ...]]
+TProcessItems = Optional[Tuple[Tuple[str, int], ...]]
 
 
 def status_print(base: str, pid: int, process: subprocess.CompletedProcess,
-                 items: T_PROCESS_ITEMS) -> None:
+                 items: TProcessItems) -> None:
     ''' Print status '''
     message = '{0:s}: {1:d}'.format(base, pid)
     if process:
@@ -60,19 +60,18 @@ def status_print(base: str, pid: int, process: subprocess.CompletedProcess,
     print(message, file=sys.stderr)
 
 
-def status_decode(status: int) -> Tuple[bool, str, T_PROCESS_ITEMS]:
+def status_decode(status: int) -> Tuple[bool, str, TProcessItems]:
     ''' Decode status '''
     if os.WIFSIGNALED(status):
         return True, 'Signaled', \
             (('Signal', os.WTERMSIG(status)), ('Coredump', os.WCOREDUMP(status)))
-    elif os.WIFEXITED(status):
+    if os.WIFEXITED(status):
         return True, 'Exited', (('Status', os.WEXITSTATUS(status)),)
-    elif os.WIFCONTINUED(status):
+    if os.WIFCONTINUED(status):
         return False, 'Continued', None
-    elif os.WIFSTOPPED(status):
+    if os.WIFSTOPPED(status):
         return False, 'Stopped', (('Signal', os.WSTOPSIG(status)),)
-    else:
-        raise RuntimeError('Status unknown')
+    raise RuntimeError('Status unknown')
 
 
 def start(args: List[str]) -> Optional[Dict[str, Any]]:
@@ -151,9 +150,9 @@ def main() -> None:  # pylint: disable=too-many-branches,too-many-statements
             raise Signal
 
     # pylint: disable=no-member
-    for sig in \
-            set(signal.Signals) - {signal.SIGCHLD, signal.SIGKILL, signal.SIGSTOP}:  # type: ignore
-        signal.signal(sig, signal_handler)  # type: ignore
+    for sig_ in \
+            set(signal.Signals) - {signal.SIGCHLD, signal.SIGKILL, signal.SIGSTOP}:
+        signal.signal(sig_, signal_handler)
     # pylint: enable=no-member
 
     processes: Dict[int, Dict[str, Any]] = OrderedDict()

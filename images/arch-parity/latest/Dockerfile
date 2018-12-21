@@ -5,7 +5,7 @@ RUN ugid='880043' && \
     groupadd --gid "${ugid}" contgrp && \
     useradd --uid "${ugid}" --gid "${ugid}" --shell /usr/bin/false --home-dir /var/lib/parity/home contusr
 
-ENV VERSION_PARITY='2.0.8-1'
+ENV VERSION_PARITY='2.1.10-1'
 RUN pacman --sync --noconfirm --refresh --sysupgrade && \
     pacman --sync --noconfirm "parity=${VERSION_PARITY}" && \
     find /var/cache/pacman/pkg -mindepth 1 -delete && \
@@ -19,6 +19,5 @@ ENTRYPOINT [ \
     "--db-path", "/var/lib/parity/db", \
     "--keys-path", "/var/lib/parity/keys", \
     "--ui-path", "/var/lib/parity/signer", \
-    "--ipc-path", "/var/lib/parity/ipc", \
-    "--dapps-path", "/var/lib/parity/dapps" \
+    "--ipc-path", "/var/lib/parity/ipc" \
 ]
